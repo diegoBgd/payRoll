@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			
+			<f:metadata>
+				<f:event listener="#{authenticite.gestionConge()}" type="preRenderView"/>
+			</f:metadata>
+			
+			<p:growl id="msgs" showDetail="true" life="21600"/>
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+				
+					<div class="card">
+					
+						<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-1,ui-grid-col-6"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+							<p:outputLabel value="Référence" />
+							<p:inputText id="txtcode" value="#{typeCongeB.code}" autocomplete="off">
+									<p:ajax event="blur" listener="#{typeCongeB.changeCode()}"
+										update=":frm" />
+							</p:inputText>
+							
+							
+								
+							</p:panelGrid>
+							
+							<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+							<p:outputLabel value="Type de congé" />
+							<p:inputText id="txtDes" value="#{typeCongeB.designation}" autocomplete="off"/>
+								
+									
+							<p:outputLabel value="Sorte de Congé" />
+								<p:selectOneMenu id="txtSorteCo" value="#{typeCongeB.sorteConge}">
+									<f:selectItem itemLabel=" " itemValue="0"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Congé de repos annuel" itemValue="1" />
+									<f:selectItem itemLabel="Congé de circonstance" itemValue="2" />
+									<f:selectItem itemLabel="Congé de maternité" itemValue="3" />
+									<f:selectItem itemLabel="Congé médical" itemValue="4" />
+									<f:selectItem itemLabel="Congé sabbatique" itemValue="5" />
+								</p:selectOneMenu>
+								
+							</p:panelGrid>
+							
+							<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-2"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+								<p:outputLabel value="Soustrait dans les congé annuels"/>
+								<p:selectBooleanCheckbox value="#{typeCongeB.annuel}"/>
+								
+								<p:outputLabel value="Nombre de jours"/>
+								<p:inputNumber value="#{typeCongeB.nombreJour}" 
+								inputStyle="text-align:right" autocomplete="off" decimalPlaces="0"/>
+							</p:panelGrid>
+	
+						
+							
+					</div>
+				
+		
+				
+					<div class="card">
+						<div class="ui-g">
+							<p:dataTable id="tbl" var="typ" value="#{typeCongeB.typeConges}"
+								rowKey="#{typ.id}" selectionMode="single"
+								selection="#{typeCongeB.selected}" emptyMessage=""
+								reflow="true" scrollable="true" scrollHeight="250">
+
+								<p:ajax event="rowSelect" listener="#{typeCongeB.onRowSelected}"
+									update=":frm" />
+
+								<p:column headerText="Type de congé" width="10%">
+									<h:outputText value="#{typ.code}" />
+								</p:column>
+								
+								<p:column headerText="Type de congé">
+									<h:outputText value="#{typ.designation}" />
+								</p:column>
+								
+							
+							</p:dataTable>	
+						</div>
+					</div>
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12">
+								<div class="ui-g-12 ui-md-1"/>
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton id="btnSave" icon="fa fa-save"
+										style="border-radius:10px"
+										value="Enregistrer" action="#{typeCongeB.enregistrer()}"
+										update=":frm" />
+								</div>
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+										style="border-radius:10px"
+										value="Supprimer" action="#{typeCongeB.supprimer()}"
+										update=":frm" styleClass="orange-btn">
+										<p:confirm header="Confirmation"
+											disabled="#{typeCongeB.disableMsg}"
+											message="Voulez-vous vraiment supprimer ?"
+											icon="ui-icon-alert" />
+										</p:commandButton>
+								</div>
+								<div class="ui-g-4 ui-md-3">
+									<p:commandButton icon="fa fa-refresh" value="Initialiser"
+										style="border-radius:10px"
+										action="#{typeCongeB.initialiser()}" update=":frm" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+		
+		
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				responsive="true">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

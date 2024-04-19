@@ -1,0 +1,381 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+ 
+							<div class="ui-g-12 ui-md-6">
+								<p:commandButton value="Liste des Retraités normales" icon="fa fa-search"
+									onclick="PF('dlgRetr').show();" />
+							</div>
+
+							<div class="ui-g-12 ui-md-6">
+								<p:commandButton value="Liste des Retraités anticipées" icon="fa fa-search"
+									onclick="PF('dlgAnt').show();" />
+							</div>
+						</div>
+					</div>
+				
+					<div class="card">
+						<p:tabView id="gen">
+							<p:tab id="tab1" title="Fin Carrière Employé">
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Employé" />
+									<p:inputText id="txtcode" value="#{finCarriereB.code}" readonly="true">
+										<p:ajax event="blur" listener="#{finCarriereB.findByCode()}"
+											update=":frm" />
+									</p:inputText>
+
+									<p:inputText id="txtNom"
+										value="#{finCarriereB.employe.nom} #{finCarriereB.employe.prenom}"
+										readonly="true" />
+								</p:panelGrid>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Organe" />
+									<p:inputText id="txtOrgane"
+										value="#{finCarriereB.employe.detailOrgane.directionGnle.designation}"
+										readonly="true" />
+									<h:outputLabel value="Service" />
+									<p:inputText id="txtServ"
+										value="#{finCarriereB.employe.detailOrgane.service.designation}"
+										readonly="true" />
+									<h:outputLabel value="Fonction" />
+									<p:inputText id="txtProfession"
+										value="#{finCarriereB.employe.fonction.designation}"
+										readonly="true" />
+									<h:outputLabel value="Personnel" />
+									<p:inputText id="txtPersonnel"
+										value="#{finCarriereB.employe.detailGrade.personalGrade.categoriePersonnel.personnel.designation}"
+										readonly="true" />
+									<h:outputLabel value="Catégorie" />
+									<p:inputText id="txtCategorie"
+										value="#{finCarriereB.employe.detailGrade.personalGrade.categoriePersonnel.designation}"
+										readonly="true"/>
+									<h:outputLabel value=" Grade " />
+									<p:inputText id="txtGrade" readonly="true"
+										value="#{finCarriereB.employe.detailGrade.personalGrade.designation}" />
+
+								</p:panelGrid>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Date Evenement" />
+									<p:inputMask id="txtDateEv"
+										value="#{finCarriereB.dateEvenementS}" mask="99/99/9999">
+										<p:ajax event="blur"
+											listener="#{finCarriereB.changeDateEvenement()}"
+											update="txtDateEv" />
+									</p:inputMask>
+									<h:outputLabel value="Date Fin" />
+									<p:inputMask id="txtDatefin" value="#{finCarriereB.dateFinS}"
+										mask="99/99/9999">
+										<p:ajax event="blur"
+											listener="#{finCarriereB.changeDateFin()}"
+											update="txtDatefin" />
+									</p:inputMask>
+									<h:outputText value="Age" />
+									<p:inputText value="#{finCarriereB.age}" readonly="true"/>
+									<h:outputText value="Pension retraite (%)" />
+									<p:inputText id="txtPourc"
+										value="#{finCarriereB.pourcentageApresAllocationRetraiteS}">
+										<p:ajax event="blur"
+											listener="#{finCarriereB.changePourcentageAllocation()}"
+											update="txtPourc" />
+									</p:inputText>
+									<h:outputText value="Durée Allocation Retraite " />
+									<p:inputText value="#{finCarriereB.dureeAllocationRetraite}" />
+									<p:outputLabel value="Type Retraite" />
+									<p:selectOneMenu id="txtTypeRetraite"
+										value="#{finCarriereB.typeRetraite}"
+										valueChangeListener="#{finCarriereB.changeTyepRetraite}">
+										<f:selectItem itemLabel="" itemValue="0" />
+										<f:selectItem itemLabel="Retraite Normale" itemValue="1" />
+										<f:selectItem itemLabel="Retraite Anticipée" itemValue="2" />
+										<f:selectItem itemLabel="Retraite Prolongé" itemValue="3" />
+										<p:ajax event="itemSelect" update="txtTypeRetraite" />
+									</p:selectOneMenu>
+									<h:outputLabel value="Motif Fin Carrière" />
+									<p:selectOneMenu id="txtMofifFin"
+										value="#{finCarriereB.idMotif}"
+										valueChangeListener="#{finCarriereB.changeMotifFinCarriere}"
+										autoWidth="false">
+										<f:selectItem itemLabel="" itemValue="0" />
+										<f:selectItem itemLabel="Licenciement pour échec de stage"
+											itemValue="1" />
+										<f:selectItem
+											itemLabel="Démission d'office pour la non reprise de fonction après suspension d'activité de service"
+											itemValue="2" />
+										<f:selectItem
+											itemLabel="Démission d'office pour la non reprise de fonction après mise en disponibilité"
+											itemValue="3" />
+										<f:selectItem
+											itemLabel="Démission d'office pour fausses déclarations ou manoeuvres frauduleuses lors de l'engagement"
+											itemValue="4" />
+										<f:selectItem itemLabel="Démission écrite" itemValue="5" />
+										<f:selectItem itemLabel="Révocation" itemValue="6" />
+										<f:selectItem itemLabel="Inaptitude physique" itemValue="7" />
+										<f:selectItem itemLabel="Inaptitude professionnelle"
+											itemValue="8" />
+										<f:selectItem itemLabel="Mise en retraite" itemValue="9" />
+										<f:selectItem itemLabel="Décès" itemValue="10" />
+										<p:ajax event="itemSelect" update="txtMofifFin" />
+									</p:selectOneMenu>
+								</p:panelGrid>
+
+							</p:tab>
+							<p:tab id="tab2" title="Primes">
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+										<p:dataTable value="#{finCarriereB.listeDetailPrime}"
+											var="det" id="tblP" rowKey="#{det.id}"
+											selection="#{finCarriereB.selectedDetailPrime}"
+											paginator="true" rows="10" paginatorAlwaysVisible="false"
+											paginatorPosition="bottom" reflow="true"
+											emptyMessage="Aucun enregitrement" selectionMode="single">
+
+											<p:ajax event="rowSelect"
+												listener="#{finCarriereB.onRowselectedDetailPrime()}"
+												update="frm:gen:idpanelprime" />
+
+											<p:column headerText="Code" style="width:100px">
+												<p:outputLabel value="#{det.prime.code}" />
+											</p:column>
+											<p:column headerText="Désignation">
+												<p:outputLabel value="#{det.prime.designation}" />
+											</p:column>
+											<p:column headerText="Montant" style="text-align:center">
+												<p:outputLabel value="#{det.montantS}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+
+									<h:panelGroup id="idpanelprime" styleClass="ui-g-12 ui-md-12">
+										<div class="ui-g-12 ui-md-6">
+											<p:outputLabel value="Primes" />
+											<p:selectOneMenu id="txtprim" value="#{finCarriereB.idPrime}"
+												valueChangeListener="#{finCarriereB.chargerIdPrime}"
+												autoWidth="false">
+												<p:ajax event="itemSelect" update="txtprim" />
+												<f:selectItem itemLabel=" " itemValue="0" />
+												<f:selectItems value="#{finCarriereB.listPrime}" />
+											</p:selectOneMenu>
+										</div>
+
+										<div class="ui-g-12 ui-md-6">
+											<p:outputLabel value="Montant Prime" />
+											<p:inputText id="txtMontPrime"
+												value="#{finCarriereB.montantPrimeS}"
+												style="text-align:right">
+												<p:ajax event="blur"
+													listener="#{finCarriereB.changeMontantPrime()}"
+													update="txtMontPrime" />
+											</p:inputText>
+										</div>
+
+									</h:panelGroup>
+
+									<div class="ui-g-12 ui-md-12">
+										<div class="ui-g-12 ui-md-3">
+											<p:commandButton icon="fa fa-plus" value="ajouter"
+												action="#{finCarriereB.ajouterDetailPrime()}"
+												update=":frm:gen:idpanelprime,:frm:gen:tblP" />
+										</div>
+
+										<div class="ui-g-12 ui-md-3">
+											<p:commandButton icon="fa fa-minus" value="enlever"
+												action="#{finCarriereB.enleverDetailPrime()}"
+												update=":frm:gen:idpanelprime,:frm:gen:tblP"
+												styleClass="orange-btn" />
+										</div>
+									</div>
+								</div>
+							</p:tab>
+
+							<p:tab id="tab3" title="Indemnités">
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+										<p:dataTable value="#{finCarriereB.listeDetailIndemnite}"
+											var="Indemn" id="tblI" rowKey="#{Indemn.id}"
+											selectionMode="single"
+											selection="#{finCarriereB.selectedDetailIndemnite}"
+											paginator="true" rows="10" paginatorAlwaysVisible="false"
+											paginatorPosition="bottom" reflow="true"
+											emptyMessage="Aucun enregistrement">
+											<p:ajax event="rowSelect"
+												listener="#{finCarriereB.onRowselectedDetailIndemnite}"
+												update=":frm:gen:idpanelindemnite" />
+
+											<p:column headerText="Code" style="width:100px">
+												<p:outputLabel value="#{Indemn.indemnite.code}" />
+											</p:column>
+											<p:column headerText="Désignation">
+												<p:outputLabel value="#{Indemn.indemnite.designation}" />
+											</p:column>
+											<p:column headerText="Montant" style="text-align:center">
+												<p:outputLabel value="#{Indemn.montantS}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+
+									<h:panelGroup id="idpanelindemnite"
+										styleClass="ui-g-12 ui-md-12">
+										<div class="ui-g-12 ui-md-6">
+											<p:outputLabel value="Indemnité" />
+											<p:selectOneMenu id="txtIndemnit"
+												value="#{finCarriereB.idIndemnite}"
+												valueChangeListener="#{finCarriereB.chargerIdIndemnite}"
+												autoWidth="false">
+												<p:ajax event="itemSelect" update="txtIndemnit" />
+												<f:selectItem itemLabel=" " itemValue="0" />
+												<f:selectItems value="#{finCarriereB.listIndemnite}" />
+											</p:selectOneMenu>
+										</div>
+
+										<div class="ui-g-12 ui-md-6">
+											<p:outputLabel value="Montant Indemnite" />
+											<p:inputText id="txtMontIndemnite"
+												value="#{finCarriereB.montantIndemniteS}"
+												style="text-align:right">
+												<p:ajax event="blur"
+													listener="#{finCarriereB.changeMontantIndemnite()}"
+													update="txtMontIndemnite" />
+											</p:inputText>
+										</div>
+
+									</h:panelGroup>
+
+									<div class="ui-g-12 ui-md-12">
+										<div class="ui-g-12 ui-md-3">
+											<p:commandButton value="ajouter" icon="fa fa-plus"
+												action="#{finCarriereB.ajouterDetailIndemnite()}"
+												update=":frm:gen:idpanelindemnite,:frm:gen:tblI" />
+										</div>
+
+										<div class="ui-g-12 ui-md-3">
+											<p:commandButton value="enlever" icon="fa fa-minus"
+												action="#{finCarriereB.enleverDetailIndemnite()}"
+												update=":frm:gen:idpanelindemnite,:frm:gen:tblI"
+												styleClass="orange-btn" />
+										</div>
+									</div>
+								</div>
+							</p:tab>
+							<p:tab id="tab4" title="Traitement Salariale">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Taux Salaire" />
+									<p:inputText id="txtTauxSal"
+										value="#{finCarriereB.traitement.pourcentageS}"
+										readonly="true" />
+									<h:outputLabel value="Ancien Salaire de Base" />
+									<p:inputText id="txtAncSal"
+										value="#{finCarriereB.traitement.ancienSalaireS}"
+										readonly="true" />
+									<h:outputLabel value="Nouveau Salaire de Base" />
+									<p:inputText id="txtNouvSal"
+										value="#{finCarriereB.traitement.salaireBaseS}"
+										readonly="true" />
+									<h:outputLabel value="Date debut salaire" />
+									<p:inputText id="txtdatetr"
+										value="#{finCarriereB.traitement.dateDebutS}" readonly="true" />
+								</p:panelGrid>
+							</p:tab>
+
+						</p:tabView>
+					</div>
+
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" action="#{finCarriereB.save()}"
+								update=":frm" />
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+								value="Supprimer"
+								onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+								action="#{finCarriereB.delete()}" update=":frm"
+								styleClass="orange-btn" />
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser" action="#{finCarriereB.initialiser()}"
+								update=":frm" />
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+		<p:dialog widgetVar="dlgRetr" modal="true"
+			header="Liste des retraités en attente" width="70%"
+			height="40%" position="center" responsive="true">
+			<h:form id="frmDem">
+				<p:dataTable id="tblDem" value="#{finCarriereB.listEmployeRetraite}"
+					var="emp" rows="10" paginator="true"
+					paginatorAlwaysVisible="false" rowKey="#{emp.id}"
+					selectionMode="single" selection="#{finCarriereB.selection}"
+					paginatorPosition="bottom" reflow="true"
+					emptyMessage="">
+
+					<p:ajax event="rowSelect" listener="#{finCarriereB.onEmplselected}"
+						update="frm" />
+
+					<p:column headerText="Employé" width="80%">
+						<h:outputText
+							value="#{emp.nomPrenom}" />
+					</p:column>
+
+					<p:column headerText="Age">
+						<h:outputText value="#{emp.age}" />
+					</p:column>
+					
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog header="Recherche employé" widgetVar="dlgAnt" modal="true"
+			height="400" width="900" resizable="true" draggable="true"
+			responsive="true">
+
+			<p:dataTable value="#{finCarriereB.listRetraiteAnticipe}" var="ret"
+				selectionMode="single" id="tab"
+				selection="#{finCarriereB.anticipe}" rowKey="#{ret.id}"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom" rows="10">
+				<p:ajax event="rowSelect"
+					listener="#{finCarriereB.onAnticipeSelected}" update=":frm" />
+
+				<p:column headerText="Employé" width="80%">
+					<h:outputText value="#{ret.employe.nomPrenom}"/>
+				</p:column>
+								
+				<p:column headerText="Age">
+					<h:outputText value="#{ret.employe.age}" />
+				</p:column>
+			</p:dataTable>
+
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<ui:composition template="/masterPage.xhtml"
+ xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"> 
+
+	<ui:define name="content">
+		
+			<h:form id="frmMotifRetr" onkeypress="if (event.keyCode == 13) { return false; }">
+				
+				<f:metadata>
+					<f:event type="preRenderView" listener="#{authenticite.fichiersBase()}" />
+				</f:metadata>
+							
+				<p:growl id="msgs" showDetail="true"/>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							
+							
+							<p:panelGrid columns="2" id="pnl1"
+								columnClasses="ui-grid-col-2,ui-grid-col-2"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								<p:outputLabel value="Code"/>
+									<p:inputText id="txtCode" value="#{baseVue.code}" maxlength="45" style="text-transform:uppercase">
+										<p:ajax event="blur" listener="#{baseVue.changeCode()}" update=":frmMotifRetr"/>
+									</p:inputText>
+								
+							</p:panelGrid>
+								<p:panelGrid columns="2" id="pnl2"
+								columnClasses="ui-grid-col-2,ui-grid-col-8"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								
+								
+									<p:outputLabel value="Désignation"/>
+									<p:inputText id="txtDes" value="#{baseVue.designation}" />
+								</p:panelGrid>
+								
+								
+								<div class="ui-g">
+							
+								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton id="btnSave" icon="fa fa-save" value="Enregistrer" action="#{baseVue.insertUpdate()}" update=":frmMotifRetr" />	
+								</div>
+								
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton id="btnDelete" icon="fa fa-trash-o" value="Supprimer" 
+										onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false" 
+										action="#{baseVue.delete()}" update=":frmMotifRetr" styleClass="orange-btn"/>	
+								</div>
+								
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton id="btnAnnuler" icon="fa fa-refresh" value="Initialiser" action="#{baseVue.initialiserControles()}" update=":frmMotifRetr" />
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+								<p:dataTable id="tbl" var="bs" value="#{baseVue.listBase}" rowKey="#{bs.id}" selectionMode="single" 
+									selection="#{baseVue.baseSelectionne}" rows="10" paginator="true" paginatorAlwaysVisible="false"
+									paginatorPosition="bottom" reflow="true" emptyMessage="Aucun enregitrement">
+									
+									<p:ajax event="rowSelect" listener="#{baseVue.takeSelection}" update=":frmMotifRetr"/>
+														
+									<p:column headerText="Code" width="100" >
+										<h:outputText value="#{bs.code}"/>
+									 </p:column>
+																
+									<p:column headerText="Désignation" >
+										<h:outputText value="#{bs.designation}"/>
+									</p:column>
+									
+															
+								</p:dataTable>	
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</h:form>
+		
+	</ui:define>
+</ui:composition>

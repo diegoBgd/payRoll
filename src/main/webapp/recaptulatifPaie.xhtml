@@ -1,0 +1,67 @@
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Récaptulatif de paie</title>
+		</h:head>
+		<body>
+			<h:form id="frm" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event listener="#{authenticite.BulletinPaie()}"
+						type="preRenderView" />
+				</f:metadata>
+				<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+			
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+						<div class="card">
+							
+						<p:panelGrid id="pnl2" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Date début"/>
+							<p:inputMask id="txtDateDeb"
+								value="#{recaptulatifPaieB.datePrintDeb}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{recaptulatifPaieB.changeDateDeb()}"
+									update="txtDateDeb" />
+							</p:inputMask>
+							<p:outputLabel value="Date fin"/>
+							<p:inputMask id="txtDateFin"
+								value="#{recaptulatifPaieB.datePrintFin}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{recaptulatifPaieB.changeDateFin()}"
+									update="txtDateFin" />
+							</p:inputMask>
+						</p:panelGrid>
+								<div class="ui-g">
+							<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+
+								<div class="ui-g-12 ui-md-2"></div>
+								<div class="ui-g-12 ui-md-2">
+									<p:commandButton id="btnVisu" icon="fa fa-file-o"
+										value="Visualiser" style="border-radius:10px" 
+										action="#{recaptulatifPaieB.printPaie()}" ajax="false" />
+								</div>
+
+								
+
+							</div>
+						</div>
+							</div>
+						</div>
+					</div>
+				
+				</h:form>
+			</body>
+			
+	</ui:define>
+</ui:composition>

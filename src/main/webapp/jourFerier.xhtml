@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm"
+			onkeypress="if (event.keyCode == 13) { return false; }">
+
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{authenticite.parametrage()}" />
+			</f:metadata>
+
+			<p:growl id="msgs" life="21600" showDetail="true" />
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+				<div class="ui-g-12 ui-fluid card">
+
+					<p:panelGrid columns="2"
+						columnClasses="ui-grid-col-1,ui-grid-col-2" layout="grid"
+						styleClass="ui-panelgrid-blank"
+						style="background-color:transparent;">
+
+						<p:outputLabel value="Code" />
+						<p:inputText id="txtCode" value="#{jourFerieB.code}"
+							autocomplete="off">
+							<p:ajax event="blur" listener="#{jourFerieB.findByCode()}"
+								update=":frm" />
+						</p:inputText>
+
+					</p:panelGrid>
+					<p:panelGrid columns="2"
+						columnClasses="ui-grid-col-1,ui-grid-col-6" layout="grid"
+						styleClass="ui-panelgrid-blank"
+						style="background-color:transparent;">
+					<p:outputLabel value="Désignation" />
+					<p:inputText id="txtDesi" value="#{jourFerieB.designation}"/>
+					
+					</p:panelGrid>
+					<p:panelGrid columns="4"
+						columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+						layout="grid" styleClass="ui-panelgrid-blank"
+						style="background-color:transparent;">
+						<p:outputLabel value="Type Jour " />
+						<p:selectOneMenu id="txtTypeJrFer"
+							value="#{jourFerieB.typeJourFerie}">
+							<f:selectItem itemLabel="Jour férié" itemValue="1" />
+							<f:selectItem itemLabel="Week End" itemValue="2" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Date " />
+						<p:inputMask id="txtDateJour" value="#{jourFerieB.dateFerieS}"
+							mask="99/99/9999">
+							<p:ajax event="blur" listener="#{jourFerieB.changeDateFerie()}"
+								update=":frm:txtDateJour" />
+						</p:inputMask>
+					</p:panelGrid>
+				</div>
+			</div>
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+				<div class="ui-g-12 ui-fluid card">
+					<p:dataTable id="tbl" var="jrfer"
+						value="#{jourFerieB.listeHolyDays}" rowKey="#{jrfer.id}"
+						selectionMode="single" selection="#{jourFerieB.selected}" 
+						emptyMessage="" scrollable="true" scrollHeight="200" reflow="true">
+						<p:ajax event="rowSelect" listener="#{jourFerieB.onRowSelected}"
+							update="frm" />
+						<p:column headerText="Code" width="10%">
+							<h:outputText value="#{jrfer.code}" />
+						</p:column>
+
+						<p:column headerText="Désignation">
+							<h:outputText value="#{jrfer.designation}" />
+						</p:column>
+						<p:column headerText="Date" width="10%">
+							<h:outputText value="#{jrfer.printDate}" />
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+				<div class="ui-g-12 ui-fluid card">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnSave" icon="fa fa-save"
+								value="Enregistrer" action="#{jourFerieB.save()}" update=":frm"
+								style="border-radius:10px" />
+						</div>
+
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+								value="Supprimer" action="#{jourFerieB.supprimer()}"
+								update=":frm" styleClass="orange-btn" style="border-radius:10px">
+								
+									<p:confirm header="Confirmation"
+											disabled="#{jourFerieB.disableMsg}"
+											message="Voulez-vous vraiment supprimer ?"
+											icon="ui-icon-alert" />
+								
+							</p:commandButton>
+						</div>
+
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser" action="#{jourFerieB.initialiser()}"
+								update=":frm" style="border-radius:10px" />
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+	</ui:define>
+</ui:composition>

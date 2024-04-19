@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Lieu Travail</title>
+		</h:head>
+		<body>
+			<h:form id="frmLieu" onkeypress="if (event.keyCode == 13) { return false; }">
+				<p:growl id="msgs" showDetail="true" />
+				<f:metadata>
+					<f:event listener="#{authenticite.fichiersBase()}"
+						type="preRenderView" />
+				</f:metadata>
+				
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="ui-g-12 ui-fluid card">
+							<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-9"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+
+									<h:outputText value="Référence" />
+									<p:inputText id="txtCode" value="#{baseVue.code}">
+										<p:ajax event="blur" listener="#{baseVue.changeCode()}"
+											update=":frmLieu" />
+									</p:inputText>
+								
+								
+									<h:outputText value="Libellé" />
+									<p:inputText id="txtDes" value="#{baseVue.designation}"/>
+								</p:panelGrid>
+							</div>
+
+						
+					
+							<div class="ui-g-12 ui-fluid card">
+
+									<p:dataTable id="tbl" var="lieu"
+										value="#{baseVue.listBase}" rowKey="#{lieu.id}"
+										selectionMode="single"
+										selection="#{baseVue.baseSelectionne}" reflow="true"
+										emptyMessage=""  scrollable="true" scrollHeight="250">
+
+										<p:ajax event="rowSelect"
+											listener="#{baseVue.takeSelection()}"
+											update=":frmLieu" />
+
+										<p:column headerText="Référence" width="150">
+											<h:outputText value="#{lieu.code}" />
+										</p:column>
+
+										<p:column headerText="Libellé">
+											<h:outputText value="#{lieu.designation}" />
+										</p:column>
+
+									</p:dataTable>
+								</div>
+						
+						
+						<div class="ui-g-12 ui-fluid card">
+									<div class="ui-g-12 ui-md-1"/>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer" action="#{baseVue.insertUpdate()}"
+											update=":frmLieu" style="border-radius:10px"/>
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer"									
+											action="#{baseVue.delete()}" styleClass="orange-btn"
+											update=":frmLieu" style="border-radius:10px">
+												<p:confirm header="Confirmation" disabled="#{baseVue.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+											</p:commandButton>
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnAnnuler" style="border-radius:10px"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{baseVue.initialiserControles()}" update=":frmLieu" />
+									</div>
+								
+							</div>
+					</div>
+				
+			</h:form>
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+		</body>
+	</ui:define>
+</ui:composition>

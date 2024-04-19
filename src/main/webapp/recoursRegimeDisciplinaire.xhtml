@@ -1,0 +1,304 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<f:metadata>
+					<f:event listener="#{authenticite.SaisieRecours()}"
+						type="preRenderView" />
+				</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+					<div class="card">
+						<div class="ui-g">
+
+							<div class="ui-g-12 ui-md-6">
+								<p:commandButton value="Liste Saisie Sanction"
+									icon="fa fa-search" onclick="PF('dlgDem').show();" />
+							</div>
+
+						</div>
+					</div>
+ 
+
+					<div class="card">
+
+						<p:tabView id="gen">
+							<p:tab id="tab1" title="Information Employé">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Employé" />
+									<p:inputText id="txtcode"
+										value="#{saisieRegimeDisciplinaireB.code}">
+										<p:ajax event="blur"
+											listener="#{saisieRegimeDisciplinaireB.findRegimeDisciplinaire()}"
+											update=":frm" />
+									</p:inputText>
+
+									<p:inputText id="txtNom"
+										value="#{saisieRegimeDisciplinaireB.employe.nom} #{saisieRegimeDisciplinaireB.employe.prenom}"
+										readonly="true" />
+									<p:commandButton value="..." oncomplete="PF('dlg').show()"></p:commandButton>
+								</p:panelGrid>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Organe" />
+									<p:inputText id="txtOrgane"
+										value="#{saisieRegimeDisciplinaireB.employe.detailOrgane.directionGnle.designation}"
+										readonly="true" />
+									<h:outputLabel value="Service" />
+									<p:inputText id="txtServ"
+										value="#{saisieRegimeDisciplinaireB.employe.detailOrgane.service.designation}"
+										readonly="true" />
+									<h:outputLabel value="Fonction" />
+									<p:inputText id="txtProfession"
+										value="#{saisieRegimeDisciplinaireB.employe.fonction.designation}"
+										readonly="true" />
+									<h:outputLabel value="Personnel" />
+									<p:inputText id="txtPersonnel"
+										value="#{saisieRegimeDisciplinaireB.employe.detailGrade.personalGrade.categoriePersonnel.personnel.designation}"
+										readonly="true" />
+									<h:outputLabel value="Catégorie" />
+									<p:inputText id="txtCategorie"
+										value="#{saisieRegimeDisciplinaireB.employe.detailGrade.personalGrade.categoriePersonnel.designation}"
+										readonly="true" />
+									<h:outputLabel value=" Grade " />
+									<p:inputText id="txtGrade" readonly="true"
+										value="#{saisieRegimeDisciplinaireB.employe.detailGrade.personalGrade.designation}" />
+
+								</p:panelGrid>
+
+
+							</p:tab>
+							<p:tab id="tab2" title="Mesures Disciplinaires">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Sanction" />
+									<p:inputText id="txtSanc"
+										value="#{saisieRegimeDisciplinaireB.libelleSanction}"
+										readonly="true" />
+
+									<h:outputLabel value="Date Saisie sanction" />
+									<p:inputText id="txtDateSaisie"
+										value="#{saisieRegimeDisciplinaireB.dateSaisieS}"
+										readonly="true" />
+									<h:outputLabel value="Date Début sanction" />
+									<p:inputText id="txtDateD"
+										value="#{saisieRegimeDisciplinaireB.dateDebutSanctionS}"
+										readonly="true" />
+									<h:outputLabel value="Durée Sanction (jours)" />
+									<p:inputText id="txtDuree"
+										value="#{saisieRegimeDisciplinaireB.dureeSanction}"
+										style="text-align:right" readonly="true" />
+									<h:outputLabel value="Date Fin Sanction" />
+									<p:inputText id="txtDateF"
+										value="#{saisieRegimeDisciplinaireB.dateFinSanctionS}"
+										readonly="true" />
+									<h:outputText value="Raisons Sanction" />
+									<p:inputTextarea
+										value="#{saisieRegimeDisciplinaireB.raisonSanction}"
+										readonly="true" />
+								</p:panelGrid>
+							</p:tab>
+
+
+							<p:tab id="tab3" title="Traitement Salariale">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Taux Salaire" />
+									<p:inputText id="txtTauxSal"
+										value="#{saisieRegimeDisciplinaireB.traitement.pourcentageS}"
+										readonly="true" />
+									<h:outputLabel value="Ancien Salaire de Base" />
+									<p:inputText id="txtAncSal"
+										value="#{saisieRegimeDisciplinaireB.traitement.ancienSalaireS}"
+										readonly="true" />
+									<h:outputLabel value="Nouveau Salaire de Base" />
+									<p:inputText id="txtNouvSal"
+										value="#{saisieRegimeDisciplinaireB.traitement.salaireBaseS}"
+										readonly="true" />
+									<h:outputLabel value="Date debut salaire" />
+									<p:inputText id="txtdatetr"
+										value="#{saisieRegimeDisciplinaireB.traitement.dateDebutS}"
+										readonly="true" />
+								</p:panelGrid>
+							</p:tab>
+							<p:tab id="tab4" title="Recours">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-6"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+
+									<h:outputLabel value="Date Recours" />
+									<p:inputMask id="txtDateR"
+										value="#{saisieRegimeDisciplinaireB.dateRecoursS}"
+										mask="99/99/9999">
+										<p:ajax event="blur"
+											listener="#{saisieRegimeDisciplinaireB.changeDateRecours()}"
+											update="txtDateR" />
+									</p:inputMask>
+									<h:outputText value="Justification Recours" />
+									<p:inputTextarea
+										value="#{saisieRegimeDisciplinaireB.justificationRecours}"
+										autoResize="true" />
+								</p:panelGrid>
+							</p:tab>
+						</p:tabView>
+					</div>
+
+
+
+					<div class="ui-g card">
+					
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+									value="Enregistrer"
+									action="#{saisieRegimeDisciplinaireB.enregistrerRecours()}"
+									update=":frm" />
+							</div>
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+									value="Supprimer"
+									onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+									action="#{saisieRegimeDisciplinaireB.supprimer()}"
+									update=":frm" styleClass="orange-btn" />
+							</div>
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+									value="Initialiser"
+									action="#{saisieRegimeDisciplinaireB.initialiser()}"
+									update=":frm" />
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			
+
+		</h:form>
+		<p:dialog header="Recherche employé" widgetVar="dlg" modal="true"
+			height="400" width="900" resizable="true" draggable="true"
+			responsive="true">
+
+			<div class="ui-g card">
+				<div class="ui-g-12 ui-md-1">
+					<h:outputLabel value="Code" />
+				</div>
+				<div class="ui-g-12 ui-md-3">
+					<p:inputText id="SCode"
+						value="#{saisieRegimeDisciplinaireB.codeEmployeRecherche}" />
+				</div>
+				<div class="ui-g-12 ui-md-1">
+					<h:outputLabel value="Nom" />
+				</div>
+				<div class="ui-g-12 ui-md-3">
+					<p:inputText
+						value="#{saisieRegimeDisciplinaireB.nomEmployeRecherche}" />
+				</div>
+				<div class="ui-g-12 ui-md-1">
+					<h:outputLabel value="Prénom" />
+				</div>
+				<div class="ui-g-12 ui-md-3">
+					<p:inputText
+						value="#{saisieRegimeDisciplinaireB.prenomEmployeRecherche}" />
+				</div>
+				<div class="ui-g-12 ui-md-1"></div>
+				<div class="ui-g-12 ui-md-3">
+					<p:commandButton value="Rechercher"
+						action="#{saisieRegimeDisciplinaireB.chargerEmploye()}"
+						update="tab" />
+				</div>
+
+			</div>
+
+			<p:dataTable value="#{saisieRegimeDisciplinaireB.listEmploye}"
+				var="empl" selectionMode="single" id="tab"
+				selection="#{saisieRegimeDisciplinaireB.selection}"
+				rowKey="#{empl.id}" paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom" rows="10">
+				<p:ajax event="rowDblselect"
+					listener="#{saisieRegimeDisciplinaireB.onRowselected1}"
+					update=":frm" />
+
+				<p:column headerText="Nom">
+					<h:outputText value="#{empl.nom}" />
+				</p:column>
+				<p:column headerText="Prénom">
+					<h:outputText value="#{empl.prenom}" />
+				</p:column>
+				<p:column headerText="Fonction">
+					<h:outputText value="#{empl.fonction.designation}" />
+				</p:column>
+				<p:column headerText="Niveau Hierarchique">
+					<h:outputText value="#{empl.detailOrgane.service.designation}" />
+				</p:column>
+				<p:column headerText="Organe">
+					<h:outputText
+						value="#{empl.detailOrgane.directionGnle.designation}" />
+				</p:column>
+			</p:dataTable>
+
+		</p:dialog>
+		<p:dialog widgetVar="dlgDem" header="Rechercher des saisies sanctions"
+			width="70%" height="40%" position="center" responsive="true">
+			<h:form id="frmDem">
+
+
+				<p:dataTable id="tblDem"
+					value="#{saisieRegimeDisciplinaireB.listSaisieRegimeDisciplinaire}"
+					var="saisie" rows="10" paginator="true"
+					paginatorAlwaysVisible="false" rowKey="#{saisie.id}"
+					selectionMode="single"
+					selection="#{saisieRegimeDisciplinaireB.selected}"
+					paginatorPosition="bottom" reflow="true"
+					emptyMessage="Aucun enregitrement">
+
+					<p:ajax event="rowSelect"
+						listener="#{saisieRegimeDisciplinaireB.onRowSelected}"
+						update="frm" />
+
+					<p:column headerText="Employé">
+						<h:outputText value="#{saisie.employe.nomPrenom}" />
+					</p:column>
+
+					<p:column headerText="Service">
+						<h:outputText
+							value="#{saisie.employe.detailOrgane.service.designation}" />
+					</p:column>
+					<p:column headerText="Grade ">
+						<h:outputText
+							value="#{saisie.employe.detailGrade.personalGrade.designation}" />
+					</p:column>
+
+					<p:column headerText="Sanction">
+						<h:outputText value="#{saisie.libelleSanction}" />
+					</p:column>
+
+					<p:column headerText="Date début sanction">
+						<h:outputText value="#{saisie.dateDebutSanctionS}" />
+					</p:column>
+
+					<p:column headerText="Raison sanction">
+						<h:outputText value="#{saisie.raisonSanction}" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

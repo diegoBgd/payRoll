@@ -1,0 +1,169 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-1"/>
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton value="Recherche" icon="fa fa-search"
+									onclick="PF('dlgPnl').show();"  style="border-radius:10px"/>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<p:panelGrid id="pnl1" columns="4"
+							columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+
+
+							<h:outputLabel value="Référence" />
+							<p:inputText id="txtCode" value="#{critereEvaluationB.code}" autocomplete="off">
+								<p:ajax event="blur"
+									listener="#{critereEvaluationB.changeCode()}" update="frm" />
+							</p:inputText>
+
+							<h:outputLabel value="Critère" />
+							<p:inputText id="txtdes"
+								value="#{critereEvaluationB.designation}" autoResize="true" />
+
+							<h:outputLabel value="Note " />
+							<p:inputNumber id="txtNote" inputStyle="text-align:right"
+								value="#{critereEvaluationB.noteGeneral}" readonly="true" />
+
+						</p:panelGrid>
+						<div class="card">
+							<p:dataTable id="tbl1" var="det"
+								value="#{critereEvaluationB.listDetailCritere}"
+								rowKey="#{det.index}" selectionMode="single"
+								selection="#{critereEvaluationB.selectedDetail}"
+								scrollable="true" emptyMessage=" " scrollHeight="150">
+								<p:ajax event="rowSelect"
+									listener="#{critereEvaluationB.onRowSelectedDetail}"
+									update=":frm:txtdesi,:frm:txtnoteDet" />
+
+								<p:column headerText="Elément à évaluer">
+									<h:outputText value="#{det.designation}" />
+								</p:column>
+
+								<p:column headerText="Note pondérale" width="10%">
+									<h:outputText value="#{det.note}" />
+								</p:column>
+								<p:column headerText="" width="10%"/>
+									
+							
+							</p:dataTable>
+
+							<p:panelGrid id="pnl2" columns="6"
+								columnClasses="ui-grid-col-1,ui-grid-col-7,ui-grid-col-2,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputLabel value="Elément" />
+								<p:inputText id="txtdesi" autocomplete="off"
+									value="#{critereEvaluationB.designationDetail}" />
+
+
+								<h:outputLabel value="Note pondérale" />
+								<p:inputNumber id="txtnoteDet" inputStyle="text-align:right" autocomplete="off"
+									value="#{critereEvaluationB.noteDetail}"/>
+									
+								<p:commandButton id="btnAjouter" icon="fa fa-plus"
+											action="#{critereEvaluationB.ajouter()}"  style="border-radius:10px"
+											update=":frm:tbl1,:frm:txtdesi,:frm:txtnoteDet,:frm:txtNote" />
+								
+								<p:commandButton id="btnEnlever" icon="fa fa-remove"
+											action="#{critereEvaluationB.enlever()}" styleClass="red-btn" 
+											style="border-radius:10px"
+											update=":frm:tbl1,:frm:txtdesi,:frm:txtnoteDet,:frm:txtNote" />
+											
+							</p:panelGrid>
+							
+						</div>
+					</div>
+ 
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-1"/>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" style="border-radius:10px"
+								value="Enregistrer" action="#{critereEvaluationB.enregistrer()}"
+								update=":frm" />
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+								value="Supprimer" style="border-radius:10px"
+								action="#{critereEvaluationB.supprimer()}" update=":frm"
+								styleClass="orange-btn">
+								<p:confirm header="Confirmation" disabled="#{critereEvaluationB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh" style="border-radius:10px"
+								value="Initialiser" action="#{critereEvaluationB.initialiser()}"
+								update=":frm" />
+						</div>
+
+					</div>
+				</div>
+
+
+			</div>
+
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" widgetVar="cd" >
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+		<p:dialog widgetVar="dlgPnl" header="Les critères d'évaluation" modal="true"
+			width="70%" height="40%" position="center" responsive="true">
+			<h:form id="frmBlt">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						
+							<p:dataTable id="tbl" var="crit"
+								value="#{critereEvaluationB.allCritereEvaluation}"
+								rowKey="#{crit.id}" selectionMode="single"
+								selection="#{critereEvaluationB.selected}" scrollable="true" 
+								scrollHeight="200" emptyMessage=" ">
+								<p:ajax event="rowSelect"
+									listener="#{critereEvaluationB.onRowSelected}"
+									update=":frm:txtCode,:frm:txtdes,:frm:txtNote,:frm:tbl1"/>
+
+								<p:column headerText="Référence" width="10%">
+									<h:outputText value="#{crit.code}" />
+								</p:column>
+
+								<p:column headerText="critères">
+									<h:outputText value="#{crit.designation}" />
+								</p:column>
+
+								<p:column headerText="Note" width="10%">
+									<h:outputText value="#{crit.noteGeneralS}" />
+								</p:column>
+							</p:dataTable>
+						
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+

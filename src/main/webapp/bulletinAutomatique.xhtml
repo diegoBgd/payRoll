@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.BulletinPaie()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+			
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<p:panelGrid id="pnl2" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-2" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+							<h:outputText value="Date paie" />
+							<p:inputMask id="txtDate"
+								value="#{bulletinPaieAutoB.datePaieString}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{bulletinPaieAutoB.changeDatePaie()}"
+									update="txtDate,txtMois,btnStart" />
+							</p:inputMask>
+						    <p:outputLabel value="Mois de paie" />
+							<p:inputText id="txtMois" value="#{bulletinPaieAutoB.moisLettre}" readonly="true"/>
+
+						</p:panelGrid>
+
+						<div class="ui-g">
+							<div class="ui-g-6 ui-md-12 ui-fluid contact-form">
+
+								<div class="ui-g-6 ui-md-2"/>
+								<div class="ui-g-6 ui-md-2">
+
+									<p:commandButton value="Démarrer" widgetVar="start" style="border-radius:10px" id="btnStart"
+										icon="fa fa-play"
+										onclick="PF('pbAjax').start();PF('poll').start();"
+										onstart="PF('dlg').show();"
+										oncomplete="PF('dlg').hide();PF('poll').stop();PF('pbAjax').cancel();"
+										action="#{bulletinPaieAutoB.generationBulletin()}"
+										disabled="#{bulletinPaieAutoB.disableSave}"
+										/>
+					
+								</div>
+							</div>
+						</div>
+					</div>
+				</div> 
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton value="Recherche" style="border-radius:10px" 
+									action="#{bulletinPaieAutoB.chargementPaieAnormal()}"
+									icon="fa fa-search" update="tblPAN" />
+							</div>
+						</div>
+						<p:dataTable value="#{bulletinPaieAutoB.listAnormal}"
+							emptyMessage="" var="pan" rowKey="#{pan.id}" id="tblPAN"
+							scrollable="true" scrollHeight="200" >
+
+							<f:facet name="header">Liste des paies anormales</f:facet>
+							<p:column headerText="" width="5%">
+								<h:outputText value="#{pan.indexNum}" />
+							</p:column>
+							<p:column headerText="Matricule" width="10%">
+								<h:outputText value="#{pan.code}" />
+							</p:column>
+							<p:column headerText="Nom et prénom" width="50%">
+								<h:outputText value="#{pan.nomPrenom}" />
+							</p:column>
+							<p:column headerText="Salaire base" width="15%"
+								style="text-align:right">
+								<h:outputText value="#{pan.printBase}"/>
+							</p:column>
+							<p:column headerText="Montant" width="15%"
+								style="text-align:right">
+								<h:outputText value="#{pan.printMontant}" />
+							</p:column>
+						</p:dataTable>
+						<p:spacer />
+						<h:commandLink>
+							<p:graphicImage name="images/pdf.png" library="apollo-layout" width="50" height="50"/>
+							<p:dataExporter type="pdf" target="tblPAN" fileName="liste" 
+								pageOnly="true" preProcessor="#{bulletinPaieAutoB.preProcessPdf}"/>
+						</h:commandLink>
+						<h:commandLink>
+							<p:graphicImage name="images/excel.png" library="apollo-layout" width="50" height="50"/>
+							<p:dataExporter type="xls" target="tblPAN" fileName="liste"
+								pageOnly="false" />
+						</h:commandLink>
+						
+					</div>
+
+				</div>
+			</div>
+
+		</h:form>
+		<p:dialog widgetVar="dlg" appendTo="@(body)" modal="true"
+			header="Génération automatique de la paie" draggable="false"
+			closeOnEscape="false" resizable="false" minimizable="false"
+			closable="false">
+
+			<h:form id="prgFrm">
+				<p:poll interval="1" widgetVar="poll" autoStart="false" async="true"
+					update=":prgFrm:txt,:frm:tblPAN" immediate="true" />
+				<h:outputLabel id="txt" value="#{bulletinPaieAutoB.nomPrenom}" />
+				<p:progressBar widgetVar="pbAjax" ajax="true"
+					value="#{bulletinPaieAutoB.progressValue}" labelTemplate="{value}%"
+					styleClass="animated" global="false">
+					<p:ajax event="complete" listener="#{bulletinPaieAutoB.onComplete}"
+						oncomplete="PF('start').enable();" />
+				</p:progressBar>
+
+			</h:form>
+
+		</p:dialog>
+	</ui:define>
+</ui:composition>

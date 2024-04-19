@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Organismes Sociaux</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+				<p:growl id="msgs" showDetail="true" />
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-2">
+
+									<p:outputLabel value="Code" />
+									<p:inputText id="txtCode" value="#{organismesSociauxB.code}" autocomplete="off">
+										<p:ajax event="blur"
+											listener="#{organismesSociauxB.changeCode()}"
+											update=":frm:txtDes,tbl" />
+									</p:inputText>
+								</div>
+								<div class="ui-g-12 ui-md-10">
+									<p:outputLabel value="Désignation" />
+									<p:inputText id="txtDes"
+										value="#{organismesSociauxB.designation}" autocomplete="off"/>
+								</div>
+							</div>
+
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer"
+											action="#{organismesSociauxB.enregistrer()}" update=":frm" />
+									</div>
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer"
+											onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+											action="#{organismesSociauxB.supprimer()}"
+											styleClass="orange-btn" update=":frm" />
+									</div>
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnAnnuler"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{organismesSociauxB.initialiser()}" update=":frm" />
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-12">
+
+									<p:dataTable id="tbl" var="depa"
+										value="#{organismesSociauxB.listOrganismes}"
+										rowKey="#{depa.id}" selectionMode="single"
+										selection="#{organismesSociauxB.organisme}" reflow="true"
+										paginator="true" rows="10" paginatorAlwaysVisible="false"
+										 paginatorPosition="bottom">
+										<p:ajax event="rowSelect"
+											listener="#{organismesSociauxB.onRowSelected}"
+											update=":frm:txtCode,:frm:txtDes" />
+
+										<p:column headerText="Code" width="10%">
+											<h:outputText value="#{depa.code}" />
+										</p:column>
+
+										<p:column headerText="Désignation">
+											<h:outputText value="#{depa.designation}" />
+										</p:column>
+
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</h:form>
+		</body>
+	</ui:define>
+</ui:composition>

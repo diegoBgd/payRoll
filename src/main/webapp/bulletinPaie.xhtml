@@ -1,0 +1,790 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Bulletin de paie</title>
+		</h:head>
+		<body>
+			<h:form id="frm" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event listener="#{authenticite.BulletinPaie()}"
+						type="preRenderView" />
+				</f:metadata>
+				<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+				<p:blockUI block="frm" trigger="cmdSave">
+					  <p:outputLabel value="Opération encours de traitement..."/>
+				</p:blockUI>
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+						<div class="card">
+							<div class="ui-g">
+
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton value="Recherche" icon="fa fa-search"
+										onclick="PF('dlgBlt').show();" style="border-radius:10px"/>
+								</div>
+								<div class="ui-g-12 ui-md-6">
+									<p:outputLabel value="#{bulletinPaieB.infoMsg}" id="txtMsg" style="color:red;font-size:16px"/>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<p:panelGrid id="pnl1" columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputText value="Employé" />
+								<p:inputText id="txtCodeEmploye"
+									value="#{bulletinPaieB.codeEmploye}" autocomplete="off">
+									<p:ajax event="blur"
+										listener="#{bulletinPaieB.searchEmploye()}"
+										update="pnl1,pnl2,frmVrb:bulletin" />
+								</p:inputText>
+
+								<p:inputText value="#{bulletinPaieB.nomEmploye}" readonly="true" />
+								<p:commandButton icon="fa fa-search" style="border-radius:10px"
+									onclick="PF('dlgEmploye').show();" />
+
+							</p:panelGrid>
+							<p:panelGrid id="pnl2" columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputText value="Date paie" />
+								<p:inputMask id="txtDate"
+									value="#{bulletinPaieB.datePaieString}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{bulletinPaieB.changeDatePaie()}"
+										update="txtDate,:frm,:frmVrb" />
+								</p:inputMask>
+
+
+								<p:outputLabel value="Mois à payer"/>
+								<p:inputText value="#{bulletinPaieB.moisLettre}" id="txtMois"
+									readonly="true"/>
+
+								<p:outputLabel value="Mode règlement" />
+								<p:selectOneMenu value="#{bulletinPaieB.modeReglement}">
+									<f:selectItem itemLabel="Espèce" itemValue="0" />
+									<f:selectItem itemLabel="Chèque" itemValue="1" />
+									<f:selectItem itemLabel="Virement" itemValue="2" />
+									<f:selectItem itemLabel="Mandat" itemValue="3" />
+
+								</p:selectOneMenu>
+								<h:outputText value="Salaire de base"/>
+								<p:inputNumber id="txtSalBase"
+									value="#{bulletinPaieB.salaireBase}" readonly="true"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;" 
+									decimalPlaces="#{bulletinPaieB.nbrDecimaux}"/>
+
+								<h:outputText value="Heures normales" />
+								<p:inputNumber id="txtHn"
+									value="#{bulletinPaieB.nombreHeureNormal}" readonly="true"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;"
+									decimalPlaces="0" />
+
+								<h:outputText value="Montant/Heure" />
+								<p:inputNumber id="txtMontantH" readonly="true"
+									value="#{bulletinPaieB.montantHeure}"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;"/>
+
+								<h:outputText value="Heures prestées" />
+								<p:inputNumber id="txtHp"
+									value="#{bulletinPaieB.nombreHeurePreste}"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;"
+									decimalPlaces="0" autocomplete="off">
+									<p:ajax event="change" update="txtHp" />
+									<p:ajax event="blur" listener="#{bulletinPaieB.onHourLeave()}"
+										update="frm" />
+								</p:inputNumber>
+
+							
+								<h:outputText value="Logement" />
+								<p:inputNumber id="txtMontLog"
+									value="#{bulletinPaieB.totalLogement}" readonly="true"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;"
+									 decimalPlaces="#{bulletinPaieB.nbrDecimaux}" />
+
+								<h:outputText value="Jours additionnels"/>
+								<p:inputNumber id="txtDayAdd" value="#{bulletinPaieB.nbreJourAdd}"
+									inputStyle="text-align:right;" decimalPlaces="0"
+									thousandSeparator="&nbsp;" >
+									<p:ajax event="blur" listener="#{bulletinPaieB.onAddDaysLeave()}"
+										update="frm" />
+								</p:inputNumber>
+								
+								<h:outputText value="Montant jrs additionnels"/>
+								<p:inputNumber id="txtMtDayAdd" readonly="true" 
+									value="#{bulletinPaieB.totalJourAdd}"
+									inputStyle="text-align:right;"
+									thousandSeparator="&nbsp;"  
+									decimalPlaces="#{bulletinPaieB.nbrDecimaux}"/>
+								
+								<h:outputText value="Jours fériés"/>
+								<p:inputNumber id="txtFrd" value="#{bulletinPaieB.nbrJourFerie}"
+									inputStyle="text-align:right;" decimalPlaces="0"
+									thousandSeparator="&nbsp;" >
+									<p:ajax event="blur" listener="#{bulletinPaieB.onFreeDaysLeave()}"
+										update="frm" />
+								</p:inputNumber>
+								
+								<h:outputText value="Taux jours fériés"/>
+								<p:inputNumber id="txtTxFrd" readonly="true" 
+									value="#{bulletinPaieB.tauxJrsFerie}"
+									inputStyle="text-align:right;"
+									thousandSeparator="&nbsp;"/>
+									
+								<h:outputText value="Montant brut" />
+								<p:inputNumber id="txtMontPrest" 
+									value="#{bulletinPaieB.totalBrute}" readonly="true"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;" 
+									 decimalPlaces="#{bulletinPaieB.nbrDecimaux}"/>
+								
+								<h:outputText value="Net à payer"
+									style="font-weight:bold;color:blue" />
+								<p:inputNumber id="txtMontNet" readonly="true"
+									value="#{bulletinPaieB.totalNetPay}"
+									inputStyle="text-align:right;font-weight:bold;color:blue"
+									thousandSeparator="&nbsp;" 
+									 decimalPlaces="#{bulletinPaieB.nbrDecimaux}"/>
+							</p:panelGrid>
+
+							<p:panelGrid id="pnl3" columns="3" 
+								columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-3" layout="grid"
+								styleClass="ui-panelgrid-blank" 
+								style="border:0px none; background-color:transparent;">
+								<p:outputLabel value="Commentaire" />
+								<p:inputText value="#{bulletinPaieB.commentaire}"
+									autocomplete="off" />
+									
+								<p:commandButton value="Les variables de paie" onclick="PF('dlgelmt').show();" 
+												 style="border-radius:10px;background: #fff;border:solid 1px #008B8F;color:#008B8F"/>
+							</p:panelGrid>
+							
+							
+						</div>
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+
+									<div class="ui-g-12 ui-md-1"/>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton value="Enregistrer" style="border-radius:10px"
+											action="#{bulletinPaieB.save()}" icon="ui-icon ui-icon-disk"
+											update=":frm" id="cmdSave" 
+											disabled="#{bulletinPaieB.disableSave}" />
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton value="Supprimer" style="border-radius:10px"
+											action="#{bulletinPaieB.deleteBulletin()}"
+											styleClass="orange-btn" icon="fa fa-remove" update=":frm">
+											
+											<p:confirm header="Confirmation" disabled="#{bulletinPaieB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton value="initialiser" style="border-radius:10px"
+											action="#{bulletinPaieB.initialize()}"
+											icon="ui-icon ui-icon-refresh" update=":frm" />
+									</div>
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</h:form>
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			<h:form>
+			<p:dialog widgetVar="confirmDialog" header="Avertissement"
+			modal="true" appendTo="@(body)" width="400">
+			<h:form id="frmConfirm">
+				<h:panelGrid columns="1" style="margin:auto;text-align:center">
+					<p:outputLabel value="Ce bulletin est déjà enregistré! Voulez-vous le modifier ?" />
+					<p:spacer height="30px"></p:spacer>
+
+					<h:panelGrid columns="2" style="margin:auto;text-align:center">
+						<p:commandButton value="Oui" style="width:120px"
+							actionListener="#{bulletinPaieB.modifyBulletin()}" update=":frm"
+							oncomplete="PF('confirmDialog').hide();" />
+						<p:commandButton value="Non" style="width:120px"
+							actionListener="#{bulletinPaieB.nonModify()}"
+							update=":frm" oncomplete="PF('confirmDialog').hide();" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+			</h:form>
+			<p:dialog widgetVar="dlgEmploye" header="Recherche Employé" 
+				modal="true" width="70%" height="40%" position="center"
+				responsive="true">
+				<h:form id="frmEmploye">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-6,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+
+									<h:outputText value="Recherche par nom" />
+									<p:inputText value="#{bulletinPaieB.nomRechEmp}" />
+
+									<p:commandButton value="Rechercher" style="border-radius:10px"
+												icon="fa fa-search"
+												action="#{bulletinPaieB.chargementEmploye()}"
+												update=":frmEmploye:tblEmploye" />
+								</p:panelGrid>
+								
+								<p:dataTable id="tblEmploye"
+									value="#{bulletinPaieB.listEmploye}" var="empl"
+									rowKey="#{empl.id}" selectionMode="single"
+									selection="#{bulletinPaieB.employe}" reflow="true"
+									scrollable="true" scrollHeight="200" emptyMessage="">
+
+									<p:ajax event="rowSelect"
+										listener="#{bulletinPaieB.onEmployeSelected}"
+										update=":frm:pnl1,:frmBlt:txtEmplRech" />
+
+									<p:column headerText="Code" width="10%">
+										<h:outputText value="#{empl.code}" />
+									</p:column>
+
+									<p:column headerText="Nom" width="40%">
+										<h:outputText value="#{empl.nomPrenom}" />
+									</p:column>
+
+									
+
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+
+				</h:form>
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgBlt" header="Rechercher les paiements" modal="true"
+				width="80%" height="50%" position="center" responsive="true">
+				<h:form id="frmBlt">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-1"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+
+
+									<h:outputText value="Employé" />
+									<p:inputText id="txtEmplRech"
+										value="#{bulletinPaieB.nomEmploye}" readonly="true" />
+									<p:commandButton icon="fa fa-search" style="border-radius:10px"
+										onclick="PF('dlgEmploye').show();"/>
+
+									
+								</p:panelGrid>
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-6,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+									
+									<p:outputLabel value="Mois" />
+									<p:selectOneMenu value="#{bulletinPaieB.mois}">
+										<f:selectItem itemLabel="" itemValue="0" />
+										<f:selectItem itemLabel="Janvier" itemValue="1" />
+										<f:selectItem itemLabel="Février" itemValue="2" />
+										<f:selectItem itemLabel="Mars" itemValue="3" />
+										<f:selectItem itemLabel="Avril" itemValue="4" />
+										<f:selectItem itemLabel="Mais" itemValue="5" />
+										<f:selectItem itemLabel="Juin" itemValue="6" />
+										<f:selectItem itemLabel="Juillet" itemValue="7" />
+										<f:selectItem itemLabel="Août" itemValue="8" />
+										<f:selectItem itemLabel="Septembre" itemValue="9" />
+										<f:selectItem itemLabel="Octobre" itemValue="10" />
+										<f:selectItem itemLabel="Novembre" itemValue="11" />
+										<f:selectItem itemLabel="Décembre" itemValue="12" />
+									
+									</p:selectOneMenu>
+									
+									<p:commandButton value="Rechercher" style="border-radius:10px"
+										action="#{bulletinPaieB.chargementBulletin()}"
+										update=":frmBlt"  icon="fa fa-search"/>
+									</p:panelGrid>
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+										<p:dataTable id="tblBlt" value="#{bulletinPaieB.listBulletin}"
+											selectionMode="single" var="bltin" emptyMessage=""
+											selection="#{bulletinPaieB.bulletinEntete}" 
+											rowKey="#{bltin.id}" reflow="true" scrollable="true" scrollHeight="200">
+
+											<p:ajax event="rowSelect"
+												listener="#{bulletinPaieB.onBulletinSelected}" update=":frm,:frmVrb" />
+
+											<p:column headerText="Code / matricule" width="10%">
+												<h:outputText value="#{bltin.codeEmploye}" />
+											</p:column>
+
+											<p:column headerText="Employé" width="30%">
+												<h:outputText value="#{bltin.nomEmploye}" />
+											</p:column>
+
+											<p:column headerText="Mois" width="10%">
+												<h:outputText value="#{bltin.moisPrint}" />
+											</p:column>
+
+											<p:column headerText="Montant" style="text-align:right"
+												width="10%">
+												<h:outputText value="#{bltin.printNet}" />
+											</p:column>
+
+										</p:dataTable>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+			<p:dialog widgetVar="dlgelmt" header="Variables de la paie"
+				width="70%" height="40%" position="center" responsive="true">
+				<h:form id="frmVrb">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+								<p:tabView id="bulletin" style="font-size:12px">
+
+								<p:tab id="tab1"
+									title="Heures sup -allocations familiales">
+									<div class="ui-g">
+										<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+
+											<div class="ui-g-12 ui-md-6">
+												<p:dataTable id="tblHs"
+													value="#{bulletinPaieB.listHeureSup}" var="hs"
+													rowKey="#{hs.id}" selectionMode="single" scrollHeight="150" 
+													style="border: 1px solid gray" emptyMessage="" scrollable="true"
+													selection="#{bulletinPaieB.detailHeurSup}" reflow="true">
+
+													<f:facet name="header">Heure supplémentaire</f:facet>
+													<p:column headerText="Nombre d'heure" width="20%">
+														<h:outputText value="#{hs.heurePreste}" />
+													</p:column>
+													<p:column headerText="taux" width="20%"
+														style="text-align:right">
+														<h:outputText value="#{hs.pourcentage}" />
+													</p:column>
+													<p:column headerText="Montant" width="20%"
+														style="text-align:right">
+														<h:outputText value="#{hs.montant}" />
+													</p:column>
+
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column footerText="Total"
+																style="text-align:left;color:brown" colspan="2" />
+															<p:column footerText="#{bulletinPaieB.totalHS}"
+																style="text-align:right;color:brown" />
+														</p:row>
+													</p:columnGroup>
+												</p:dataTable>
+											</div>
+
+											<div class="ui-g-12 ui-md-6">
+												<p:dataTable id="tblPrs" scrollHeight="150" style="border: 1px solid gray"
+													value="#{bulletinPaieB.listAllocation}" var="alc" scrollable="true"
+													rowKey="#{alc.id}" selectionMode="single" emptyMessage=""
+													selection="#{bulletinPaieB.detailAllocation}" reflow="true">
+
+													<f:facet name="header">Personnes à charge</f:facet>
+													<p:column headerText="Nom" width="40%">
+														<h:outputText value="#{alc.nomPersonne}"/>
+													</p:column>
+													<p:column headerText="Nombre" width="20%">
+														<h:outputText value="#{alc.nombre}" />
+													</p:column>
+													<p:column headerText="Montant" width="40%"
+														style="text-align:right">
+														<h:outputText value="#{alc.printMontant}" />
+													</p:column>
+													
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column footerText="Total"
+																style="text-align:left;color:brown" colspan="2" />
+															<p:column footerText="#{bulletinPaieB.printTotAlloc}"
+																style="text-align:right;color:brown" /> 
+														</p:row>
+													</p:columnGroup>
+												</p:dataTable>
+												
+											</div>
+										</div>
+									</div>
+
+								</p:tab>
+
+								<p:tab id="tab2" title="Primes">
+										
+												<p:dataTable id="tblprime" scrollHeight="150"
+													value="#{bulletinPaieB.listePrime}" var="prm"
+													rowKey="#{prm.idPrime}" selectionMode="single"
+													selection="#{bulletinPaieB.detailPrime}" emptyMessage=""
+													scrollable="true" style="border: 1px solid gray">
+
+													<p:ajax event="rowSelect"
+														listener="#{bulletinPaieB.onPrimeSelected}"
+														update=":frmVrb:bulletin:smPrm,:frmVrb:bulletin:mtPrm,:frm:txtMontNet" />
+
+													
+													<p:column headerText="Primes" width="25%">
+														<h:outputText value="#{prm.libellePrime}" />
+													</p:column>
+
+													<p:column headerText="Montant" width="10%"
+														style="text-align:right">
+														<h:outputText value="#{prm.printMontant}" />
+													</p:column>
+													<p:column headerText="" width="5%"/>
+													
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column footerText="Total"
+																style="text-align:left;color:brown" />
+																
+															<p:column footerText="#{bulletinPaieB.printTotalPrime}"
+																style="text-align:right;color:brown" />
+																
+															<p:column/>
+														</p:row>
+													</p:columnGroup>
+												</p:dataTable>
+
+											<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-7,ui-grid-col-3,ui-grid-col-1,ui-grid-col-1"
+													layout="grid" styleClass="ui-panelgrid-blank"
+													style="border:0px none; background-color:transparent;">
+													
+													<p:selectOneMenu id="smPrm"
+														value="#{bulletinPaieB.idPrime}" autoWidth="true" 
+														filter="true" filterMatchMode="contains"
+														valueChangeListener="#{bulletinPaieB.changePrime}">
+														<f:selectItems value="#{bulletinPaieB.listePrimes}" />
+														<p:ajax event="itemSelect" update="smPrm" />
+														
+													</p:selectOneMenu>
+												
+
+													<p:inputNumber id="mtPrm"
+														value="#{bulletinPaieB.montantPrime}" autocomplete="off"
+														inputStyle="text-align:right" thousandSeparator="&nbsp;" 
+														decimalPlaces="0"/>
+												
+
+													<p:commandButton  icon="fa fa-plus"
+														action="#{bulletinPaieB.addPrime()}" style="border-radius:10px" 
+														update="tblprime,smPrm,mtPrm,:frm:txtMontNet,:frm:txtMontPrest,
+														        :frmVrb:bulletin:tblHs,:frmVrb:bulletin:tblCot" />
+												
+
+													<p:commandButton icon="fa fa-remove"
+														styleClass="red-btn"  style="border-radius:10px" 
+														action="#{bulletinPaieB.removePrime()}"
+														update="tblprime,smPrm,mtPrm,:frm:txtMontNet,:frm:txtMontPrest,
+														       :frmVrb:bulletin:tblHs,:frmVrb:bulletin:tblCot" />
+											</p:panelGrid>
+								
+
+
+								</p:tab>
+									<p:tab id="tab3" title="Cotisations">
+									
+
+												<p:dataTable id="tblCot" scrollHeight="150"
+													style="border: 1px solid gray"
+													value="#{bulletinPaieB.listeCotisation}" var="cot"
+													scrollable="true" rowKey="#{cot.idCotisation}"
+													selectionMode="single" emptyMessage=""
+													selection="#{bulletinPaieB.detailCotisation}" reflow="true">
+
+													<p:ajax event="rowSelect"
+														listener="#{bulletinPaieB.onCotisationSelected}"
+														update=":frmVrb:bulletin:smCot,:frmVrb:bulletin:mtCot,
+														:frmVrb:bulletin:mtPat" />
+
+
+													<p:column headerText="Libellé" width="40%">
+														<h:outputText value="#{cot.libelleCotisation}" />
+													</p:column>
+
+													<p:column headerText="Salarial" width="20%"
+														style="text-align:right">
+														<h:outputText value="#{cot.printSalarial}" />
+													</p:column>
+													<p:column headerText="Patronal" width="20%"
+														style="text-align:right">
+														<h:outputText value="#{cot.printPatronal}" />
+													</p:column>
+													<p:column/>
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column footerText="Total"
+																style="text-align:left;color:brown" />
+															<p:column
+																footerText="#{bulletinPaieB.printTotalSalarial}"
+																style="text-align:right;color:brown" />
+															<p:column
+																footerText="#{bulletinPaieB.printTotalPatronal}"
+																style="text-align:right;color:brown" />
+															<p:column/>
+														</p:row>
+													</p:columnGroup>
+
+												</p:dataTable>
+												<p:panelGrid columns="5"
+													columnClasses="ui-grid-col-5,ui-grid-col-3,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1"
+													layout="grid" styleClass="ui-panelgrid-blank"
+													style="border:0px none; background-color:transparent;">
+													
+													<p:selectOneMenu id="smCot" filter="true"
+														filterMatchMode="contains" autoWidth="true"
+														value="#{bulletinPaieB.idCotisation}"
+														valueChangeListener="#{bulletinPaieB.changeCotisation}">
+														<f:selectItems value="#{bulletinPaieB.listeCotisations}" />
+														<p:ajax event="change" update="smCot" />
+														
+													</p:selectOneMenu>
+
+													<p:inputNumber id="mtCot"
+														value="#{bulletinPaieB.montantCotisation}"
+														autocomplete="off" inputStyle="text-align:right"
+														thousandSeparator="&nbsp;" decimalPlaces="0" />
+
+													<p:inputNumber id="mtPat"
+														value="#{bulletinPaieB.partPatronal}" autocomplete="off"
+														inputStyle="text-align:right" thousandSeparator="&nbsp;"
+														decimalPlaces="0" />
+
+													<p:commandButton icon="fa fa-plus" style="border-radius:10px"
+														action="#{bulletinPaieB.addCotisation()}"
+														update="mtPat,smCot,mtCot,tblCot,:frm:txtMontNet,:frm:txtMontPrest" />
+
+													<p:commandButton icon="fa fa-remove" styleClass="red-btn"
+														action="#{bulletinPaieB.removeCotisation()}" style="border-radius:10px"
+														update="mtPat,smCot,mtCot,tblCot,:frm:txtMontNet,:frm:txtMontPrest" />
+												</p:panelGrid>
+
+									
+									</p:tab>
+									<p:tab id="tabRet" title="Retenus">
+										
+													<p:dataTable id="tblDed" scrollHeight="150"
+														style="border: 1px solid gray"
+														value="#{bulletinPaieB.listDeduction}" var="ded"
+														scrollable="true" rowKey="#{ded.idRetenu}"
+														selectionMode="single" emptyMessage=""
+														selection="#{bulletinPaieB.detailDeduction}" reflow="true">
+
+														<p:ajax event="rowSelect"
+															listener="#{bulletinPaieB.onDeductionSelected}"
+															update=":frmVrb:bulletin:smDed,:frmVrb:bulletin:mtDed" />
+
+													
+														<p:column headerText="Retenu" width="50%">
+															<h:outputText value="#{ded.libelleDeduction}" />
+														</p:column>
+
+														<p:column headerText="Montant" width="30%"
+															style="text-align:right">
+															<h:outputText value="#{ded.printMontant}" />
+														</p:column>
+														
+														<p:column/>
+														
+														<p:columnGroup type="footer">
+															<p:row>
+																<p:column footerText="Total"
+																	style="text-align:left;color:brown" />
+																<p:column footerText="#{bulletinPaieB.printTotalDed}"
+																	style="text-align:right;color:brown" />
+																<p:column/>
+															</p:row>
+														</p:columnGroup>
+													</p:dataTable>
+													<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-6,ui-grid-col-4,ui-grid-col-1,ui-grid-col-1"
+													layout="grid" styleClass="ui-panelgrid-blank"
+													style="border:0px none; background-color:transparent;">
+											
+														<p:selectOneMenu id="smDed"
+															value="#{bulletinPaieB.idDeduction}" autoWidth="true"
+															filter="true" filterMatchMode="contains"
+															valueChangeListener="#{bulletinPaieB.changeDeduction}">
+															<f:selectItems value="#{bulletinPaieB.listeDeductions}" />
+															<p:ajax event="change" update="smDed" />
+															<p:ajax event="blur"
+																listener="#{bulletinPaieB.onDeductionLeave()}"
+																update="mtDed" />
+														</p:selectOneMenu>
+													
+
+														<p:inputNumber id="mtDed"
+															value="#{bulletinPaieB.montantDeduction}"
+															autocomplete="off" inputStyle="text-align:right"
+															thousandSeparator="&nbsp;" decimalPlaces="0" />
+													
+
+														<p:commandButton  icon="fa fa-plus" style="border-radius:10px"
+															action="#{bulletinPaieB.addDeduction()}"
+															update="mtDed,smDed,tblDed,:frm:txtMontNet,:frm:txtMontPrest" />
+													
+
+														<p:commandButton styleClass="red-btn" icon="fa fa-remove"
+															action="#{bulletinPaieB.removeDeduction()}" style="border-radius:10px"
+															update="mtDed,smDed,tblDed,:frm:txtMontNet,:frm:txtMontPrest" />
+											
+													</p:panelGrid>
+
+									</p:tab>
+									
+									<p:tab id="tab4" title="Crédits et avances">
+									<div class="ui-g">
+										<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+											<div class="ui-g-12 ui-md-6">
+												<p:dataTable id="tblAv" value="#{bulletinPaieB.listAvance}"
+													var="av" rowKey="#{av.id}" selectionMode="single"
+													selection="#{bulletinPaieB.detailAvance}"  scrollable="true"
+													reflow="true" emptyMessage="" scrollHeight="150" 
+													style="border: 1px solid gray">
+
+												
+
+													<f:facet name="header">Avances</f:facet>
+													<p:column headerText="Date" width="10%">
+														<h:outputText value="#{av.datePrint}" />
+													</p:column>
+
+													<p:column headerText="Montant" width="20%"
+														style="text-align:right">
+														<h:outputText value="#{av.printMotant}" />
+													</p:column>
+
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column footerText="Total"
+																style="text-align:left;color:brown" />
+															<p:column footerText="#{bulletinPaieB.printTotalAvc}"
+																style="text-align:right;color:brown" />
+														</p:row>
+													</p:columnGroup>
+												</p:dataTable>
+												
+											</div>
+											<div class="ui-g-12 ui-md-6">
+												<p:dataTable id="tblCrd" value="#{bulletinPaieB.listCredit}"
+													var="crd" rowKey="#{crd.noDossier}" selectionMode="single" scrollable="true"
+													scrollHeight="150" style="border: 1px solid gray" emptyMessage=""
+													selection="#{bulletinPaieB.detailCredit}" reflow="true">
+
+										
+													<f:facet name="header">Crédits</f:facet>
+													<p:column headerText="Dossier" width="5%">
+														<h:outputText value="#{crd.noDossier}" />
+													</p:column>
+													<p:column headerText="Libellé" width="30%">
+														<h:outputText value="#{crd.libelle}" />
+													</p:column>
+													<p:column headerText="Montant" width="15%"
+														style="text-align:right">
+														<h:outputText value="#{crd.printMontant}" />
+													</p:column>
+
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column footerText="Total"
+																style="text-align:left;color:brown" />
+															<p:column footerText="#{bulletinPaieB.printTotalCrd}"
+																style="text-align:right;color:brown" />
+														</p:row>
+													</p:columnGroup>
+												</p:dataTable>
+												
+
+											</div>
+										</div>
+									</div>
+								</p:tab>
+								
+								<p:tab id="tab5" title="Comission">
+									<div class="ui-g">
+										<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+											<div class="ui-g-12 ui-md-6">
+												<p:dataTable id="tblCm" value="#{bulletinPaieB.listComission}"
+													var="cm" rowKey="#{cm.id}" selectionMode="single"
+													selection="#{bulletinPaieB.detailComission}"  scrollable="true"
+													reflow="true" emptyMessage="" scrollHeight="150" 
+													style="border: 1px solid gray">
+
+												
+
+													<f:facet name="header">Commissions</f:facet>
+													<p:column headerText="commission" width="70%">
+														<h:outputText value="#{cm.comission.designation}" />
+													</p:column>
+
+													<p:column headerText="Montant" width="20%"
+														style="text-align:right">
+														<h:outputText value="#{cm.printMontant}" />
+													</p:column>
+
+													<p:columnGroup type="footer">
+														<p:row>
+															<p:column footerText="Total"
+																style="text-align:left;color:brown" />
+															<p:column footerText="#{bulletinPaieB.printTotalAvc}"
+																style="text-align:right;color:brown" />
+														</p:row>
+													</p:columnGroup>
+												</p:dataTable>
+												
+											</div>
+											
+										</div>
+									</div>
+								</p:tab>
+
+							</p:tabView>
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+
+		</body>
+	</ui:define>
+</ui:composition>

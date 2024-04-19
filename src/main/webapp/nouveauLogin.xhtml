@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+ 
+ 		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Génération du nouveau compte</title>
+	<style type="text/css">
+#mydiv {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 50%;
+	height: 50%;
+	transform: translate(-50%, -50%);
+	
+}
+</style>
+</h:head>
+		
+		<h:body>
+			<h:form id="frm" target="_blank"
+				onkeypress="if (event.keyCode == 13) { return false; }">
+				
+				<p:growl id="msgs" showDetail="true" />
+
+				<div class="ui-g" id="mydiv">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<p:panelGrid id="pnl1" columns="2"
+								columnClasses="ui-grid-col-3,ui-grid-col-8" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+						
+								<p:outputLabel value="Matricule "/>
+								<p:inputText id="txtEmploye" value="#{modifPasseWordB.matricule}">								
+										<p:ajax event="blur" listener="#{modifPasseWordB.chercherEmploye()}"
+										update=":frm"/>
+								</p:inputText>
+								<p:outputLabel value="Nom et prénom "/>
+								<p:inputText value="#{modifPasseWordB.nom}" readonly="true"/>
+													
+								<p:outputLabel value="E-mail"/>
+								<p:inputText value="#{modifPasseWordB.mail}" readonly="true"/>
+							
+							</p:panelGrid>
+							
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+									<div class="ui-g-12 ui-md-3"/>
+									<div class="ui-g-12 ui-md-8">
+										<p:commandButton id="btnGnrCode" icon="fa fa-envelope-o"  style="border-radius:10px"
+											value="Envoie le mot de passe sur e-mail" action="#{modifPasseWordB.sendPwdToMail()}" update=":frm"/>
+									</div>
+									<div class="ui-g-12 ui-md-3"/>
+									<div class="ui-g-12 ui-md-8">
+								
+									<p:commandButton value="Retour à la page d'accueil"  action="#{modifPasseWordB.redirectionLogin()}"
+												 style="border-radius:10px;background: #fff;border:solid 1px #008B8F;color:#008B8F"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+					<h:outputStylesheet name="css/layout-cyan-light.css"
+			library="apollo-layout" />
+			</h:form>
+		</h:body>
+</html>

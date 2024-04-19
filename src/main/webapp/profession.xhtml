@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Profession</title>
+		</h:head>
+		<body>
+			<h:form id="frmpro" onkeypress="if (event.keyCode == 13) { return false; }">
+				<p:growl id="msgs" showDetail="true" />
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-2">
+									<p:outputLabel value="Code" />
+									<p:inputText id="txtCode" value="#{professionB.code}" size="25" autocomplete="off">
+										<p:ajax event="blur" listener="#{professionB.changeCode()}"
+											update="txtDesignation" />
+									</p:inputText>
+								</div>
+								<div class="ui-g-12 ui-md-10">
+									<p:outputLabel value="Désignation" />
+									<p:inputText id="txtDesignation"
+										value="#{professionB.designation}" size="100" autocomplete="off"/>
+								</div>
+							</div>
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer" action="#{professionB.enregistrer()}"
+											update="frmpro" />
+									</div>
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer"
+											onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+											action="#{professionB.supprimer()}" update="frmpro"
+											styleClass="orange-btn" />
+									</div>
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnAnnuler"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{professionB.initialiser()}" update="frmpro" />
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-12">
+
+									<p:dataTable id="tbl" var="prof"
+										value="#{professionB.professions}" rowKey="#{prof.id}"
+										selectionMode="single" selection="#{professionB.profession}"
+										reflow="true" paginator="true" rows="10"
+										paginatorAlwaysVisible="false" paginatorPosition="bottom">
+
+										<p:ajax event="rowSelect"
+											listener="#{professionB.onRowSelected}"
+											update=":frmpro:txtCode,:frmpro:txtDesignation" />
+
+										<p:column headerText="Code">
+											<h:outputText value="#{prof.code}" />
+										</p:column>
+
+										<p:column headerText="Désignation">
+											<h:outputText value="#{prof.designation}" />
+										</p:column>
+
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</h:form>
+		</body>
+	</ui:define>
+</ui:composition>

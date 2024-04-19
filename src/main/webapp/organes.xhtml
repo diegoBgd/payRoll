@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<title>Répartition des fonctions</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{authenticite.structureAdministrative()}" />
+				</f:metadata>
+				<p:growl id="msg" life="21600" showDetail="true" sticky="false" />
+				<div>
+					<div class="ui-g-12 ui-fluid card no-margin">
+						<div class="ui-g-2">
+							<h:outputText value="Code" />
+							<p:inputMask id="txtCode" value="#{repartitionFonctionB.code}"
+								mask="99" autocomplete="off" />
+
+						</div>
+						<div class="ui-g-10">
+							<h:outputLabel value="Désignation" />
+							<p:inputText id="txtDes"
+								value="#{repartitionFonctionB.designation}" maxlength="100"
+								autocomplete="off" />
+						</div>
+
+
+
+					</div>
+					<div class="ui-g-12 ui-fluid card">
+						<div class="ui-g-4">
+							<p:commandButton value="Enregistrer"
+								action="#{repartitionFonctionB.enregistrer()}"
+								icon="ui-icon-disk"
+								update=":frm:txtCode,:frm:txtDes,:frm:msg,:frm:tbl" />
+						</div>
+						<div class="ui-g-4">
+							<p:commandButton value="Supprimer"
+								onclick="if (!confirm('Voulez-vous vraiment Supprimer?')) return false"
+								icon="ui-icon-trash"
+								action="#{repartitionFonctionB.supprimer()}"
+								styleClass="orange-btn"
+								update=":frm:txtCode,:frm:txtDes,:frm:msg,:frm:tbl" />
+						</div>
+						<div class="ui-g-4">
+							<p:commandButton value="Initialiser"
+								action="#{repartitionFonctionB.initialiser()}"
+								icon="ui-icon ui-icon-refresh"
+								update=":frm:txtCode,:frm:txtDes,:frm:msg" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-fluid card no-margin">
+						<p:dataTable id="tbl" emptyMessage="Pas de données à afficher"
+							var="com" value="#{repartitionFonctionB.listeOrganes}"
+							rowKey="#{com.id}" selectionMode="single"
+							selection="#{repartitionFonctionB.organe}" reflow="true"
+							paginator="true" rows="20" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false">
+							<p:ajax event="rowSelect"
+								listener="#{repartitionFonctionB.affecter()}"
+								update=":frm:txtCode,:frm:txtDes" />
+
+							<p:column headerText="Code" width="10%">
+								<h:outputText value="#{com.code}" />
+							</p:column>
+							<p:column headerText="Désignation">
+								<h:outputText value="#{com.designation}" />
+							</p:column>
+
+						</p:dataTable>
+					</div>
+
+				</div>
+			</h:form>
+
+		</body>
+	</ui:define>
+</ui:composition>

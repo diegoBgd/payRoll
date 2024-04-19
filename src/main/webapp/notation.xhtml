@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm"
+			onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{authenticite.premierEvaluation()}" />
+			</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+
+						<p:panelGrid id="pnl1" columns="4"
+							columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-2,ui-grid-col-5"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+							<h:outputText value="Référence" />
+							<p:inputText id="txtCode" value="#{typeNotationB.code}"
+								autocomplete="off">
+								<p:ajax event="blur" listener="#{typeNotationB.changeCode()}"
+									update=":frm" />
+
+							</p:inputText>
+
+
+							<h:outputText value="Libellé" />
+							<p:inputText id="txtDes" value="#{typeNotationB.designation}"
+								autocomplete="off" />
+						</p:panelGrid>
+						<p:panelGrid id="pnl2" columns="4"
+							columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+							<h:outputText value="Note minimum (%)" />
+							<p:inputNumber id="txtPourcentageMin"
+								value="#{typeNotationB.pourcentageMin}"
+								inputStyle="text-align:right" autocomplete="off" />
+
+							<h:outputText value="Note Max (%)" />
+							<p:inputNumber id="txtPourcentageMax"
+								value="#{typeNotationB.pourcentageMax}"
+								inputStyle="text-align:right" autocomplete="off" />
+
+							<h:outputText value="Augmentation sur salaire(%)" />
+							<p:inputNumber id="txtTaux"
+								value="#{typeNotationB.tauxAugmentation}"
+								inputStyle="text-align:right" autocomplete="off" />
+
+						</p:panelGrid>
+
+
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-6 ui-fluid contact-form"></div>
+						</div>
+					</div>
+
+
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12">
+
+								<p:dataTable id="tbl" var="nota"
+									value="#{typeNotationB.listNotation}" rowKey="#{nota.id}"
+									selectionMode="single" selection="#{typeNotationB.selected}"
+									scrollable="true" scrollHeight="200" emptyMessage="">
+									<p:ajax event="rowSelect" 
+										listener="#{typeNotationB.onRowSelected}" update="frm" />
+
+									<p:column headerText="Code" width="10%">
+										<h:outputText value="#{nota.code}" />
+									</p:column>
+
+									<p:column headerText="Désignation" width="50%">
+										<h:outputText value="#{nota.designation}" />
+									</p:column>
+
+									<p:column headerText="Taux Augmentation" width="20%">
+										<h:outputText value="#{nota.tauxAugmentation}"
+											style="text-align:right" />
+									</p:column>
+								</p:dataTable>
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12">
+									<div class="ui-g-12 ui-md-1"/>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											style="border-radius:10px" value="Enregistrer"
+											action="#{typeNotationB.enregistrer()}" update=":frm" />
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer" style="border-radius:10px"
+											action="#{typeNotationB.supprimer()}" update=":frm"
+											styleClass="orange-btn">
+											<p:confirm header="Confirmation" disabled="#{typeNotationB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnAnnuler"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{typeNotationB.initialiser()}"
+											style="border-radius:10px" update=":frm" />
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+		</h:form>
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+	</ui:define>
+
+</ui:composition>

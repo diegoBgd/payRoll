@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frmSaisieDemandePlanConge" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.gestionConge()}"
+					type="preRenderView" />
+			</f:metadata>
+
+			<p:growl id="message" autoUpdate="true" showDetail="true"
+				sticky="true" />
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+					<div class="card">
+			 			<div class="ui-g">
+
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton value="Liste Demande Plan congé"
+									icon="fa fa-search"
+									action="#{saisieDemandePlanCongeB.initialiser()}"
+									oncomplete="PF('rechercheDialog').show();" />
+							</div>
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton value="Liste Validation Plan congé"
+									icon="fa fa-search"
+									action="#{saisieDemandePlanCongeB.initialiser()}"
+									oncomplete="PF('rechercheDialog1').show();" />
+							</div>
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton value="Liste Refus Plan congé"
+									icon="fa fa-search"
+									action="#{saisieDemandePlanCongeB.initialiser()}"
+									oncomplete="PF('rechercheDialog2').show();" />
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Employé" />
+							<p:inputText id="txtcode" value="#{saisieDemandePlanCongeB.code}">
+								<p:ajax event="blur"
+									listener="#{saisieDemandePlanCongeB.findByCode()}"
+									update=":frmSaisieDemandePlanConge" />
+							</p:inputText>
+
+							<p:inputText id="txtNom"
+								value="#{saisieDemandePlanCongeB.employe.nom} #{saisieDemandePlanCongeB.employe.prenom}"
+								readonly="true" />
+							<p:commandButton value="..." oncomplete="PF('dlg').show()"></p:commandButton>
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Direction Université" />
+							<p:inputText id="txtDire"
+								value="#{saisieDemandePlanCongeB.employe.detailOrgane.directionGnle.designation}"
+								readonly="true" />
+							<h:outputLabel value="Direction " />
+							<p:inputText id="txtDirect"
+								value="#{saisieDemandePlanCongeB.employe.detailOrgane.direction.designation}"
+								readonly="true" />
+							<h:outputLabel value="Service" />
+							<p:inputText id="txtServ"
+								value="#{saisieDemandePlanCongeB.employe.detailOrgane.service.designation}"
+								readonly="true" />
+							<h:outputLabel value="Fonction" />
+							<p:inputText id="txtProfession"
+								value="#{saisieDemandePlanCongeB.employe.affectationEmploye.fonction.designation}"
+								readonly="true" />
+							<h:outputLabel value="Personnel" />
+							<p:inputText id="txtPersonnel"
+								value="#{saisieDemandePlanCongeB.employe.detailGrade.personalGrade.categoriePersonnel.personnel.designation}"
+								readonly="true" />
+							<h:outputLabel value="Catégorie" />
+							<p:inputText id="txtCategorie"
+								value="#{saisieDemandePlanCongeB.employe.detailGrade.personalGrade.categoriePersonnel.designation}"
+								readonly="true" />
+							<h:outputLabel value=" Grade " />
+							<p:inputText id="txtGrade" readonly="true"
+								value="#{saisieDemandePlanCongeB.employe.detailGrade.personalGrade.designation}" />
+							<h:outputLabel value="Campus" />
+							
+						</p:panelGrid>
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<p:outputLabel value="* Sorte congé" />
+							<p:inputText id="txtSorteCon"
+								value="#{saisieDemandePlanCongeB.libelleSorteConge}"
+								readonly="true" />
+							<p:outputLabel value="Jours Congés Annuel Du" />
+							<p:inputText id="txtJrDu"
+								value="#{saisieDemandePlanCongeB.jourCongeAnnuelDuS}"
+								readonly="true" />
+							<p:outputLabel value="Jours Congés pris" />
+							<p:inputText id="txtJrPris"
+								value="#{saisieDemandePlanCongeB.jourCongeAnnuelPrisS}"
+								readonly="true" />
+							<p:outputLabel value="Solde (en jours)" />
+							<p:inputText id="txtSolde"
+								value="#{saisieDemandePlanCongeB.soldeS}" readonly="true" />
+							<p:outputLabel value="* Date Debut" />
+							<p:inputMask id="txtDateD"
+								value="#{saisieDemandePlanCongeB.dateDebutS}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{saisieDemandePlanCongeB.changeDateDebut()}"
+									update="txtDateD,txtduree,:frmSaisieDemandePlanConge" />
+							</p:inputMask>
+							<p:outputLabel value="* Date fin" />
+							<p:inputMask id="txtDateF"
+								value="#{saisieDemandePlanCongeB.dateFinS}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{saisieDemandePlanCongeB.changeDateFin()}"
+									update="txtDateF,txtduree" />
+							</p:inputMask>
+							<p:outputLabel value="* Durée (jours)" />
+							<p:inputText id="txtduree"
+								value="#{saisieDemandePlanCongeB.duree}"
+								style="text-align:right">
+								<p:ajax event="blur"
+									listener="#{saisieDemandePlanCongeB.changeDuree()}"
+									update="txtduree" />
+							</p:inputText>
+							<p:outputLabel value="* Motif" />
+							<p:inputTextarea id="txtMotif"
+								value="#{saisieDemandePlanCongeB.motif}" rows="1" />
+						</p:panelGrid>
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer"
+									action="#{saisieDemandePlanCongeB.saveDemande()}"
+									update=":frmSaisieDemandePlanConge" />
+							</div>
+
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+									value="Supprimer" action="#{saisieDemandePlanCongeB.delete()}"
+									onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+									update=":frmSaisieDemandePlanConge" styleClass="orange-btn" />
+							</div>
+
+							<div class="ui-g-4 ui-md-4">
+								<p:commandButton icon="fa fa-refresh" value="Initialiser"
+									action="#{saisieDemandePlanCongeB.initialiser()}"
+									update=":frmSaisieDemandePlanConge" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<p:dialog header="Employé" resizable="false" showEffect="fade"
+				widgetVar="dlg">
+
+				<h:panelGrid columns="6">
+
+					<h:outputText value="Code" />
+					<p:inputText id="SCode"
+						value="#{saisieDemandePlanCongeB.codeEmployeRecherche}"
+						style="width:250px" />
+					<h:outputText value="SNom" />
+					<p:inputText value="#{saisieDemandePlanCongeB.nomEmployeRecherche}"
+						style="width:250px" />
+					<h:outputText value="SPrénom" />
+					<p:inputText
+						value="#{saisieDemandePlanCongeB.prenomEmployeRecherche}"
+						style="width:250px" />
+					<p:spacer width="1" height="1" />
+					<p:commandButton value="Rechercher"
+						action="#{saisieDemandePlanCongeB.chargerEmploye()}"
+						update=":frmSaisieDemandePlanConge:tab" style="width:260px" />
+				</h:panelGrid>
+
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable value="#{saisieDemandePlanCongeB.listEmploye}"
+						var="empl" selectionMode="single" id="tab"
+						selection="#{saisieDemandePlanCongeB.selection}"
+						rowKey="#{empl.id}" scrollable="true" scrollHeight="150">
+						<p:ajax event="rowDblselect"
+							listener="#{saisieDemandePlanCongeB.onRowselected1}"
+							update=":frmSaisieDemandePlanConge" />
+
+						<p:column headerText="Nom">
+							<h:outputText value="#{empl.nom}" />
+						</p:column>
+						<p:column headerText="Prénom">
+							<h:outputText value="#{empl.prenom}" />
+						</p:column>
+						<p:column headerText="Fonction">
+							<h:outputText value="#{empl.fonction.designation}" />
+						</p:column>
+						<p:column headerText="Niveau Hierarchique">
+							<h:outputText value="#{empl.detailOrgane.service.designation}" />
+						</p:column>
+						<p:column headerText="Organe">
+							<h:outputText value="#{empl.detailOrgane.directionGnle.designation}" />
+						</p:column>
+					</p:dataTable>
+
+				</p:panelGrid>
+
+
+			</p:dialog>
+
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+
+		</h:form>
+
+		<p:dialog widgetVar="rechercheDialog"
+			header="Recherche Demande Sortie" modal="true" appendTo="@(body)"
+			width="980">
+			<h:form id="frmRecherche">
+
+
+				<h:panelGrid columns="2" style="margin:auto;text-align:center">
+					<p:commandButton value="Rechercher" style="width:120px"
+						actionListener="#{saisieDemandePlanCongeB.findDemandePlanConge()}"
+						update=":frmRecherche" />
+				</h:panelGrid>
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable
+						value="#{saisieDemandePlanCongeB.listSaisieDemandePlanConge}"
+						var="dem" selectionMode="single" id="tab"
+						selection="#{saisieDemandePlanCongeB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true"
+						emptyMessage="Aucun élément à afficher">
+
+						<p:ajax event="rowSelect"
+							listener="#{saisieDemandePlanCongeB.onRowselected}"
+							update=":frmSaisieDemandePlanConge" />
+
+						<p:column headerText="Nom">
+							<h:outputText value="#{dem.employe.nom}" />
+						</p:column>
+						<p:column headerText="Prénom">
+							<h:outputText value="#{dem.employe.prenom}" />
+						</p:column>
+						<p:column headerText="Fonction">
+							<h:outputText
+								value="#{dem.employe.affectationEmploye.fonction.designation}" />
+						</p:column>
+						<p:column headerText="Date Début">
+							<h:outputText value="#{dem.dateDebutS}" />
+						</p:column>
+						<p:column headerText="Date Fin">
+							<h:outputText value="#{dem.dateFinS}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="rechercheDialog1"
+			header="Recherche Sortie validée" modal="true" appendTo="@(body)"
+			width="980">
+			<h:form id="frmValidation">
+
+
+				<h:panelGrid columns="2" style="margin:auto;text-align:center">
+					<p:commandButton value="Rechercher" style="width:120px"
+						actionListener="#{saisieDemandePlanCongeB.findValidationPlanConge()}"
+						update=":frmValidation" />
+				</h:panelGrid>
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable
+						value="#{saisieDemandePlanCongeB.listSaisieDemandePlanConge}"
+						var="dem" selectionMode="single" id="tab"
+						selection="#{saisieDemandePlanCongeB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true"
+						emptyMessage="Aucun élément à afficher">
+
+						<p:ajax event="rowSelect"
+							listener="#{saisieDemandePlanCongeB.onRowselected}"
+							update=":frmSaisieDemandePlanConge" />
+
+						<p:column headerText="Nom">
+							<h:outputText value="#{dem.employe.nom}" />
+						</p:column>
+						<p:column headerText="Prénom">
+							<h:outputText value="#{dem.employe.prenom}" />
+						</p:column>
+						<p:column headerText="Fonction">
+							<h:outputText
+								value="#{dem.employe.affectationEmploye.fonction.designation}" />
+						</p:column>
+						<p:column headerText="Date Début">
+							<h:outputText value="#{dem.dateDebutS}" />
+						</p:column>
+						<p:column headerText="Date Fin">
+							<h:outputText value="#{dem.dateFinS}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="rechercheDialog2"
+			header="Recherche Sortie Non Validée" modal="true" appendTo="@(body)"
+			width="980">
+			<h:form id="frmNonValidation">
+
+
+				<h:panelGrid columns="2" style="margin:auto;text-align:center">
+					<p:commandButton value="Rechercher" style="width:120px"
+						actionListener="#{saisieDemandePlanCongeB.findNonValidationPlanConge()}"
+						update=":frmNonValidation" />
+				</h:panelGrid>
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable
+						value="#{saisieDemandePlanCongeB.listSaisieDemandePlanConge}"
+						var="dem" selectionMode="single" id="tab"
+						selection="#{saisieDemandePlanCongeB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true"
+						emptyMessage="Aucun élément à afficher">
+
+						<p:ajax event="rowSelect"
+							listener="#{saisieDemandePlanCongeB.onRowselected}"
+							update=":frmSaisieDemandePlanConge" />
+
+						<p:column headerText="Nom">
+							<h:outputText value="#{dem.employe.nom}" />
+						</p:column>
+						<p:column headerText="Prénom">
+							<h:outputText value="#{dem.employe.prenom}" />
+						</p:column>
+						<p:column headerText="Fonction">
+							<h:outputText
+								value="#{dem.employe.affectationEmploye.fonction.designation}" />
+						</p:column>
+						<p:column headerText="Date Début">
+							<h:outputText value="#{dem.dateDebutS}" />
+						</p:column>
+						<p:column headerText="Date Fin">
+							<h:outputText value="#{dem.dateFinS}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

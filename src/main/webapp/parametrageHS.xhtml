@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<title>Paramètrage Heure Supplementaire</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{authenticite.parametrage()}" />
+				</f:metadata>
+				<p:growl id="msgs" showDetail="true" />
+				
+					<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					
+							<div class="ui-g-12 ui-fluid card">
+							
+								<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-6"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								<p:outputLabel value="Référence"/>
+								<p:inputText value="#{parametrageHeureSupplementaireB.numero}">
+								  <p:ajax event="blur" listener="#{parametrageHeureSupplementaireB.changeNumero()}" update=":frm"/>
+								</p:inputText>
+								<p:outputLabel value="Actif"/>
+								<p:selectBooleanCheckbox value="#{parametrageHeureSupplementaireB.actif}"/>
+								</p:panelGrid>
+
+							<p:panelGrid id="pnl3" columns="1" columnClasses="ui-grid-col-8"
+							style="border:0px none ; background-color:transparent;">
+
+								<p:dataTable id="tblDetail" var="deta"
+									value="#{parametrageHeureSupplementaireB.listDetailHeureSupplementaire}"
+									rowKey="#{deta.index}" emptyMessage=""
+									selection="#{parametrageHeureSupplementaireB.detailHeureSupplementaire}"
+									selectionMode="single">
+
+									<p:ajax event="rowSelect"
+										listener="#{parametrageHeureSupplementaireB.onRowSelectedDetail}"
+										update=":frm:pnl4" />
+
+									<p:column headerText="N°">
+										<h:outputText value="#{deta.index}" />
+									</p:column>
+
+									<p:column headerText="Heure Début">
+										<h:outputText value="#{deta.heureDebutS}" />
+									</p:column>
+
+									<p:column headerText="Heure Fin">
+										<h:outputText value="#{deta.heureFinS}" style="float:right" />
+									</p:column>
+
+									<p:column headerText="Taux(%) Sur S.Base">
+										<h:outputText value="#{deta.taux}" style="float:right" />
+									</p:column>
+								</p:dataTable>
+							</p:panelGrid>
+							<p:panelGrid id="pnl4" columns="6"
+								columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:inputText value="#{parametrageHeureSupplementaireB.index}"
+									readonly="true" style="font-weight:bold" />
+								<p:inputMask id="txtHeureDebutS"
+									value="#{parametrageHeureSupplementaireB.heureDebutS}"
+									mask="99:99:99">
+									<p:ajax event="blur"
+										listener="#{parametrageHeureSupplementaireB.changeHeureDebut()}"
+										update=":frm" />
+								</p:inputMask>
+								<p:inputMask id="txtHeureFinS"
+									value="#{parametrageHeureSupplementaireB.heureFinS}"
+									mask="99:99:99">
+									<p:ajax event="blur"
+										listener="#{parametrageHeureSupplementaireB.changeHeureFin()}"
+										update=":frm" />
+								</p:inputMask>
+								<p:inputNumber id="txtTaux"
+									value="#{parametrageHeureSupplementaireB.taux}"
+									inputStyle="text-align:right;font-weight:bold" />
+								
+									
+										
+										<p:commandButton  icon="fa fa-plus" style="border-radius:10px"
+											action="#{parametrageHeureSupplementaireB.charger()}"
+											update=":frm" />
+											
+											<p:commandButton icon="fa fa-remove"
+											styleClass="red-btn" style="border-radius:10px"
+											action="#{parametrageHeureSupplementaireB.enlever()}"
+											update=":frm" />
+											
+											<h:inputHidden id="txtId"
+									value="#{parametrageHeureSupplementaireB.idDetail}" />
+							</p:panelGrid>
+
+
+							
+							</div>
+							<div class="ui-g-12 ui-fluid card">
+									
+									<div class="ui-g-12 ui-md-2">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer" style="border-radius:10px"
+											action="#{parametrageHeureSupplementaireB.enregistrer()}"
+											update=":frm" />
+									</div>
+									<div class="ui-g-12 ui-md-2">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer" style="border-radius:10px"
+											action="#{parametrageHeureSupplementaireB.supprimer()}"
+											update=":frm" styleClass="orange-btn">
+												<p:confirm header="Confirmation" disabled="#{parametrageHeureSupplementaireB.disableMsg}"
+												message="Voulez vous vraiment supprimer cet élément ?"
+												icon="ui-icon-alert"/>
+											</p:commandButton>
+									</div>
+									<div class="ui-g-12 ui-md-2">
+										<p:commandButton id="btnAnnuler" style="border-radius:10px"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{parametrageHeureSupplementaireB.initialiser()}"
+											update=":frm" />
+									</div>
+
+								</div>
+
+						</div>
+				
+				
+			</h:form>
+			<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" widgetVar="cd" >
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			
+		<p:dialog widgetVar="confirmDialog" header="Avertissement"
+			modal="true" appendTo="@(body)" width="400">
+			<h:form id="frmConfirm">
+				<h:panelGrid columns="1" style="margin:auto;text-align:center">
+					<p:outputLabel value="Si vous clôturez ce barème, il ne sera plus utilisé. Etes-vous sur de vouloir le clôturer ?" />
+					<p:spacer height="30px"></p:spacer>
+
+					<h:panelGrid columns="2" style="margin:auto;text-align:center">
+						<p:commandButton value="Oui" style="width:120px"
+							actionListener="#{parametrageHeureSupplementaireB.enregistrer()}" update=":frm"
+							oncomplete="PF('confirmDialog').hide();" />
+						<p:commandButton value="Non" style="width:120px"							
+							update=":frm" oncomplete="PF('confirmDialog').hide();" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		</body>
+	</ui:define>
+</ui:composition>

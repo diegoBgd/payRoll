@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Réintégration</title>
+		</h:head>
+		<body>
+			<h:form id="frmReint"
+				onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{authenticite.gestionPosition()}" />
+				</f:metadata>
+				<p:growl id="msg" life="21600" showDetail="true" sticky="false" />
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+						<div class="card">
+							<div class="ui-g">
+
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton value="Recherche des demandes encours"
+										icon="fa fa-search" onclick="PF('dlgDem').show();" />
+								</div>
+							</div>
+						</div>
+						<div class="card">
+								<p:tabView id="gen">
+									<p:tab id="tab1" title="Nouveau position">
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-1"
+											layout="grid" styleClass="ui-panelgrid-blank"
+											style="background-color:transparent;">
+											<h:outputLabel value="Employé" />
+											<p:inputText id="txtcode" value="#{demandePositionB.code}"
+												readonly="true">
+
+											</p:inputText>
+
+											<p:inputText id="txtNom"
+												value="#{demandePositionB.employe.nomPrenom} "
+												readonly="true" />
+									<p:commandButton icon="fa fa-search"
+									onclick="PF('dlgEmploye').show();" />
+										</p:panelGrid>
+										<p:panelGrid columns="2"
+											columnClasses="ui-grid-col-2,ui-grid-col-8" layout="grid"
+											styleClass="ui-panelgrid-blank"
+											style="background-color:transparent;">
+
+											<h:outputText value="Position" />
+											<p:selectOneMenu id="txtPos"
+												value="#{demandePositionB.idPosition}" autoWidth="false"
+												readonly="true">
+												<f:selectItem itemLabel="" itemValue="0" />
+												<f:selectItem itemLabel="L'activité de service"
+													itemValue="1" />
+												<f:selectItem itemLabel="Le détachement" itemValue="2" />
+												<f:selectItem
+													itemLabel="La suspension d'activités de service"
+													itemValue="3" />
+												<f:selectItem itemLabel="La disponibilité" itemValue="4" />
+												<f:selectItem
+													itemLabel="La suspension de fonction par mesure d'ordre"
+													itemValue="5" />
+												<p:ajax event="change"
+													update=":frmReint:gen:txtPos,:frmReint:gen:txtCond" />
+											</p:selectOneMenu>
+											<h:outputText value="Condition Position" />
+											<p:selectOneMenu id="txtCond"
+												value="#{demandePositionB.idCondition}" autoWidth="false">
+												<f:selectItems value="#{demandePositionB.listConditions}" />
+												<p:ajax event="itemSelect" update="txtCond,frmReint" />
+											</p:selectOneMenu>
+											<h:outputText value="Personnel" />
+											<p:selectOneMenu id="txtPrs"
+												value="#{demandePositionB.id}" autoWidth="false">
+												<f:selectItems value="#{demandePositionB.listConditions}" />
+												<p:ajax event="itemSelect" update="txtPrs,frmReint" />
+											</p:selectOneMenu>
+										</p:panelGrid>
+
+
+										<p:panelGrid columns="4"
+											columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+											layout="grid" styleClass="ui-panelgrid-blank"
+											style="background-color:transparent;">
+											<h:outputLabel value="Date retour" />
+											<p:inputMask id="txtDateRet"
+												value="#{demandePositionB.dateRetourS}"
+												mask="99/99/9999" readonly="true">
+												<p:ajax event="blur"
+													listener="#{demandePositionB.changeDateDemandePosition()}"
+													update="txtDateRet,frmReint" />
+											</p:inputMask>
+											
+											<h:outputLabel value="Date début nouveau salaire" />
+											<p:inputMask id="txtDateD" readonly="true"
+												value="#{demandePositionB.dateMisApplicationS}" mask="99/99/9999">
+												<p:ajax event="blur"
+													listener="#{demandePositionB.changeDateDebut()}"
+													update="txtDateD" />
+											</p:inputMask>
+											
+											
+
+										</p:panelGrid>
+
+										<p:panelGrid columns="2"
+											columnClasses="ui-grid-col-2,ui-grid-col-8" layout="grid"
+											styleClass="ui-panelgrid-blank"
+											style="background-color:transparent;">
+											<p:outputLabel value="Motif" />
+											<p:inputTextarea value="#{demandePositionB.motifDemande}"
+												readonly="true" />
+										</p:panelGrid>
+
+										<p:panelGrid columns="5"
+											columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1"
+											layout="grid" styleClass="ui-panelgrid-blank"
+											style="background-color:transparent;">
+
+											<p:spacer />
+											<h:outputText value="Ajout Allocation familiale" />
+											<p:selectBooleanCheckbox
+												value="#{demandePositionB.ajoutAllocationFamiliale}"
+												style="float:right" readonly="true" />
+
+											<h:outputText value="Ajout indemnité logement" />
+											<p:selectBooleanCheckbox
+												value="#{demandePositionB.ajoutIndemniteLogement}"
+												style="float:right" readonly="true" />
+
+											<p:spacer />
+											<h:outputText value="Avancement grade" />
+											<p:selectBooleanCheckbox
+												value="#{demandePositionB.avancementGrade}"
+												style="float:right" readonly="true" />
+
+											<h:outputText value="Avancement traitement" />
+											<p:selectBooleanCheckbox
+												value="#{demandePositionB.avancementTraitement}"
+												style="float:right" readonly="true" />
+										</p:panelGrid>
+
+									</p:tab>
+									<p:tab id="tab2" title="Information sur salaire">
+										<div class="ui-g">
+											<div class="ui-g-12 ui-md-6">
+												<p:dataTable value="#{demandePositionB.listeDetailPrime}"
+													var="det" id="tblP" rowKey="#{det.prime.id}"
+													selection="#{demandePositionB.selectedDetailPrime}"
+													reflow="true" scrollable="true" scrollHeight="250"
+													emptyMessage="Aucun enregitrement" selectionMode="single">
+
+
+													<p:column headerText="Primes">
+														<p:outputLabel value="#{det.prime.designation}" />
+													</p:column>
+
+												</p:dataTable>
+											</div>
+											<div class="ui-g-12 ui-md-6">
+
+												<p:panelGrid columns="4"
+													columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3"
+													layout="grid" styleClass="ui-panelgrid-blank"
+													style="background-color:transparent;">
+													<h:outputLabel value="Taux Salaire" />
+													<p:inputNumber id="txtTauxSal" autocomplete="off"
+														inputStyle="text-align:right"
+														value="#{demandePositionB.taux}" readonly="true" />
+
+
+													<h:outputLabel value="Ancien Salaire " />
+													<p:inputNumber id="txtAncSal" autocomplete="off"
+														inputStyle="text-align:right" decimalPlaces="0"
+														value="#{demandePositionB.ancienSalaire}" readonly="true" />
+
+
+													<h:outputLabel value="Nouveau Salaire" />
+													<p:inputNumber id="txtNouvSal" autocomplete="off"
+														inputStyle="text-align:right" decimalPlaces="0"
+														value="#{demandePositionB.nouveauSalaire}" readonly="true" />
+
+												</p:panelGrid>
+
+											</div>
+
+
+										</div>
+									</p:tab>
+
+									
+								</p:tabView>
+							</div>
+
+							<div class="card">
+							</div>
+						
+
+
+					</div>
+				</div>
+
+			</h:form>
+		</body>
+	</ui:define>
+    </ui:composition>

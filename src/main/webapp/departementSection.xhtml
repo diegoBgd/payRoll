@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Services</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{authenticite.OrganisationAcademique()}" />
+				</f:metadata>
+				<p:growl id="msg" life="21600" showDetail="true" sticky="false" />
+				<div class="ui-g">
+					<div class="ui-g-12 ui-fluid">
+						<div class="card no-margin">
+							<div class="ui-g">
+								<h:panelGroup layout="block" id="pg1"
+									styleClass="ui-g-12 ui-fluid">
+									<div class="ui-g-12 ui-md-6">
+										<h:outputLabel value="Campus" />
+										<p:selectOneMenu id="smCampus"
+											value="#{departementSectionB.idCampus}"
+											valueChangeListener="#{departementSectionB.changeCampus}"
+											autoWidth="false">
+											<f:selectItems value="#{departementSectionB.listeCampus}" />
+											<p:ajax event="itemSelect"
+												update=":frm:smCampus,:frm:smFaculte" />
+										</p:selectOneMenu>
+									</div>
+									<div class="ui-g-12 ui-md-6">
+										<h:outputLabel value="Faculté/Institut" />
+										<p:selectOneMenu id="smFaculte"
+											value="#{departementSectionB.idFaculte}"
+											valueChangeListener="#{departementSectionB.changeFaculte}"
+											autoWidth="false">
+											<f:selectItems
+												value="#{departementSectionB.listeFaculteInstitut}" />
+											<p:ajax event="itemSelect" update=":frm:smFaculte,:frm:tbl" />
+										</p:selectOneMenu>
+									</div>
+									<div class="ui-g-12 ui-md-6">
+										<h:outputText value="Code" />
+										<p:inputMask value="#{departementSectionB.code}"/>
+											
+									
+									</div>
+									<div class="ui-g-12 ui-md-6">
+										<h:outputLabel value="Désignation" />
+										<p:inputText value="#{departementSectionB.designation}"
+											maxlength="100" />
+									</div>
+								</h:panelGroup>
+
+								<div class="ui-g-4">
+									<p:commandButton value="Enregistrer"
+										action="#{departementSectionB.enregistrer()}"
+										icon="ui-icon-disk" update=":frm:pg1,:frm:msg,:frm:tbl" />
+								</div>
+								<div class="ui-g-4">
+									<p:commandButton value="Supprimer"
+										onclick="if (!confirm('Voulez-vous vraiment Supprimer?')) return false"
+										icon="ui-icon-trash"
+										action="#{departementSectionB.supprimer()}"
+										update=":frm:pg1,:frm:msg,:frm:tbl" styleClass="orange-btn" />
+
+								</div>
+								<div class="ui-g-4">
+									<p:commandButton value="Initialiser"
+										action="#{departementSectionB.initialiser()}"
+										icon="ui-icon ui-icon-refresh" update=":frm:pg1,:frm:msg,:frm:tbl" />
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="ui-g-12 ui-fluid card">
+					<p:dataTable id="tbl" var="ser"
+						value="#{departementSectionB.listeDepartement}" rowKey="#{ser.id}"
+						selectionMode="single" selection="#{departementSectionB.selected}"
+						reflow="true" paginator="true" rows="20" emptyMessage=""
+						paginatorPosition="bottom" paginatorAlwaysVisible="false">
+						<p:ajax event="rowSelect"
+							listener="#{departementSectionB.onRowSelected}" update=":frm" />
+
+						
+						<p:column headerText="Code" width="20%">
+							<h:outputText value="#{ser.code}" />
+						</p:column>
+						<p:column headerText="Désignation">
+							<h:outputText value="#{ser.designation}" />
+						</p:column>
+
+					</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+			
+		</body>
+	</ui:define>
+</ui:composition>

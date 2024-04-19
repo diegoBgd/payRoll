@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+	<h:form id="frm"
+		onkeypress="if (event.keyCode == 13) { return false; }">
+
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{authenticite.parametrage()}" />
+		</f:metadata>
+
+		<p:growl id="msgs" showDetail="true" />
+			<p:blockUI block="frm" trigger="btnSave">
+			 <p:outputLabel value="Opération encours de traitement..."/>
+			 </p:blockUI>
+		<div class="ui-g">
+			<div class="ui-g-12 ui-md-12 ui-lg-6 ui-fluid contact-form">
+				
+				<div class="card">
+					<p:panelGrid id="pnl1" columns="2"
+							columnClasses="ui-grid-col-3,ui-grid-col-8" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							
+							<p:outputLabel value="Personnel" />
+							<p:selectOneMenu id="txtPrsnl" value="#{utilitaireVue.idPrsnl}" 
+								valueChangeListener="#{utilitaireVue.changePersonnel}">							
+								<f:selectItems value="#{utilitaireVue.listPersonnel}" />
+								<p:ajax event="itemSelect" update="txtPrsnl,txtCatg"/>
+							</p:selectOneMenu>
+							
+						
+							<p:outputLabel value="Catégorie"/>
+							<p:selectOneMenu id="txtCatg" value="#{utilitaireVue.idCateg}"
+								valueChangeListener="#{utilitaireVue.changeCategorie}">
+								<f:selectItems value="#{utilitaireVue.listCateg}" />
+								<p:ajax event="change" update="txtCatg,txtGrd" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Grades"/>
+							<p:selectOneMenu id="txtGrd" value="#{utilitaireVue.idGrd}"
+								valueChangeListener="#{utilitaireVue.changeGrade}">
+								<f:selectItems value="#{utilitaireVue.listGrd}" />
+								<p:ajax event="change" update="txtGrd" />
+								
+							</p:selectOneMenu>
+							<p:outputLabel value="Fonction"/>
+							<p:selectOneMenu id="txtFx" value="#{utilitaireVue.idFonct}"
+								valueChangeListener="#{utilitaireVue.changeFonction}">
+								<f:selectItems value="#{utilitaireVue.listFoct}" />
+								<p:ajax event="change" update="txtFx" />
+								
+							</p:selectOneMenu>
+						</p:panelGrid>
+				</div>
+				
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+								
+								<div class="ui-g-12 ui-md-6">
+									<p:commandButton value="Affecter aux employés" 
+										action="#{utilitaireVue.chargermentParm()}" update="txtMsg"
+										id="btnSave" />
+								</div>
+								<div class="ui-g-12 ui-md-12">
+									<p:outputLabel value="#{utilitaireVue.infoMsg}" id="txtMsg" style="color:red"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					</div>
+					
+				
+		</div>
+	</h:form>
+	</ui:define>
+</ui:composition>

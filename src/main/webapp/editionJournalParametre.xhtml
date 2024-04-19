@@ -1,0 +1,115 @@
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:define name="content">
+		<h:form id="frm" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.parametrage()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<p:panelGrid id="pnl1" columns="2"
+							columnClasses="ui-grid-col-1,ui-grid-col-6" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+							<p:outputLabel value="Journal" />
+							<p:selectOneMenu id="txtJrnl" value="#{journalParametreB.idParamtre}" 
+								valueChangeListener="#{journalParametreB.changeParametre}">							
+								<f:selectItems value="#{journalParametreB.listParametre}" />
+								<p:ajax event="itemSelect" update="txtJrnl"/>
+							</p:selectOneMenu>
+							
+						</p:panelGrid>
+						<p:panelGrid id="pnl2" columns="4"
+							columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Date début"/>
+							<p:selectOneMenu id="smDateP" value="#{journalParametreB.datePrintDeb}"
+								valueChangeListener="#{journalParametreB.changeDateDeb}">
+								<f:selectItems value="#{journalParametreB.listDateDb}" />
+								<p:ajax event="change" update="smDateP" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Taille des caractères" />
+							<p:selectOneMenu id="txtTail" value="#{journalParametreB.taille}" 
+								valueChangeListener="#{journalParametreB.changeTaille}">							
+								<f:selectItem itemLabel="5" itemValue="5" />
+								<f:selectItem itemLabel="6" itemValue="6" />
+								<f:selectItem itemLabel="7" itemValue="7" />
+								<f:selectItem itemLabel="8" itemValue="8" />
+								<f:selectItem itemLabel="9" itemValue="9" />
+								<f:selectItem itemLabel="10" itemValue="10" />
+								<p:ajax event="itemSelect" update="txtTail"/>
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Date fin"/>
+							<p:selectOneMenu id="smDateC" value="#{journalParametreB.datePrintFin}"
+								valueChangeListener="#{journalParametreB.changeDateFin}">
+								<f:selectItems value="#{journalParametreB.listDateFn}" />
+								<p:ajax event="change" update="smDateC" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Ranger par"/>
+							<p:selectOneMenu value="#{journalParametreB.order}">
+								<f:selectItem itemLabel="Matricule" itemValue="0" />
+								<f:selectItem itemLabel="Nom " itemValue="1" />
+							</p:selectOneMenu>
+						</p:panelGrid>
+						
+						
+						
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+								<div class="ui-g-12 ui-md-1">
+								</div>
+
+								<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Editer en excel" icon="fa fa-file-excel-o"
+								style="border-radius:10px"
+								action="#{journalParametreB.printJournalExcel()}"
+								ajax="false"/>
+								</div>
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton id="btnVisu" icon="fa fa-file-pdf-o"
+										value="Visualiser" style="border-radius:10px"
+										action="#{journalParametreB.printJournal()}" ajax="false" />
+								</div>
+
+								
+
+							</div>
+						</div>
+					<h:panelGroup id="pnl" rendered="#{journalParametreB.showTbl}">
+						<p:dataTable id="tbl" value="#{journalParametreB.listEmploye}"
+							var="data">
+							<p:columns value="#{journalParametreB.listDynamic}" var="dyn"
+								columnIndexVar="colIndex">
+								<f:facet name="header">
+									<h:outputText value="#{dyn.nomColone}" />
+								</f:facet>
+								<h:outputText value="#{data[dyn.valeur]}" />
+							</p:columns>
+
+						</p:dataTable>
+
+					</h:panelGroup>
+
+					</div>
+					
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

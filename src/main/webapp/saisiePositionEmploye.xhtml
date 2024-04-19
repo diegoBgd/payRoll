@@ -1,0 +1,454 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frmPos" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl id="msgs" showDetail="true" sticky="false" />
+			<p:blockUI block="frmPos" trigger="btnSave"/>
+			<f:metadata>
+					<f:event  type="preRenderView"  listener="#{authenticite.gestionPosition()}" />
+				</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+					<div class="card">
+						<div class="ui-g">
+
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton value="Recherche des demandes encours"
+									icon="fa fa-search" onclick="PF('dlgDem').show();" />
+							</div>
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton
+									value="Recherche des demandes traités"
+									icon="fa fa-search" onclick="PF('dlgDec').show();" />
+		 					</div>
+		 					
+		 				
+						</div>
+					</div>
+
+					<div class="card">
+						<p:tabView id="gen">
+							<p:tab id="tab1" title="Position">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Employé" />
+									<p:inputText id="txtcode"
+										value="#{demandePositionB.code}" readonly="true">
+										<p:ajax event="blur" listener="#{demandePositionB.findByCode()}"
+										update="pgEmp" />
+									</p:inputText>
+
+									<p:inputText id="txtNom"
+										value="#{demandePositionB.employe.nomPrenom} "
+										readonly="true" />
+									
+								</p:panelGrid>
+								<p:panelGrid columns="2" id="pgEmp"
+									columnClasses="ui-grid-col-2,ui-grid-col-8"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									
+								<h:outputText value="Position" />
+									<p:selectOneMenu id="txtPos"
+										value="#{demandePositionB.idPosition}"
+										
+										autoWidth="false" readonly="true">
+										<f:selectItem itemLabel="" itemValue="0" />
+										<f:selectItem itemLabel="L'activité de service" itemValue="1" />
+										<f:selectItem itemLabel="Le détachement" itemValue="2" />
+										<f:selectItem itemLabel="La suspension d'activités de service"
+											itemValue="3" />
+										<f:selectItem itemLabel="La disponibilité" itemValue="4" />
+										<f:selectItem
+											itemLabel="La suspension de fonction par mesure d'ordre"
+											itemValue="5" />
+										<p:ajax event="change"
+											update=":frmPos:gen:txtPos,:frmPos:gen:txtCond" />
+									</p:selectOneMenu>
+									<h:outputText value="Condition Position" />
+									<p:selectOneMenu id="txtCond"
+										value="#{demandePositionB.idCondition}"
+										
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listConditions}" />
+										<p:ajax event="itemSelect" update="txtCond,frmPos" />
+									</p:selectOneMenu>
+									
+									<h:outputText value="Personnel" />
+									<p:selectOneMenu id="txtPrs"
+										value="#{demandePositionB.idPersonel}"
+										valueChangeListener="#{demandePositionB.changePersonnel}"
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listPrsnl}" />
+										<p:ajax event="itemSelect" update="txtPrs,txtCateg" />
+									</p:selectOneMenu>
+									
+									<h:outputText value="Catégorie" />
+									<p:selectOneMenu id="txtCateg"
+										value="#{demandePositionB.idCateg}"
+										valueChangeListener="#{demandePositionB.changeCategorie}"
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listCateg}" />
+										<p:ajax event="itemSelect" update="txtCateg,txtGrd" />
+									</p:selectOneMenu>
+									
+									<h:outputText value="Grade" />
+									<p:selectOneMenu id="txtGrd"
+										value="#{demandePositionB.idGrad}"
+										valueChangeListener="#{demandePositionB.changeGrade}"
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listGrd}" />
+										<p:ajax event="itemSelect" update="txtGrd" />
+									</p:selectOneMenu>
+									
+									<h:outputText value="Fonction" />
+									<p:selectOneMenu id="txtFx"
+										value="#{demandePositionB.idFonct}"
+										valueChangeListener="#{demandePositionB.changeFonction}"
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listFonct}" />
+										<p:ajax event="itemSelect" update="txtFx" />
+									</p:selectOneMenu>
+									
+								</p:panelGrid>
+								
+								
+								
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Date demande" />
+									<p:inputMask id="txtDateDem"
+										value="#{demandePositionB.dateDemandePositionS}"
+										mask="99/99/9999" readonly="true">
+										<p:ajax event="blur"
+											listener="#{demandePositionB.changeDateDemandePosition()}"
+											update="txtDateDem,frmPos" />
+									</p:inputMask>
+									<h:outputLabel value="Date Debut" />
+									<p:inputMask id="txtDateD" readonly="true"
+										value="#{demandePositionB.dateDebutS}" mask="99/99/9999">
+										<p:ajax event="blur"
+											listener="#{demandePositionB.changeDateDebut()}"
+											update="txtDateD" />
+									</p:inputMask>
+									<h:outputLabel value="Date Fin" />
+									<p:inputMask id="txtDateF" readonly="true"
+										value="#{demandePositionB.dateFinS}" mask="99/99/9999">
+										<p:ajax event="blur"
+											listener="#{demandePositionB.changeDateFin()}"
+											update="txtDateF"/>
+									</p:inputMask>
+									<h:outputLabel value="Période (mois)"/>
+									<p:inputNumber id="txtDureePos"
+												value="#{demandePositionB.duree}" autocomplete="off" 
+												inputStyle="text-align:right" decimalPlaces="0" readonly="true"/>
+									
+									</p:panelGrid>
+									
+									<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-8"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+										<p:outputLabel value="Motif" />
+										<p:inputTextarea value="#{demandePositionB.motifDemande}" readonly="true"/>
+									</p:panelGrid>
+									
+									<p:panelGrid columns="5"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									
+									<p:spacer/>
+									
+								</p:panelGrid>
+
+							</p:tab>
+							<p:tab id="tab2" title="Information sur salaire">
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6">
+										<p:dataTable
+											value="#{demandePositionB.listeDetailPrime}" var="det"
+											id="tblP" rowKey="#{det.indexe}"
+											
+											reflow="true" scrollable="true" scrollHeight="250"
+											emptyMessage="Aucun enregitrement" selectionMode="single">
+
+											
+											<p:column headerText="Primes à garder">
+												<p:outputLabel value="#{det.prime.designation}" />
+											</p:column>
+											<p:column headerText="" width="5%">
+												<p:selectBooleanCheckbox value="#{det.kept}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+									<div class="ui-g-12 ui-md-6">
+									
+									<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Taux Salaire" />
+									<p:inputNumber id="txtTauxSal" autocomplete="off" inputStyle="text-align:right" 
+										value="#{demandePositionB.taux}"
+										readonly="true" />
+										
+									
+									<h:outputLabel value="Ancien Salaire " />
+									<p:inputNumber id="txtAncSal" autocomplete="off" inputStyle="text-align:right" decimalPlaces="0"
+										value="#{demandePositionB.ancienSalaire}"
+										readonly="true" />
+										
+								
+									<h:outputLabel value="Nouveau Salaire" />
+									<p:inputNumber id="txtNouvSal" autocomplete="off" inputStyle="text-align:right" decimalPlaces="0"
+										value="#{demandePositionB.nouveauSalaire}"
+										readonly="true" />
+									
+									
+									</p:panelGrid>
+								
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-5,ui-grid-col-1,ui-grid-col-5,ui-grid-col-1"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									
+									<h:outputText value="Garder allocation familiale" />
+									<p:selectBooleanCheckbox
+										value="#{demandePositionB.ajoutAllocationFamiliale}"
+										style="float:right" readonly="true"/>
+									
+									<h:outputText value="Garder indemnité logement" />
+									<p:selectBooleanCheckbox
+										value="#{demandePositionB.ajoutIndemniteLogement}"
+										style="float:right" readonly="true"/>
+										
+									
+									<h:outputText value="Garder avancement grade" />
+									<p:selectBooleanCheckbox
+										value="#{demandePositionB.avancementGrade}"
+										style="float:right" readonly="true"/>
+									
+									<h:outputText value="Garder avancement traitement" />
+									<p:selectBooleanCheckbox
+										value="#{demandePositionB.avancementTraitement}"
+										style="float:right" readonly="true"/>
+										
+									
+									</p:panelGrid>
+									
+									</div>
+									
+									
+								</div>
+							</p:tab>
+
+							<p:tab id="tab3" title="Décision">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-1,ui-grid-col-6,"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputText value="Décision " />
+									<p:selectOneMenu id="txtDecision"
+										value="#{demandePositionB.decision}"
+										autoWidth="false">
+										<p:ajax event="itemSelect" update="txtDecision" />
+										<f:selectItem itemLabel=" " itemValue="0" />
+										<f:selectItem itemLabel="Accepté" itemValue="1" />
+										<f:selectItem itemLabel="Réfusé " itemValue="2" />
+										<p:ajax event="change" update="txtDecision" />
+									</p:selectOneMenu>
+									
+								</p:panelGrid>
+								
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-8"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									
+									<p:outputLabel value="Motif refus" />
+									<p:inputTextarea value="#{demandePositionB.motifRefus}" />
+									
+									</p:panelGrid>
+							</p:tab>
+						</p:tabView>
+					</div>
+
+
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" disabled="#{demandePositionB.disableSave}"
+								action="#{demandePositionB.saveDecision()}" update=":frmPos" />
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnDelete" icon="fa fa-rotate-left"
+								value="Annuler"
+								action="#{demandePositionB.annuler()}" update=":frmPos"
+								styleClass="orange-btn">
+								<p:confirm header="Confirmation"
+												message="Voulez-vous annuler l'opération ?"
+												icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser"
+								action="#{demandePositionB.initialiser()}" update=":frmPos" />
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</h:form>
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+		</h:form>
+		<p:dialog widgetVar="dlgDem"
+			header="Liste des demandes encours" width="70%"
+			height="40%" position="center" responsive="true">
+			<h:form id="frmPosDem">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+
+
+							<div class="ui-g">
+
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton id="btnChrg" icon="ui-icon ui-icon-refresh"
+										value="Charger" action="#{demandePositionB.chargement()}"
+										update="tblDem" />
+								</div>
+								<div class="ui-g-12 ui-md-12">
+
+									<p:dataTable id="tblDem"
+										value="#{demandePositionB.listDemande}"
+										var="demande" rows="10" paginator="true"
+										paginatorAlwaysVisible="false" rowKey="#{demande.id}"
+										selectionMode="single"
+										selection="#{demandePositionB.selected}"
+										paginatorPosition="bottom" reflow="true"
+										emptyMessage="Aucun enregitrement">
+
+										<p:ajax event="rowSelect"
+											listener="#{demandePositionB.onRowDmdSelected}"
+											update="frmPos" />
+
+										<p:column headerText="Code" width="10%">
+											<h:outputText value="#{demande.employe.code}" />
+										</p:column>
+
+										<p:column headerText="Employé" width="40%">
+											<h:outputText value="#{demande.employe.nomPrenom}" />
+										</p:column>
+
+
+										<p:column headerText=" Position ">
+											<h:outputText value="#{demande.conditionPosition.condition}" />
+										</p:column>
+
+
+
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		
+		<p:dialog widgetVar="dlgDec"
+			header="Liste des demandes traitées" width="70%"
+			height="40%" position="center" responsive="true">
+			<h:form id="frmPosDec">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">									
+								
+									<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-4"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<p:outputLabel value="Type décision"/>
+									<p:selectOneMenu id="txtDecision"
+										value="#{demandePositionB.typeDecision}"
+										autoWidth="false">
+										<p:ajax event="itemSelect" update="txtDecision" />
+										<f:selectItem itemLabel="Demandes acceptées" itemValue="1" />
+										<f:selectItem itemLabel="Demandes réfusées " itemValue="2" />
+										<p:ajax event="change" update="txtDecision" />
+									</p:selectOneMenu>
+									
+									<p:spacer/>
+									<p:commandButton id="btnChrg" icon="ui-icon ui-icon-refresh"
+										value="Charger"
+										action="#{demandePositionB.chargerPositionDecide()}"									
+										update="tblDec" />
+										
+									</p:panelGrid>
+								
+									<p:dataTable id="tblDec"
+										value="#{demandePositionB.listPosition}"
+										var="demande" rows="10" paginator="true"
+										paginatorAlwaysVisible="false" rowKey="#{demande.id}"
+										selectionMode="single"
+										selection="#{demandePositionB.selected}"
+										paginatorPosition="bottom" reflow="true"
+										emptyMessage="Aucun enregitrement">
+
+										<p:ajax event="rowSelect"
+											listener="#{demandePositionB.onRowDecidSelected}"
+											update="frmPos" />
+
+
+										<p:column headerText="Code" width="10%">
+											<h:outputText value="#{demande.employe.code}" />
+										</p:column>
+
+										<p:column headerText="Employé" width="40%">
+											<h:outputText value="#{demande.employe.nomPrenom}" />
+										</p:column>
+
+										<p:column headerText="Condition Position ">
+											<h:outputText value="#{demande.conditionPosition.condition}" />
+										</p:column>
+
+									</p:dataTable>
+
+								</div>
+							</div>
+						</div>
+				
+			</h:form>
+		</p:dialog>
+		
+		
+		
+		
+	</ui:define>
+
+</ui:composition>

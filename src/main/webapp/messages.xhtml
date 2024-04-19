@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<ui:composition template="/masterPage.xhtml"
+ xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"> 
+
+	<ui:define name="content">
+		<h:head>
+			<link  type="text/css" rel="stylesheet" href="../resources/style.css"/>
+			<title>Message</title>
+		</h:head>
+		<body> 
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+				    <f:event  type="preRenderView" listener="#{authenticite.message()}" />
+				</f:metadata>				
+				<p:growl id="msgs" showDetail="true"/>
+							
+			</h:form>
+		</body> 
+	</ui:define>
+</ui:composition>

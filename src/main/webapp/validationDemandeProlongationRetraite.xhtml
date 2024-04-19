@@ -1,0 +1,263 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frmVldPrl" onkeypress="if (event.keyCode == 13) { return false; }"> 
+			<p:growl showDetail="true" sticky="false" />
+			<p:blockUI block="frmVldPrl" trigger="btnSave"/>
+			<div class="ui-g">
+			<f:metadata>
+					<f:event  type="preRenderView"  listener="#{authenticite.validationProlongationRetraite()}" />
+				</f:metadata>
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+				
+				<div class="card">
+						  <div class="ui-g">
+						  	<div class="ui-g-12 ui-md-2"/>
+							<div class="ui-g-12 ui-md-4">
+							 	<p:commandButton value="Liste des demandes"  
+							 	icon="fa fa-search" onclick="PF('dlgDmd').show();"/>
+							</div>
+		 					<div class="ui-g-12 ui-md-4">
+							 	<p:commandButton value="Liste des demandes traitées" 					 	
+							 	icon="fa fa-search" onclick="PF('dlgTrt').show();"/>
+							</div>
+						</div>
+					</div>
+					</div>
+				
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+					<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Employé" />
+							<p:inputText id="txtcode" value="#{demandeProlongationRetraiteB.code}" readonly="true"/>
+											
+							<p:inputText id="txtNom"
+								value="#{demandeProlongationRetraiteB.employe.nomPrenom} "
+								readonly="true" />
+						
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+						
+							<h:outputLabel value="Personnel" />
+							<p:inputText id="txtPersonnel"
+								value="#{demandeProlongationRetraiteB.personel}"
+								readonly="true" />
+								
+							<h:outputLabel value="Catégorie" />
+							<p:inputText id="txtCategorie"
+								value="#{demandeProlongationRetraiteB.categorie}"
+								readonly="true" />
+								
+							<h:outputLabel value="Niveau de formation " />
+							<p:inputText id="txtNv" readonly="true"
+								value="#{demandeProlongationRetraiteB.niveauFrm}" />
+							
+			
+							<h:outputLabel value=" Grade " />
+							<p:inputText id="txtGrade"
+								readonly="true" value="#{demandeProlongationRetraiteB.grade}"/>
+							
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+        	    			<h:outputLabel value="Date demande"/>
+							<p:inputMask id="txtDateDem" value="#{demandeProlongationRetraiteB.dateDemandeS}" mask="99/99/9999" readonly="true"/>									
+							
+							<h:outputText value="Age" />
+							<p:inputNumber value="#{demandeProlongationRetraiteB.age}" inputStyle="text-align:right" decimalPlaces="0" readonly="true"/>
+							
+							<h:outputText value="Période demandée " />
+							<p:inputNumber value="#{demandeProlongationRetraiteB.ageRetraiteDemande}" inputStyle="text-align:right" decimalPlaces="0"  readonly="true"/>
+							
+						</p:panelGrid>
+						
+						<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+							<p:outputLabel value="Motif" />
+							<p:inputTextarea
+								value="#{demandeProlongationRetraiteB.motifDemande}" />
+								
+					   </p:panelGrid>
+        	    	</div>
+        	    	</div>
+        	    	<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+        	   		<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+        	    			<h:outputLabel value="Date validation" />
+							<p:inputMask id="txtDateDecis" value="#{demandeProlongationRetraiteB.dateDecisionS}" mask="99/99/9999" >
+								<p:ajax event="blur" listener="#{demandeProlongationRetraiteB.changeDateDecision()}" update="txtDateDecis" />	
+							</p:inputMask> 	
+							<h:outputText value="Décision" />
+							<p:selectOneMenu id="txtDec"
+									value="#{demandeProlongationRetraiteB.decision}">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItem itemLabel="Accepter" itemValue="1" />
+									<f:selectItem itemLabel="Refuser" itemValue="2" />
+									
+								</p:selectOneMenu>
+						</p:panelGrid>
+					</div>
+					
+					
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" action="#{demandeProlongationRetraiteB.enregistrerDecision()}"
+								update=":frmVldPrl" />
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnDelete" icon="fa fa-rotate-left"
+								value="Annuler"
+								
+								action="#{demandeProlongationRetraiteB.annulerDecision()}" update=":frmVldPrl"
+								styleClass="orange-btn" >
+								<p:confirm header="Confirmation"
+												message="Voulez-vous vraiement annuler ?"
+												icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser" action="#{demandeProlongationRetraiteB.initialiser()}"
+								update=":frmVldPrl" />
+						</div>
+
+					</div>
+					
+					
+
+ 				</div>
+        	   </div>
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+			</h:form>
+		<p:dialog widgetVar="dlgDmd" header="Liste des demandes encours" width="70%" height="40%" position="center" responsive="true">
+				<h:form id="frmRech" >
+			   	<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+							
+							<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnChrg" icon="ui-icon ui-icon-refresh"
+								value="Charger"
+								action="#{demandeProlongationRetraiteB.chargementDemande()}"
+								update="tblDem"/>
+							</div>
+							<div class="ui-g-12 ui-md-8"/>
+					
+					<p:dataTable id="tblDem" value="#{demandeProlongationRetraiteB.listDemande}" var="demande" rows="10" paginator="true" paginatorAlwaysVisible="false"
+						rowKey="#{demande.id}" selectionMode="single" selection="#{demandeProlongationRetraiteB.selected}" paginatorPosition="bottom" reflow="true" emptyMessage="Aucun enregitrement" >
+									
+						<p:ajax event="rowSelect" listener="#{demandeProlongationRetraiteB.onRowSelected}" update="frmVldPrl"/>
+														
+						<p:column headerText="Employé">
+							<h:outputText value="#{demande.employe.nomPrenom}" />
+						</p:column>
+												
+						<p:column headerText="Date demande " width="15%" >
+							<h:outputText value="#{demande.dateDemandeS}"/>
+						</p:column>
+						
+						<p:column headerText="Période demandée" width="15%" >
+							<h:outputText value="#{demande.ageRetraiteDemande}"/>
+						</p:column>
+						
+															
+					</p:dataTable>	
+					</div>
+					</div>
+					</div>
+					</div>
+				</h:form>
+			</p:dialog>
+			
+			<p:dialog widgetVar="dlgTrt" header="Liste des demandes de retraite anticipée"
+				width="80%" height="40%" position="center" responsive="true">
+				<h:form id="frmRechTrt">
+				<p:poll interval="3" update="tbTrt" autoStart="true"></p:poll>
+					<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+							
+							<div class="ui-g-12 ui-md-2">
+								<h:outputText value="Type décision" />
+							</div>
+							<div class="ui-g-12 ui-md-4">
+							<p:selectOneMenu id="txtDec"
+									value="#{demandeProlongationRetraiteB.typeDec}">	
+									<f:selectItem itemLabel="" itemValue="0" />							
+									<f:selectItem itemLabel="Accepter" itemValue="1" />
+									<f:selectItem itemLabel="Refuser" itemValue="2" />
+									
+								</p:selectOneMenu>
+							</div>
+							
+							<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnChrg" icon="ui-icon ui-icon-refresh"
+								value="Charger"
+								action="#{demandeProlongationRetraiteB.chargementTraitement()}"
+								update="tbTrt"/>
+							</div>
+							
+							<p:dataTable id="tbTrt" var="dema"
+								value="#{demandeProlongationRetraiteB.listDecisionDemande}"
+								rowKey="#{dema.id}" selectionMode="single"
+								selection="#{demandeProlongationRetraiteB.selected}"
+								paginator="true" paginatorAlwaysVisible="false"
+								paginatorPosition="bottom" rows="10" emptyMessage="">
+
+								<p:ajax event="rowSelect"
+									listener="#{demandeProlongationRetraiteB.onRowDecisionSelected}"
+									update=":frmVldPrl" />
+
+								<p:column headerText="Employé" width="40%">
+									<h:outputText value="#{dema.employe.nomPrenom}" />
+								</p:column>
+
+								<p:column headerText="Age Actuel" width="10%">
+									<h:outputText value="#{dema.age}" />
+								</p:column>
+								<p:column headerText="Période demandée" width="10%">
+									<h:outputText value="#{dema.ageRetraiteDemande}" />
+								</p:column>
+								<p:column headerText="Date Demande" width="10%">
+									<h:outputText value="#{dema.dateDemandeS}" />
+								</p:column>
+								
+							</p:dataTable>
+						</div>
+						</div>
+					</div>
+					</div>
+				</h:form>
+			</p:dialog>
+	</ui:define>
+
+</ui:composition>

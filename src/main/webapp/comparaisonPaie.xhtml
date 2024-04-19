@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:define name="content">
+		<h:form id="frm" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.BulletinPaie()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+					<p:panelGrid id="pnl2" columns="4"
+							columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Date paie"/>
+							<p:selectOneMenu id="smDateP" value="#{comparatifPaie.datePaie}"
+								valueChangeListener="#{comparatifPaie.changeDatePaie}">
+								<f:selectItems value="#{comparatifPaie.listDatePaie}" />
+								<p:ajax event="change" update="smDateP" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Date à comparer"/>
+							<p:selectOneMenu id="smDateC" value="#{comparatifPaie.dateCompare}"
+								valueChangeListener="#{comparatifPaie.changeDateCompare}">
+								<f:selectItems value="#{comparatifPaie.listDateCompare}" />
+								<p:ajax event="change" update="smDateC" />
+								
+							</p:selectOneMenu>
+							<p:outputLabel value="Ranger par"/>
+							<p:selectOneMenu value="#{comparatifPaie.order}">
+								<f:selectItem itemLabel="Matricule" itemValue="0" />
+								<f:selectItem itemLabel="Nom " itemValue="1" />
+							</p:selectOneMenu>
+							<p:outputLabel value="Comparer"/>
+							<p:selectOneMenu value="#{comparatifPaie.typeMontant}">
+								<f:selectItem itemLabel="Net" itemValue="0" />
+								<f:selectItem itemLabel="Brut " itemValue="1" />
+							</p:selectOneMenu>
+							
+							<p:spacer/>
+							<p:commandButton id="btnVisu" icon="fa fa-file-o"
+										value="Visualiser" style="border-radius:10px" 
+										action="#{comparatifPaie.printData()}" ajax="false" />
+						</p:panelGrid>
+						
+						
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

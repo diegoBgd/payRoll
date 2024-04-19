@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{authenticite.fichiersBase()}" />
+			</f:metadata>
+
+			<p:growl id="msgs" showDetail="true" />
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+				<div class="ui-g-12 ui-fluid card">
+
+						<p:panelGrid id="pnl1" columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-1"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+							<h:outputText value="Employé" />
+							<p:inputText id="txtCodeEmploye"
+								value="#{saisieHeurSupVue.codeEmploye}" autocomplete="off">
+								<p:ajax event="blur"
+									listener="#{saisieHeurSupVue.searchEmploye()}" update="txtNom" />
+							</p:inputText>
+
+							<p:inputText id="txtNom" value="#{saisieHeurSupVue.nomEmploye}"
+								readonly="true" />
+							<p:commandButton icon="fa fa-search"
+								onclick="PF('dlgEmploye').show();" style="border-radius:10px"/>
+
+						</p:panelGrid>
+						<p:panelGrid id="pnl2" columns="2"
+							columnClasses="ui-grid-col-4,ui-grid-col-3"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+							<p:outputLabel value="Cette saisie concerne la paie du mois de " />
+							<p:selectOneMenu value="#{saisieHeurSupVue.mois}"
+								valueChangeListener="#{saisieHeurSupVue.changeMonth}">
+
+								<f:selectItem itemLabel="" itemValue="0" />
+								<f:selectItem itemLabel="Janvier" itemValue="1" />
+								<f:selectItem itemLabel="Février" itemValue="2" />
+								<f:selectItem itemLabel="Mars" itemValue="3" />
+								<f:selectItem itemLabel="Avril" itemValue="4" />
+								<f:selectItem itemLabel="Mai" itemValue="5" />
+								<f:selectItem itemLabel="Juin" itemValue="6" />
+								<f:selectItem itemLabel="Juillet" itemValue="7" />
+								<f:selectItem itemLabel="Août" itemValue="8" />
+								<f:selectItem itemLabel="Septembre" itemValue="9" />
+								<f:selectItem itemLabel="Octobre" itemValue="10" />
+								<f:selectItem itemLabel="Novembre" itemValue="11" />
+								<f:selectItem itemLabel="Décembre" itemValue="12" />
+
+								<p:ajax event="itemSelect" update=":frm" />
+							</p:selectOneMenu>
+
+						</p:panelGrid>
+						<p:panelGrid id="pnl3" columns="1" columnClasses="ui-grid-col-8"
+							layout="grid"
+							style="border:0px none; background-color:transparent;">
+							<p:dataTable id="tblHeurs"
+								value="#{saisieHeurSupVue.listHeurPreste}" var="hp"
+								rowKey="#{hp.id}" selectionMode="single" emptyMessage=""
+								selection="#{saisieHeurSupVue.hPreste}" reflow="true"
+								scrollable="true" scrollHeight="150" >
+
+
+								<p:column headerText="Tranche" width="20%">
+									<h:outputText value="#{hp.temps}" />
+								</p:column>
+
+								<p:column headerText="Pourcentage" width="10%">
+									<h:outputText value="#{hp.pourcent} %" />
+								</p:column>
+
+								<p:column headerText="Heures" width="5%">
+									<p:inputNumber value="#{hp.heure}" id="txtHr"
+										inputStyle="text-align:right" decimalPlaces="0" maxlength="2">
+										<p:ajax event="blur"  update="txtHr"/>
+									</p:inputNumber>
+									
+								</p:column>
+								<p:column headerText="Minutes" width="5%">
+									<p:inputNumber value="#{hp.minute}"
+										inputStyle="text-align:right" decimalPlaces="0" maxlength="2" id="txtMn">
+										<p:ajax event="blur" listener="#{hp.onMinuteChange()}" update="txtHr,txtMn" />
+										</p:inputNumber>
+								</p:column>
+
+								<p:column headerText="Sec" width="5%">
+									<p:inputNumber value="#{hp.sec}" inputStyle="text-align:right"
+										decimalPlaces="0" maxlength="2" id="txtSec">
+										<p:ajax event="blur" listener="#{hp.onSecondchange()}" update="txtMn,txtSec" />
+									</p:inputNumber>
+								</p:column>
+							</p:dataTable>
+						</p:panelGrid>
+						
+					</div>
+					<div class="ui-g-12 ui-fluid card" >
+					<div class="ui-g-12 ui-md-1"/>
+					<div class="ui-g-12 ui-md-2">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer" action="#{saisieHeurSupVue.save()}"
+									update=":frm" style="border-radius:10px"/>
+							</div>
+
+							<div class="ui-g-12 ui-md-2">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+									value="Supprimer" action="#{saisieHeurSupVue.deleteHsup()}" update=":frm"
+									styleClass="orange-btn" style="border-radius:10px">
+									<p:confirm header="Confirmation" disabled="#{saisieHeurSupVue.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+								</p:commandButton>
+							</div>
+
+							<div class="ui-g-12 ui-md-2">
+								<p:commandButton id="btnAnnuler" icon="fa fa-refresh"
+									value="Initialiser" action="#{saisieHeurSupVue.initialize()}" update=":frm" 
+									style="border-radius:10px"/>
+							</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" widgetVar="cd" >
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			
+		<p:dialog widgetVar="dlgEmploye" header="Recherche Employé"
+			modal="true" width="70%" height="40%" position="center"
+			responsive="true">
+			<h:form id="frmEmploye">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+
+							<p:panelGrid columns="3"
+								columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								
+								<h:outputText value="Recherche par nom" />
+								<p:inputText value="#{saisieHeurSupVue.nomRechEmp}" />
+
+								<p:commandButton value="Rechercher"  style="border-radius:10px"
+											action="#{saisieHeurSupVue.chargementEmploye()}"
+											update=":frmEmploye:tblEmploye" icon="fa fa-search"/>
+							</p:panelGrid>
+							
+							<p:dataTable id="tblEmploye"
+								value="#{saisieHeurSupVue.listEmploye}" var="empl"
+								rowKey="#{empl.id}" selectionMode="single" emptyMessage=""
+								selection="#{saisieHeurSupVue.employe}" reflow="true"
+							   scrollHeight="250" scrollable="true">
+
+								<p:ajax event="rowSelect"
+									listener="#{saisieHeurSupVue.onEmployeSelected}"
+									update=":frm:pnl1" />
+
+								<p:column headerText="Code/Matricule" width="10%">
+									<h:outputText value="#{empl.code}" />
+								</p:column>
+
+								<p:column headerText="Nom">
+									<h:outputText value="#{empl.nomPrenom}" />
+								</p:column>
+
+
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

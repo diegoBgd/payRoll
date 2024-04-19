@@ -1,0 +1,214 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<p:blockUI block="frm" trigger="btnSave" />
+			<f:metadata>
+				<f:event listener="#{authenticite.ValidationAvancementGrade()}"
+					type="preRenderView" />
+			</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card" >
+						<div class="ui-g">
+
+							<div class="ui-g-12 ui-md-6">
+								<p:commandButton value="Liste Dossiers Avancement"
+									icon="fa fa-search" onclick="PF('dlgAvc').show();" />
+							</div>
+							<div class="ui-g-12 ui-md-6">
+								<p:commandButton value="Liste Demande Avancement"
+									icon="fa fa-search" onclick="PF('dlgDem').show();" />
+							</div>
+
+						</div>
+					</div>
+
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-8,ui-grid-col-1"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									
+									<h:outputLabel value="Employé" />
+									<p:inputText id="txtcode" autocomplete="off"
+										value="#{changementGradeB.matricule}">
+									<p:ajax event="blur"
+										listener="#{changementGradeB.searchEmploye()}" update=":frm" />
+										</p:inputText>
+									
+									<p:inputText id="txtNom"
+										value="#{changementGradeB.nomPrenom}"
+										readonly="true" />
+									<p:commandButton value="..." oncomplete="PF('dlgEmpl').show()"/>	
+										
+								</p:panelGrid>
+								
+								<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="background-color:transparent;">
+								<h:outputLabel value="Personnel" />
+								<p:inputText id="txtPrsnl"
+									value="#{changementGradeB.personel}"
+									readonly="true" />
+								<h:outputLabel value="Catégorie" />
+								<p:inputText id="txtCat"
+									value="#{changementGradeB.categorie}"
+									readonly="true" />
+								<h:outputLabel value=" Grade " />
+								<p:inputText id="txtGrade" readonly="true"
+									value="#{changementGradeB.grade}" />
+								
+								<h:outputLabel value=" Niveau formation " />
+								<p:inputText id="txtFrm" readonly="true"
+									value="#{changementGradeB.niveauFrm}" />
+							   </p:panelGrid>
+							</div>
+						</div>
+					</div>
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+								
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-1,ui-grid-col-7,ui-grid-col-1"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<p:selectOneRadio id="rdb" layout="responsive" columns="1"
+										value="#{changementGradeB.etatDemande}">
+										<f:selectItem itemLabel="Accepté" itemValue="2" />
+										<f:selectItem itemLabel="Refusé" itemValue="3" />
+										<p:ajax event="change" update="rdb,txtMotif" listener="#{changementGradeB.changeDecision()}"/>
+									</p:selectOneRadio>
+								<p:outputLabel value="Motif refus"/>
+								<p:inputTextarea id="txtMotif" value="#{changementGradeB.motifRefus}" disabled="#{changementGradeB.desable}"/>
+								</p:panelGrid>
+
+							</div>
+						</div>
+					</div>
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" action="#{changementGradeB.save()}"
+								update=":frm" />
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+								value="Supprimer"
+								onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+								action="#{changementGradeB.supprimer()}" update=":frm"
+								styleClass="orange-btn" />
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser" action="#{changementGradeB.initialiser()}"
+								update=":frm" />
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</h:form>
+		<p:dialog widgetVar="dlgEmpl"
+			header="Liste des employes" width="70%"
+			height="40%" position="center" responsive="true">
+			<h:form id="frmAvc">
+			<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card no-margin">
+
+							<p:panelGrid columns="2"
+								columnClasses="ui-grid-col-1,ui-grid-col-6"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="background-color:transparent;">
+							
+								<h:outputLabel value="Matricule" />
+								<p:inputText id="SCode"
+										value="#{evaluationEmployeB.codeEmployeRecherche}" />
+
+								<h:outputLabel value="Nom" />
+								<p:inputText value="#{evaluationEmployeB.nomEmployeRecherche}" />
+								
+								<p:spacer/>
+								<p:commandButton value="Chargerment"
+								 action="#{changementGradeB.chargerEmploye()}" update="tblEmpl"/>	
+								 
+							</p:panelGrid>
+				
+				
+				<p:dataTable id="tblEmpl"
+					value="#{changementGradeB.listEmploye}" var="empl"
+					rows="10" paginator="true" paginatorAlwaysVisible="false"
+					rowKey="#{empl.id}" selectionMode="single"
+					selection="#{changementGradeB.selection}" paginatorPosition="bottom"
+					reflow="true" emptyMessage="Aucun enregitrement">
+
+					<p:ajax event="rowSelect"
+						listener="#{changementGradeB.onEmployeSelected}" update=":frm" />
+
+					<p:column headerText="Matricule" width="20%">
+						<h:outputText
+							value="#{empl.code}" />
+					</p:column>
+
+					<p:column headerText="Nom et prenom">
+						<h:outputText value="#{empl.nomPrenom}" />
+					</p:column>
+			</p:dataTable>
+			</div>
+			</div>
+			</div>
+			</h:form>
+			
+		</p:dialog>
+		<p:dialog widgetVar="dlgDem"
+			header="Rechercher les dossiers de demande d'avancement de grade"
+			width="70%" height="40%" position="center" responsive="true">
+			<h:form id="frmDem">
+
+
+				<p:dataTable id="tbl"
+					value="#{changementGradeB.listAvancement}"
+					var="demande" rows="10" paginator="true"
+					paginatorAlwaysVisible="false" rowKey="#{demande.id}"
+					selectionMode="single"
+					selection="#{changementGradeB.selectedAvancement}"
+					paginatorPosition="bottom" reflow="true"
+					emptyMessage="Aucun enregitrement">
+
+					<p:ajax event="rowSelect"
+						listener="#{changementGradeB.onAvancementSelected}" update="frm" />
+
+					<p:column headerText="Employé">
+						<h:outputText
+							value="#{demande.nomPrenom}" />
+					</p:column>
+
+					<p:column headerText="Ancien grade">
+						<h:outputText
+							value="#{demande.gradeAN}" />
+					</p:column>
+					
+					<p:column headerText="Nouveau grade">
+						<h:outputText
+							value="#{demande.gradeNV}" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

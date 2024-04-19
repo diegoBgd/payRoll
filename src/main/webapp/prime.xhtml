@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Primes</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+			
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						
+						<div class="ui-g-12 ui-fluid card">
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-6" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputText value="Référence" />
+								<p:inputText id="txtCode" value="#{primeIndemniteB.code}"
+									autocomplete="off">
+									<p:ajax event="blur"
+										listener="#{primeIndemniteB.changeCodePrime()}" update=":frm" />
+								</p:inputText>
+
+								<h:outputText value="Prime" />
+								<p:inputText id="txtDesignation"
+									value="#{primeIndemniteB.designation}" autocomplete="off" />
+									
+								
+								
+							</p:panelGrid>
+							<p:panelGrid id="pnl2" columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputLabel value="Type " />
+								<p:selectOneMenu id="txtType" 
+									value="#{primeIndemniteB.type}">
+									<f:selectItem itemLabel="" itemValue="" />
+									<f:selectItem itemLabel="Prime" itemValue="P" />
+									<f:selectItem itemLabel="Indemnité" itemValue="I" />
+									<f:selectItem itemLabel="Allocations" itemValue="A" />
+									<p:ajax event="change" update="txtType" />
+								</p:selectOneMenu>
+								
+								<h:outputLabel value="Compte comptable" />
+								<p:inputText value="#{primeIndemniteB.prefixeComptable}"/>
+							
+								
+							</p:panelGrid >
+							<p:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,
+																	ui-grid-col-2,ui-grid-col-1,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								
+							
+								<h:outputLabel value="Imposable" />
+								<p:selectBooleanCheckbox value="#{primeIndemniteB.imposable}"/>
+								
+								<h:outputLabel value="Soumise à cotisation" />
+								<p:selectBooleanCheckbox value="#{primeIndemniteB.soumisCotisation}"/>
+								
+								
+							</p:panelGrid>
+							
+						</div>
+						<div class="ui-g-12 ui-fluid card">
+							<p:dataTable id="tblPrm" value="#{primeIndemniteB.listePrime}"
+								var="prm" rowKey="#{prm.id}" selectionMode="single"
+								reflow="true" selection="#{primeIndemniteB.selected}"
+								scrollable="true" scrollHeight="200" emptyMessage="">
+								<p:ajax event="rowSelect"
+									listener="#{primeIndemniteB.onRowSelected}" update=":frm" />
+
+
+								<p:column headerText="Référence " width="10%">
+									<h:outputText value="#{prm.code}" />
+								</p:column>
+
+								<p:column headerText="Prime">
+									<h:outputText value="#{prm.designation}" />
+								</p:column>
+
+
+
+							</p:dataTable>
+						</div>
+						<div class="ui-g-12 ui-fluid card">
+									<div class="ui-g-12 ui-md-1"/>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer" style="border-radius:10px"
+											action="#{primeIndemniteB.enregistrerPrime()}" update=":frm" />
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer" style="border-radius:10px"
+									
+											action="#{primeIndemniteB.supprimer()}"
+											styleClass="orange-btn" update=":frm">
+											<p:confirm header="Confirmation" disabled="#{primeIndemniteB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+											</p:commandButton>
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnAnnuler" style="border-radius:10px"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{primeIndemniteB.initialiser()}" update=":frm" />
+									</div>
+
+								
+
+							
+
+						</div>
+					</div>
+		
+
+			</h:form>
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form> 
+		
+			
+
+		</body>
+	</ui:define>
+</ui:composition>

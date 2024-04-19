@@ -1,0 +1,278 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frmDm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl id="msgs" showDetail="true" sticky="false" />
+			<p:blockUI block="frmDm" trigger="btnSave"/>
+			<f:metadata>
+					<f:event  type="preRenderView"  listener="#{authenticite.gestionPosition()}" />
+				</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+
+							<div class="ui-g-12 ui-md-6">
+								<p:commandButton value="Recherche" icon="fa fa-search"
+									onclick="PF('dlgDemande').show();" />
+							</div>
+ 
+						</div>
+					</div>
+
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Employé" />
+							<p:inputText id="txtcode" value="#{demandePositionB.code}">
+								<p:ajax event="blur" listener="#{demandePositionB.findByCode()}"
+									update=":frmDm" />
+							</p:inputText>
+
+							<p:inputText id="txtNom"
+								value="#{demandePositionB.employe.nomPrenom}"
+								readonly="true" />
+							<p:commandButton value="..." oncomplete="PF('dlg').show()"></p:commandButton>
+						</p:panelGrid>
+						<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputText value="Position" />
+							<p:selectOneMenu id="txtPos"
+								value="#{demandePositionB.idPosition}"
+								valueChangeListener="#{demandePositionB.changePosition}" autoWidth="false">
+								<f:selectItem itemLabel="" itemValue="0" />
+								<f:selectItem itemLabel="L'activité de service" itemValue="1" />
+								<f:selectItem itemLabel="Le détachement" itemValue="2" />
+								<f:selectItem itemLabel="La suspension d'activités de service"
+									itemValue="3" />
+								<f:selectItem itemLabel="La disponibilité" itemValue="4" />
+								<f:selectItem
+									itemLabel="La suspension de fonction par mesure d'ordre"
+									itemValue="5" />
+								<p:ajax event="change" update=":frmDm:txtPos,:frmDm:txtCond" />
+							</p:selectOneMenu>
+							
+							<h:outputText value="Condition / cause" />
+							<p:selectOneMenu id="txtCond"
+								value="#{demandePositionB.idCondition}"
+								valueChangeListener="#{demandePositionB.changeCondition}"
+								autoWidth="false">
+								<f:selectItems value="#{demandePositionB.listConditions}" />
+								<p:ajax event="itemSelect" update="txtCond,msgs,btnSave" />
+							</p:selectOneMenu>
+							<h:outputText value="Personnel" />
+									<p:selectOneMenu id="txtPrs"
+										value="#{demandePositionB.idPersonel}"
+										valueChangeListener="#{demandePositionB.changePersonnel}"
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listPrsnl}" />
+										<p:ajax event="itemSelect" update="txtPrs,txtCateg" />
+									</p:selectOneMenu>
+									
+									<h:outputText value="Catégorie" />
+									<p:selectOneMenu id="txtCateg"
+										value="#{demandePositionB.idCateg}"
+										valueChangeListener="#{demandePositionB.changeCategorie}"
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listCateg}" />
+										<p:ajax event="itemSelect" update="txtCateg,txtGrd" />
+									</p:selectOneMenu>
+									
+									<h:outputText value="Grade" />
+									<p:selectOneMenu id="txtGrd"
+										value="#{demandePositionB.idGrad}"
+										valueChangeListener="#{demandePositionB.changeGrade}"
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listGrd}" />
+										<p:ajax event="itemSelect" update="txtGrd" />
+									</p:selectOneMenu>
+									
+									<h:outputText value="Fonction" />
+									<p:selectOneMenu id="txtFx"
+										value="#{demandePositionB.idFonct}"
+										valueChangeListener="#{demandePositionB.changeFonction}"
+										autoWidth="false">
+										<f:selectItems
+											value="#{demandePositionB.listFonct}" />
+										<p:ajax event="itemSelect" update="txtFx" />
+									</p:selectOneMenu>
+									
+								  <p:outputLabel value="Motif" />
+								  <p:inputTextarea value="#{demandePositionB.motifDemande}" />
+							
+			
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Date demande" />
+							<p:inputMask id="txtDateDem"
+								value="#{demandePositionB.dateDemandePositionS}"
+								mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{demandePositionB.changeDateDemandePosition()}"
+									update="txtDateDem" />
+							</p:inputMask>
+							<h:outputLabel value="Date Debut" />
+							<p:inputMask id="txtDateD" value="#{demandePositionB.dateDebutS}"
+								mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{demandePositionB.changeDateDebut()}"
+									update="txtDateD,txtDureePos" />
+							</p:inputMask>
+							<h:outputLabel value="Période (mois)"/>
+							<p:inputNumber id="txtDureePos"
+												value="#{demandePositionB.duree}" autocomplete="off" 
+												inputStyle="text-align:right" decimalPlaces="0" readonly="true"/>
+							<h:outputLabel value="Date Fin" />
+							<p:inputMask id="txtDateF" value="#{demandePositionB.dateFinS}"
+								mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{demandePositionB.changeDateFin()}"
+									update="txtDateF,txtDureePos" />
+							</p:inputMask>
+							
+							
+						</p:panelGrid>
+					</div>
+
+					<p:dialog header="Recherche employé" widgetVar="dlg" modal="true"
+						height="400" width="900" resizable="true" draggable="true"
+						responsive="true">
+
+						<div class="ui-g card">
+							
+							<div class="ui-g-12 ui-md-2">
+								<h:outputLabel value="Recherche par nom" />
+							</div>
+							<div class="ui-g-12 ui-md-4">
+								<p:inputText value="#{demandePositionB.nomEmployeRecherche}" />
+							</div>
+							
+							<div class="ui-g-12 ui-md-1"></div>
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Rechercher"
+									action="#{demandePositionB.chargerEmploye()}" update=":frmDm:tab" />
+							</div>
+
+						
+
+						<p:dataTable value="#{demandePositionB.listEmploye}" var="empl"
+							selectionMode="single" id="tab"
+							selection="#{demandePositionB.selection}" rowKey="#{empl.id}"
+							paginator="true" paginatorAlwaysVisible="false"
+							paginatorPosition="bottom" rows="10">
+							<p:ajax event="rowDblselect"
+								listener="#{demandePositionB.onRowselected1}" update=":frmDm" />
+
+							<p:column headerText="Code" width="10%">
+								<h:outputText value="#{empl.code}"/>
+							</p:column>
+							<p:column headerText="Prénom">
+								<h:outputText value="#{empl.nomPrenom}" />
+							</p:column>
+							
+						</p:dataTable>
+						</div>
+					</p:dialog>
+				
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" action="#{demandePositionB.enregistrer()}"
+								update=":frmDm" disabled="#{demandePositionB.disableSave}"/>
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+								value="Supprimer"							
+								action="#{demandePositionB.supprimer()}" update=":frmDm"
+								styleClass="orange-btn" >
+								<p:confirm header="Confirmation"
+												message="Voulez-vous supprimer cette demande ?"
+												icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser" action="#{demandePositionB.initialiser()}"
+								update=":frmDm" />
+						</div>
+
+					</div>
+
+
+				</div>
+			</div>
+		</h:form>
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+		</h:form>
+		<p:dialog widgetVar="dlgDemande"
+			header="Liste de demande de position" width="80%"
+			height="40%" position="center" responsive="true">
+			<h:form id="frmDemande">
+			<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+							
+							<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnChrg" icon="ui-icon ui-icon-refresh"
+								value="Charger"
+								action="#{demandePositionB.chargement()}"
+								update="tbdema"/>
+							</div>
+							<div class="ui-g-12 ui-md-8"/>
+				<p:dataTable id="tbdema" var="dema"
+					value="#{demandePositionB.listDemande}" rowKey="#{dema.id}"
+					selectionMode="single" selection="#{demandePositionB.selected}"
+					paginator="true" paginatorAlwaysVisible="false"
+					paginatorPosition="bottom" rows="10" emptyMessage="">
+
+					<p:ajax event="rowSelect"
+						listener="#{demandePositionB.onRowSelected}" update=":frmDm" />
+
+					<p:column headerText="Code" width="10%">
+						<h:outputText value="#{dema.employe.code}" />
+					</p:column>
+					<p:column headerText="Employé" width="40%">
+						<h:outputText value="#{dema.employe.nomPrenom}"/>
+					</p:column>
+
+					<p:column headerText="Date Demande" width="10%">
+						<h:outputText value="#{dema.dateDemandePositionS}" />
+					</p:column>
+					<p:column headerText="Motif">
+						<h:outputText value="#{dema.motifDemande}" />
+					</p:column>
+				</p:dataTable>
+				</div>
+				</div>
+				</div>
+				</div>
+			</h:form>
+			
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

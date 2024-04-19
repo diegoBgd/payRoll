@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.gestionConge()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:blockUI block="frm" trigger="btnSave"/>
+			<p:growl id="message" autoUpdate="true" showDetail="true"
+				sticky="true" />
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+					<div class="card">
+			 			<div class="ui-g">
+
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton value="Liste des Plannifications"
+									icon="fa fa-search"
+									action="#{saisiePlanCongeB.initialiser()}"
+									oncomplete="PF('rechercheDialog').show();" />
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Employé" />
+							<p:inputText id="txtcode" value="#{saisiePlanCongeB.code}">
+								<p:ajax event="blur"
+									listener="#{saisiePlanCongeB.findByCode()}"
+									update=":frm" />
+							</p:inputText>
+
+							<p:inputText id="txtNom"
+								value="#{saisiePlanCongeB.employe.nomPrenom}"
+								readonly="true" />
+							<p:commandButton value="..." oncomplete="PF('dlg').show()"></p:commandButton>
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+							
+							<p:outputLabel value="Type de conge" />
+								<p:selectOneMenu id="txtTyp" value="#{saisiePlanCongeB.idTypeConge}"
+									valueChangeListener="#{saisiePlanCongeB.changeTypeConge}" autoWidth="false">																
+									<f:selectItems value="#{saisiePlanCongeB.listTypeConge}" />
+									<p:ajax event="itemSelect" update="frm"/>		
+								</p:selectOneMenu>
+						</p:panelGrid>
+				
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+							<p:outputLabel value="Nbre de jours annuels" />
+							<p:inputNumber id="txtJrDu"
+								value="#{saisiePlanCongeB.jourCongeAnnuel}"
+								readonly="true" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" decimalPlaces="0" />
+						
+								
+							<p:outputLabel value=" Date Debut" />
+							<p:inputMask id="txtDateD"
+								value="#{saisiePlanCongeB.dateDebutS}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{saisiePlanCongeB.changeDateDebut()}"
+									update="txtDateD,txtduree,btnSave" />
+							</p:inputMask>
+							
+							
+							<p:outputLabel value="Durée (jours)" />
+							<p:inputNumber id="txtduree"
+								value="#{saisiePlanCongeB.duree}"
+								inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" decimalPlaces="0"/>
+								
+						<p:outputLabel value="Date fin" />
+							<p:inputMask id="txtDateF"
+								value="#{saisiePlanCongeB.dateFinS}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{saisiePlanCongeB.changeDateFin()}"
+									update="txtDateF,txtduree,btnSave" />
+							</p:inputMask>
+							
+						</p:panelGrid>
+					</div>
+
+				</div>
+
+			</div>
+
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer" disabled="#{saisiePlanCongeB.disableSave}"
+									action="#{saisiePlanCongeB.saveSaisie()}"
+									update=":frm" />
+							</div>
+
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+									value="Supprimer" action="#{saisiePlanCongeB.delete()}"
+									onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+									update=":frm" styleClass="orange-btn" />
+							</div>
+
+							<div class="ui-g-4 ui-md-4">
+								<p:commandButton icon="fa fa-refresh" value="Initialiser"
+									action="#{saisiePlanCongeB.initialiser()}"
+									update=":frm" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<p:dialog header="Employé" resizable="false" showEffect="fade"
+				widgetVar="dlg">
+
+				<h:panelGrid columns="2">
+
+					<h:outputText value="Code" />
+					<p:inputText id="Matricule"
+						value="#{saisiePlanCongeB.codeEmployeRecherche}"
+						style="width:250px" />
+					<h:outputText value="Nom" />
+					<p:inputText value="#{saisiePlanCongeB.nomEmployeRecherche}"
+						style="width:250px" />
+					
+					<p:spacer width="1" height="1" />
+					<p:commandButton value="Rechercher"
+						action="#{saisiePlanCongeB.chargerEmploye()}"
+						update=":frm:tab" style="width:260px" />
+				</h:panelGrid>
+
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable value="#{saisiePlanCongeB.listEmploye}"
+						var="empl" selectionMode="single" id="tab"
+						selection="#{saisiePlanCongeB.selection}"
+						rowKey="#{empl.id}" scrollable="true" scrollHeight="150">
+						<p:ajax event="rowDblselect"
+							listener="#{saisiePlanCongeB.onRowselected1}"
+							update=":frm" />
+
+						<p:column headerText="code" width="10%">
+							<h:outputText value="#{empl.code}" />
+						</p:column>
+						<p:column headerText=" Nom et Prénom">
+							<h:outputText value="#{empl.nomPrenom}" />
+						</p:column>
+						
+					</p:dataTable>
+
+				</p:panelGrid>
+
+
+			</p:dialog>
+
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+
+		</h:form>
+
+		<p:dialog widgetVar="rechercheDialog"
+			header="Recherche Demande Sortie" modal="true" appendTo="@(body)"
+			width="980">
+			<h:form id="frmRecherche">
+
+
+				<h:panelGrid columns="1" style="margin:auto">
+					<p:commandButton value="Rechercher" style="width:120px"
+						actionListener="#{saisiePlanCongeB.chargement()}"
+						update=":frmRecherche:tab" />
+				</h:panelGrid>
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable
+						value="#{saisiePlanCongeB.listPlan}"
+						var="dem" selectionMode="single" id="tab"
+						selection="#{saisiePlanCongeB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true"
+						emptyMessage="Aucun élément à afficher">
+
+						<p:ajax event="rowSelect"
+							listener="#{saisiePlanCongeB.onRowselected}"
+							update=":frm" />
+
+						<p:column headerText="Code" width="10%">
+							<h:outputText value="#{dem.employe.code}" />
+						</p:column>
+						<p:column headerText="Nom et prénom">
+							<h:outputText value="#{dem.employe.nomPrenom}" />
+						</p:column>
+					
+						<p:column headerText="Date Début" width="10%">
+							<h:outputText value="#{dem.dateDebutS}" />
+						</p:column>
+						<p:column headerText="Date Fin"  width="10%">
+							<h:outputText value="#{dem.dateFinS}" />
+						</p:column>
+
+						<p:column headerText="durée"  width="10%">
+							<h:outputText value="#{dem.dureeConge}" style="float:right"/>
+						</p:column>
+
+					</p:dataTable>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		
+	</ui:define>
+</ui:composition>

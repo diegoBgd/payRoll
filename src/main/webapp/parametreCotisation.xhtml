@@ -1,0 +1,479 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Paramétrage Cotisations</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+				<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+				<p:blockUI block="frm" trigger="btnSave"/>
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton value="Recherche" icon="fa fa-search"
+										onclick="PF('dlgCotisation').show();" style="border-radius:10px"/>
+								</div>
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton value="Changer ordre de calcul" icon="fa fa-search"
+										onclick="PF('dlgOrder').show();" style="border-radius:10px"/>
+								</div>
+							</div>
+						</div>					
+						<div class="card">
+
+							<p:tabView id="tbv">
+								<p:tab id="tab0" title="Cotisation ">
+
+									<p:panelGrid id="pnl1" columns="2"
+											columnClasses="ui-grid-col-1,ui-grid-col-2"
+											layout="grid" styleClass="ui-panelgrid-blank"
+											style="border:0px none; background-color:transparent;">
+										<p:outputLabel value="Elémént"/>
+										<p:selectOneMenu id="txtCot"  filter="true" filterMatchMode="contains"
+											value="#{parametreCotisationB.idCot}" autoWidth="true"
+											valueChangeListener="#{parametreCotisationB.changeCotisation}">
+											<f:selectItems value="#{parametreCotisationB.cotisations}" />
+											<p:ajax event="change" update=":frm" />
+										</p:selectOneMenu>
+									</p:panelGrid>
+
+									<p:panelGrid columns="3" style="width:70%">
+
+										<p:spacer />
+										<p:outputLabel value="Salarial" />
+										<p:outputLabel value="Patronal" />
+
+										<p:outputLabel value="Taux (%)" />
+										<p:inputNumber id="txtTauxSal" autocomplete="off"
+											value="#{parametreCotisationB.tauxSalarial}"
+											inputStyle="text-align:right">
+											<p:ajax event="blur"
+												listener="#{parametreCotisationB.changeValueTauxSalarial()}"
+												update="txtForfaitPlancSal" />
+										</p:inputNumber>
+										<p:inputNumber id="txtTauxPat" autocomplete="off"
+											value="#{parametreCotisationB.tauxPatronal}"
+											inputStyle="text-align:right">
+											<p:ajax event="blur"
+												listener="#{parametreCotisationB.changeValueTauxPatronal()}"
+												update="txtForfaitPlancPatr" />
+										</p:inputNumber>
+
+										<p:outputLabel value="Forfait" />
+										<p:inputNumber id="txtForfaitPlancSal" autocomplete="off"
+											value="#{parametreCotisationB.forfaitSalarial}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;">
+											<p:ajax event="blur"
+												listener="#{parametreCotisationB.changeValueForfaitSalarial()}"
+												update="txtTauxSal" />
+										</p:inputNumber>
+										<p:inputNumber id="txtForfaitPlancPatr" autocomplete="off"
+											value="#{parametreCotisationB.forfaitPatronal}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;">
+											<p:ajax event="blur"
+												listener="#{parametreCotisationB.changeValueForfaitPatronal()}"
+												update="txtTauxPat" />
+										</p:inputNumber>
+
+										<p:outputLabel value="plancher" />
+										<p:inputNumber id="txtPlacherSal" autocomplete="off"
+											value="#{parametreCotisationB.plancherSalarial}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;">
+
+											<p:ajax event="blur"
+												listener="#{parametreCotisationB.changePlancher()}"
+												update="txtPlacherSal" />
+										</p:inputNumber>
+										<p:inputNumber id="txtPlacherPatr" autocomplete="off"
+											value="#{parametreCotisationB.plancherPatronal}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;">
+											<p:ajax event="blur"
+												listener="#{parametreCotisationB.changePlancher()}"
+												update="txtPlacherPatr" />
+										</p:inputNumber>
+
+										<p:outputLabel value="plafond" />
+										<p:inputNumber id="txtPlafSal" autocomplete="off"
+											value="#{parametreCotisationB.plafonSalarial}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;">
+											<p:ajax event="blur"
+												listener="#{parametreCotisationB.changePlafond()}"
+												update="txtPlafSal" />
+										</p:inputNumber>
+										<p:inputNumber id="txtPlafPatr" autocomplete="off"
+											value="#{parametreCotisationB.plafonPatronal}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;">
+											<p:ajax event="blur"
+												listener="#{parametreCotisationB.changePlafond()}"
+												update="txtPlafPatr" />
+										</p:inputNumber>
+										
+										<p:outputLabel value="Taux maximum" />
+										<p:inputNumber id="txtTPlafSal" autocomplete="off"
+											value="#{parametreCotisationB.tauxPlafonSalarial}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;">
+											
+										</p:inputNumber>
+										<p:inputNumber id="txtTPlafPatr" autocomplete="off"
+											value="#{parametreCotisationB.tauxPlafonPatronal}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;">
+										
+										</p:inputNumber>
+										
+										<p:outputLabel value="Base à considérer" />
+										<p:selectOneMenu id="txtBseS"
+											value="#{parametreCotisationB.typeBaseSalarial}">
+											<f:selectItem itemLabel="Base normale" itemValue="0" />
+											<f:selectItem itemLabel="Base sur heures/jours prestés"
+												itemValue="1" />
+											<f:selectItem itemLabel="Base fixe"
+												itemValue="2" />
+											<p:ajax event="change" update="txtBseS" />
+										</p:selectOneMenu>
+										
+										<p:selectOneMenu id="txtBseP"
+											value="#{parametreCotisationB.typeBasePatronal}">
+											<f:selectItem itemLabel="Base normale" itemValue="0" />
+											<f:selectItem itemLabel="Base sur heures/jours prestés"
+												itemValue="1" />
+											<f:selectItem itemLabel="Base fixe"
+												itemValue="2" />
+											 <p:ajax event="change" update="txtBseP" />
+										</p:selectOneMenu>
+										
+									</p:panelGrid>
+									<p:panelGrid columns="2" style="width:70%">
+									<p:outputLabel value="Plafond base"/>
+									<p:inputNumber id="txtPlfBse" autocomplete="off" 
+									inputStyle="text-align:right" thousandSeparator="&nbsp;"
+											value="#{parametreCotisationB.plafondBase}"/>
+											<p:outputLabel value="Plancher base"/>
+									<p:inputNumber id="txtPlcBse" autocomplete="off"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;"
+											value="#{parametreCotisationB.plancherBase}"/>
+									<p:outputLabel value="Base fixe"/>		
+									<p:inputNumber id="txtPBseFxe" autocomplete="off"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;"
+											value="#{parametreCotisationB.baseFixe}"/>
+									</p:panelGrid>
+									
+								
+
+								</p:tab>
+								<p:tab id="tab1" title="Eléments additionnels à la base ">
+
+									<p:dataTable id="tblEltPrm"
+										value="#{parametreCotisationB.listElementPrm}"
+										scrollable="true" var="det" rowKey="#{det.codeElement}"
+										selection="#{parametreCotisationB.detail}" scrollHeight="300">
+
+
+										<p:column headerText="Code " width="7%">
+											<h:outputText value="#{det.codeElement}" />
+										</p:column>
+
+										<p:column headerText="Libellé" width="30%">
+											<h:outputText value="#{det.libelleElement}" />
+										</p:column>
+
+										<p:column headerText="" width="2%">
+											<p:selectBooleanCheckbox id="chkSelect"
+												value="#{det.seleceted}">
+												<p:ajax event="change" listener="#{det.checkDetail()}"
+													update="clnTx,clnTxMx,clnPlc,clnPlf,clnFrf" />
+											</p:selectBooleanCheckbox>
+										</p:column>
+
+										<p:column headerText="% " width="8%">
+											<p:inputNumber id="clnTx" value="#{det.taux}" 
+											disabled="#{det.disable}"
+											inputStyle="text-align:right">
+											<p:ajax event="blur" listener="#{det.changeTaux()}"
+													update="clnFrf,clnTxMx" />
+											</p:inputNumber>
+										</p:column>
+										<p:column headerText="Max(% Base)" width="15%">
+
+											<p:inputNumber id="clnTxMx" value="#{det.tauxMax}"
+												disabled="#{det.disable}" inputStyle="text-align:right">
+												<p:ajax event="blur" listener="#{det.changeTauxMax()}"
+													update="clnFrf,clnTx" />
+											</p:inputNumber>
+
+
+										</p:column>
+										
+										<p:column headerText="Forfait" width="15%">
+
+											<p:inputNumber id="clnFrf" value="#{det.forfait}"
+												disabled="#{det.disable}" inputStyle="text-align:right"
+												thousandSeparator="&nbsp;" decimalPlaces="0">
+												<p:ajax event="blur" listener="#{det.changeForfait()}"
+													update="clnTxMx,clnPlc,clnPlf" />
+											</p:inputNumber>
+
+										</p:column>
+
+										<p:column headerText="Plancher" width="15%">
+
+											<p:inputNumber id="clnPlc" value="#{det.plancher}"
+												disabled="#{det.disable}" inputStyle="text-align:right"
+												thousandSeparator="&nbsp;" decimalPlaces="0">
+												<p:ajax event="blur" listener="#{det.changeForfait()}"
+													update="clnTxMx,clnPlc,clnPlf" />
+											</p:inputNumber>
+										</p:column>
+
+										<p:column headerText="Plafond" width="15%">
+											<p:inputNumber id="clnPlf" value="#{det.plafon}"
+												disabled="#{det.disable}" inputStyle="text-align:right"
+												thousandSeparator="&nbsp;" decimalPlaces="0">
+												<p:ajax event="blur" listener="#{det.changeForfait()}"
+													update="clnTxMx,clnPlc,clnPlf" />
+											</p:inputNumber>
+
+										</p:column>
+
+									</p:dataTable>
+
+								</p:tab>
+
+								<p:tab id="tab2" title="Elements à soustraire de la base">
+									<p:dataTable id="tblEltCot"
+										value="#{parametreCotisationB.listElementCot}"
+										scrollHeight="250" scrollable="true" var="det"
+										rowKey="#{det.codeElement}"
+										selection="#{parametreCotisationB.detail}">
+
+
+										<p:column headerText="Code " width="10%">
+											<h:outputText value="#{det.codeElement}" />
+										</p:column>
+
+										<p:column headerText="Libellé" width="30%">
+											<h:outputText value="#{det.libelleElement}" />
+										</p:column>
+
+										<p:column headerText="" width="2%">
+											<p:selectBooleanCheckbox id="chkSelect"
+												value="#{det.seleceted}">
+												<p:ajax event="change" listener="#{det.checkDetail()}" update="clnTaux,clnForf,clnPlanc,clnPlafd"/>
+											</p:selectBooleanCheckbox>
+										</p:column>
+										<p:column headerText="Taux(%)" width="5%">
+
+											<p:inputNumber id="clnTaux" value="#{det.taux}"
+												disabled="#{det.disable}" inputStyle="text-align:right"
+												thousandSeparator="&nbsp;">
+
+											</p:inputNumber>
+
+										</p:column>
+
+										<p:column headerText="Forfait" width="10%">
+
+											<p:inputNumber id="clnForf" value="#{det.forfait}" 
+												disabled="#{det.disable}" inputStyle="text-align:right"
+												thousandSeparator="&nbsp;">
+												<p:ajax event="blur" listener="#{det.changeForfait()}" update="clnTaux,clnPlanc,clnPlafd" />
+											</p:inputNumber>
+
+										</p:column>
+
+										<p:column headerText="Plancher" width="10%">
+
+											<p:inputNumber id="clnPlanc" value="#{det.plancher}"
+												disabled="#{det.disable}" inputStyle="text-align:right"
+												thousandSeparator="&nbsp;">
+											<p:ajax event="blur" listener="#{det.changeForfait()}" update="clnTaux,clnPlanc,clnPlafd" />
+											</p:inputNumber>
+										</p:column>
+
+										<p:column headerText="Plafond" width="10%">
+											<p:inputNumber id="clnPlafd" value="#{det.plafon}"
+												disabled="#{det.disable}" inputStyle="text-align:right"
+												thousandSeparator="&nbsp;">
+												<p:ajax event="blur" listener="#{det.changeForfait()}" update="clnTaux,clnPlanc,clnPlafd" />
+											</p:inputNumber>
+
+										</p:column>
+
+									</p:dataTable>
+								</p:tab>
+							</p:tabView>
+						</div>
+
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+								
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+										value="Enregistrer"  style="border-radius:10px"
+										action="#{parametreCotisationB.enregistrer()}" update=":frm" />
+								</div>
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+										styleClass="orange-btn" value="Supprimer" style="border-radius:10px"
+										action="#{parametreCotisationB.supprimer()}" update=":frm">
+										<p:confirm header="Confirmation"
+											message="Voulez-vous supprimer cet élement ?"
+											icon="fa fa-question" />
+
+									</p:commandButton>
+								</div>
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+										value="Initialiser" style="border-radius:10px"
+										action="#{parametreCotisationB.initialiser()}" update=":frm" />
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+			</h:form>
+			
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			
+			<p:dialog widgetVar="dlgCotisation" modal="true" position="center"
+				responsive="true" width="700" height="400">
+
+				<h:form id="frmCotisation">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+
+										<div class="ui-g-12 ui-md-4"></div>
+										<div class="ui-g-12 ui-md-8">
+
+											<p:commandButton value="Chargement"
+												action="#{parametreCotisationB.chargementParametre()}"
+												update="tblCot" />
+
+										</div>
+									</div>
+								</div>
+								<p:dataTable id="tblCot" value="#{parametreCotisationB.listeParametre}"
+									var="prmCot" rowKey="#{prmCot.id}" selectionMode="single"
+									 selection="#{parametreCotisationB.selected}">
+
+									<p:ajax event="rowSelect"
+											listener="#{parametreCotisationB.onSelected}"
+											update=":frm" />
+											
+								
+									<p:column headerText="Code " width="10%">
+										<h:outputText value="#{prmCot.code}" />
+									</p:column>
+
+									<p:column headerText="Libellé">
+										<h:outputText value="#{prmCot.libelle}" />
+									</p:column>
+									
+									
+									
+								</p:dataTable>
+							</div>
+
+						</div>
+					</div>
+
+				</h:form>
+
+			</p:dialog>
+			
+			<p:dialog widgetVar="dlgOrder" modal="true" position="center"
+				responsive="true" width="700" height="400">
+
+				<h:form id="frmOrder">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+
+										<div class="ui-g-12 ui-md-4"></div>
+										<div class="ui-g-12 ui-md-8">
+
+											<p:commandButton value="Chargement"
+												action="#{parametreCotisationB.chargementParametre()}"
+												update="tblCot" />
+
+										</div>
+									</div>
+								</div>
+								<p:dataTable id="tblCot" value="#{parametreCotisationB.listeParametre}"
+									var="prmCot" rowKey="#{prmCot.id}" selectionMode="single"
+									 selection="#{parametreCotisationB.selected}">
+
+									<p:ajax event="rowSelect"
+											listener="#{parametreCotisationB.onSelected}"
+											update=":frm" />
+											
+									<p:column headerText="Ordre" width="8%">
+										<p:inputNumber value="#{prmCot.priorite}" inputStyle="text-align:right;height:12px"
+												thousandSeparator="&nbsp;" decimalPlaces="0">
+												<p:ajax event="blur" listener="#{prmCot.changePriority()}"/>
+										</p:inputNumber>
+												
+									</p:column>
+
+									<p:column headerText="Code " width="10%">
+										<h:outputText value="#{prmCot.code}" />
+									</p:column>
+
+									<p:column headerText="Libellé">
+										<h:outputText value="#{prmCot.libelle}" />
+									</p:column>
+									
+									
+									
+								</p:dataTable>
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+								
+								<p:commandButton value="Modifier"
+												action="#{parametreCotisationB.updatePriority()}"
+												update="tblCot" />
+								</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</h:form>
+
+			</p:dialog>
+					
+		</body>
+	</ui:define>
+</ui:composition>

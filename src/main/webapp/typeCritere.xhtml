@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+ xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"> 
+
+<ui:define name="content">
+		<h:head>
+			<link  type="text/css" rel="stylesheet" href="../resources/style.css"/>
+			<title>Types Critères</title>
+		</h:head>
+	 <body> 
+	 <h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+		 <p:growl id="msgs" showDetail="true" autoUpdate="true"/>
+		 <p:separator><b>Types Critères</b></p:separator>
+		 <h:panelGrid columns="2" id="pnl1">
+		 	<h:outputLabel value="Code"/>
+		 	<p:inputText id="txtCode" value="#{typeCritereB.code}" size="25" >
+		 		<p:ajax event="blur" listener="#{typeCritereB.findByCode()}" update="frm"/>
+		 	</p:inputText>
+		 	<h:outputLabel value="Désignation"/>
+		 	<p:inputTextarea id="txtdes" value="#{typeCritereB.designation}" style="width:420px"/>
+		 	<h:outputLabel value="Note Appréciation"/>
+		 	<p:inputText id="txtNote" value="#{typeCritereB.noteAppreciationGlobaleS}" size="25" style="text-align:right" >
+		 		<p:ajax event="blur" listener="#{typeCritereB.changeNoteAppreciation()}" update=":frm:txtNote"/>
+		 	</p:inputText>
+		 	
+		 </h:panelGrid>
+		
+
+		<h:panelGrid columns="5">
+		<p:spacer width="100" height="1"/>
+			<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" value="Enregistrer" action="#{typeCritereB.enregistrer()}" update=":frm" style="width:120px;"/>
+			<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh" value="Initialiser" action="#{typeCritereB.initialiser()}" update=":frm" style="width:120px;"/>
+			<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash" value="Supprimer" onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false" 
+				action="#{typeCritereB.supprimer()}" update=":frm" style="width:120px;"/>
+			<p:commandButton id="btnQuitter" icon="ui-icon ui-icon-arrowreturnthick-1-n" value="Fermer" action="#{typeCritereB.fermer()}" style="width:120px;"/>
+		</h:panelGrid>
+		 <p:dataTable id="tbl2" var="crit" value="#{typeCritereB.allCriteres}" rowKey="#{crit.id}" selectionMode="single" 
+		selection="#{typeCritereB.selected}" scrollable="true" scrollHeight="170" >
+			<p:ajax event="rowSelect" listener="#{typeCritereB.onRowSelected}" update=":frm:pnl1"/>
+								
+			<p:column headerText="Code" width="60" >
+				<h:outputText value="#{crit.code}"/>
+			 </p:column>
+										
+			<p:column headerText="Désignation " width="260" >
+				<h:outputText value="#{crit.designation}"/>
+			</p:column>
+										
+			<p:column headerText="Note Aprréciation" width="260">
+				<h:outputText value="#{crit.noteAppreciationGlobaleS}"/>
+			</p:column>	
+			
+		</p:dataTable>
+			
+	 </h:form>
+	
+	 </body> 
+	</ui:define>
+</ui:composition>

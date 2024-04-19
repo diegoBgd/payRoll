@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+
+							<div class="ui-g-12 ui-md-12" style="text-align: center;background-color:#3399ff ">
+								<H1>
+									<p:outputLabel value="#{authenticite.Operation()}" style="color:white"/>
+								</H1>
+							</div>
+
+							<div style="border: 2px solid #3399ff">
+								<H1 style="text-align: center; color: red">
+									Désolé ! <br /> Vous n'avez pas droit à cette opération !
+								</H1>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</h:form>
+		</body>
+	</ui:define>
+
+</ui:composition>

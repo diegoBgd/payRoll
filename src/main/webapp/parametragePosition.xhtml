@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<f:metadata>
+				<f:event listener="#{authenticite.gestionPosition()}"
+					type="preRenderView" />
+			</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12  ui-lg-12 ui-fluid contact-form">
+					<div class="ui-g-12 ">
+						<div class="card">
+							<div class="ui-g">
+
+								<div class="ui-g-12 ui-md-6">
+									<p:commandButton value="Recherche" icon="fa fa-search"
+										onclick="PF('rechercheDialog').show();" />
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							
+										<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-3,ui-grid-col-3"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="background-color:transparent;">
+										
+										<h:outputLabel value="Personnel" />
+										<p:selectOneMenu id="txtPers" autoWidth="false"
+											value="#{parametragePositionB.idPersonnel}"
+											valueChangeListener="#{parametragePositionB.changePersonnel}">
+											<f:selectItems value="#{parametragePositionB.listPersonnel}" />
+											<p:ajax event="change" update=":frm" />
+										</p:selectOneMenu>
+										
+										<h:outputLabel value="Position" />
+											<p:selectOneMenu id="txtPosi" autoWidth="false"
+												value="#{parametragePositionB.idposition}"
+												valueChangeListener="#{parametragePositionB.changePosition}">
+												<f:selectItem itemLabel="" itemValue="0" />
+												<f:selectItem itemLabel="L'activité de service"
+													itemValue="1" />
+												<f:selectItem itemLabel="Le détachement" itemValue="2" />
+												<f:selectItem
+													itemLabel="La suspension d'activités de service"
+													itemValue="3" />
+												<f:selectItem itemLabel="La disponibilité" itemValue="4" />
+												<f:selectItem
+													itemLabel="La suspension de fonction par mesure d'ordre"
+													itemValue="5" />
+												<p:ajax event="change"
+													update="txtCondi" />
+											</p:selectOneMenu>
+											
+										
+										
+										<h:outputLabel value="Catégorie" />
+										<p:selectOneMenu id="txtCat" autoWidth="false"
+											value="#{parametragePositionB.idCategorie}"
+											valueChangeListener="#{parametragePositionB.changerIdCategorie}">
+											<f:selectItems value="#{parametragePositionB.listCateg}" />
+											<p:ajax event="change" update=":frm" />
+										</p:selectOneMenu>
+										
+										<h:outputText value="Condition / Cause " />
+											<p:selectOneMenu id="txtCondi" autoWidth="false"
+												value="#{parametragePositionB.idCondition}"
+												valueChangeListener="#{parametragePositionB.changeCondition}">
+												<f:selectItems
+													value="#{parametragePositionB.listCondition}" />
+												<p:ajax event="itemSelect" update=":frm" />
+											</p:selectOneMenu>
+											
+										
+											
+										</p:panelGrid>
+										
+									<p:panel header="Informations sur la paie">
+										<p:panelGrid columns="4"
+										columnClasses="ui-grid-col-5,ui-grid-col-1,ui-grid-col-4,ui-grid-col-1"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="background-color:transparent;">
+										
+										
+											<h:outputText
+												value="Pourcentage du salaire pendant la période de position" />
+											<p:inputNumber id="txtTauxav" autocomplete="off" inputStyle="text-align:right" 
+												value="#{parametragePositionB.tauxSalaire}"/>
+												
+										
+										
+											<h:outputText value=" Garde l'allocation familiale" />
+											<p:selectBooleanCheckbox
+												value="#{parametragePositionB.ajoutAllocationFamiliale}"
+												style="float:right" />
+										
+											<h:outputText value="Garde l'allocation logement" />
+											<p:selectBooleanCheckbox
+												value="#{parametragePositionB.ajoutAllocationLogement}"
+												style="float:right" />
+										
+											<h:outputText value="Bénéficie l'avancement de grade" />
+											<p:selectBooleanCheckbox
+												value="#{parametragePositionB.avancementGrade}"
+												style="float:right" />
+										
+											<h:outputText value="Bénéficie l'avancement traitement" />
+											<p:selectBooleanCheckbox
+												value="#{parametragePositionB.avancementTraitement}"
+												style="float:right" />
+										</p:panelGrid>
+									</p:panel>
+				
+											
+							
+						</div>
+					
+					<div class="card">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer"
+								action="#{parametragePositionB.save()}"
+								update=":frm" />
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+								value="Supprimer"
+								
+								action="#{parametragePositionB.supprimer()}"
+								update=":frm" styleClass="orange-btn">
+								
+								<p:confirm header="Confirmation"
+												message="Voulez-vous supprimer ce bulletin ?"
+												icon="ui-icon-alert" />
+												
+							</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser"
+								action="#{parametragePositionB.initialiser()}"
+								update=":frm"/>
+						</div>
+						</div>
+					</div>
+
+				</div>
+				</div>
+
+			</div>
+
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+			</h:form>
+		<p:dialog widgetVar="rechercheDialog"
+			header="Recherche parametrage" modal="true" appendTo="@(body)"
+			width="980">
+			<h:form id="frmRecherche">
+
+
+				<h:panelGrid columns="1" style="margin:auto">
+					<p:commandButton value="Rechercher" style="width:120px"
+						actionListener="#{parametragePositionB.chargement()}"
+						update=":frmRecherche:tab" />
+				</h:panelGrid>
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable
+						value="#{parametragePositionB.listParametrage}"
+						var="dem" selectionMode="single" id="tab"
+						selection="#{parametragePositionB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true"
+						emptyMessage="Aucun élément à afficher">
+
+						<p:ajax event="rowSelect"
+							listener="#{parametragePositionB.onRowSelect}"
+							update=":frm" />
+
+						<p:column headerText="Personnel" width="40%">
+							<h:outputText value="#{dem.libellePersonnel}" />
+						</p:column>
+						<p:column headerText="Condition" width="40%">
+							<h:outputText value="#{dem.libelleCondition}" />
+						</p:column>
+						
+					</p:dataTable>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+			
+	</ui:define>
+
+</ui:composition>
+
+
+
+

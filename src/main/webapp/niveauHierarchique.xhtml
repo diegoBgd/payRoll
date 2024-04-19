@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Niveau Hierarchique</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<p:growl id="msgs" showDetail="true" />
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-2">
+
+									<p:outputLabel value="Code" />
+									<p:inputText id="txtCode" value="#{niveauHierarchiqueB.code}"
+										size="25">
+										<p:ajax event="blur"
+											listener="#{niveauHierarchiqueB.changeCode()}"
+											update=":frm:txtDes,:frm:txtNiveau" />
+									</p:inputText>
+								</div>
+
+								<div class="ui-g-12 ui-md-2">
+									<p:outputLabel value="Niveau" />
+									<p:inputNumber id="txtNiveau"
+										value="#{niveauHierarchiqueB.niveau}" decimalPlaces="0"
+										inputStyle="text-align: right" size="25" />
+								</div>
+
+								<div class="ui-g-12 ui-md-8">
+									<h:outputText value="Désignation" />
+									<p:inputText id="txtDes"
+										value="#{niveauHierarchiqueB.designation}" size="67" />
+								</div>
+
+							</div>
+
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer"
+											action="#{niveauHierarchiqueB.enregister()}" update=":frm" />
+									</div>
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+											value="Supprimer"
+											onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+											action="#{niveauHierarchiqueB.supprimer()}" update=":frm"
+											styleClass="orange-btn" />
+									</div>
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnAnnuler"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{niveauHierarchiqueB.initialiser()}" update=":frm" />
+									</div>
+
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12">
+
+								<p:dataTable id="tbl" var="niveau"
+									value="#{niveauHierarchiqueB.listNiveau}" rowKey="#{niveau.id}"
+									selectionMode="single"
+									selection="#{niveauHierarchiqueB.selected}" reflow="true"
+									paginator="true" rows="10" paginatorAlwaysVisible="false"
+									paginatorPosition="bottom">
+
+									<p:ajax event="rowSelect"
+										listener="#{niveauHierarchiqueB.onRowSelected}"
+										update=":frm:txtDes,:frm:txtNiveau,:frm:txtCode" />
+
+									<p:column headerText="Code">
+										<h:outputText value="#{niveau.code}" />
+									</p:column>
+
+									<p:column headerText="Désignation">
+										<h:outputText value="#{niveau.designation}" />
+									</p:column>
+
+									<p:column headerText="Niveau">
+										<h:outputText value="#{niveau.niveau}" />
+									</p:column>
+
+								</p:dataTable>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</h:form>
+		</body>
+	</ui:define>
+</ui:composition>

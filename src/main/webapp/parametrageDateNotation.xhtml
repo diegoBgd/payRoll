@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/masterPage.xhtml">   
+
+    <ui:define name="content">
+    <h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+    	<p:growl showDetail="true" sticky="false"/>
+        <div class="ui-g">
+            <div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+             
+              	<div class="ui-g card">
+              		<div class="ui-g-12 ui-md-6">
+              			<h:outputText value="Jour début"/>
+						<p:inputText id="txtJourD" value="#{parametrageDateNotationB.jourDebut}"/> 
+              		</div>
+              		<div class="ui-g-12 ui-md-6 ">
+              			<h:outputText value="Mois début"/>
+						<p:selectOneMenu id="txtMoisD" value="#{parametrageDateNotationB.moisDebut}" valueChangeListener="#{parametrageDateNotationB.changeMoisDebut}" >
+							<p:ajax event="change" update=":frm:txtMoisD"/>
+							<f:selectItem itemLabel="" itemValue="0"/>
+							<f:selectItem itemLabel="Janvier" itemValue="1"/>
+							<f:selectItem itemLabel="Février" itemValue="2"/>
+							<f:selectItem itemLabel="Mars" itemValue="3"/>
+							<f:selectItem itemLabel="Avril" itemValue="4"/>
+							<f:selectItem itemLabel="Mai" itemValue="5"/>
+							<f:selectItem itemLabel="Juin" itemValue="6"/>
+							<f:selectItem itemLabel="Juillet" itemValue="7"/>
+							<f:selectItem itemLabel="Aout" itemValue="8"/>
+							<f:selectItem itemLabel="Septembre" itemValue="9"/>
+							<f:selectItem itemLabel="Octobre" itemValue="10"/>
+							<f:selectItem itemLabel="Novembre" itemValue="11"/>
+							<f:selectItem itemLabel="Décembre" itemValue="12"/>
+						</p:selectOneMenu>
+              		</div>
+              		<div class="ui-g-12 ui-md-6">
+              			<h:outputText value="Jour fin"/>
+						<p:inputText id="txtJourF" value="#{parametrageDateNotationB.jourFin}"/> 
+              		</div>
+              		<div class="ui-g-12 ui-md-6 ">
+              			<h:outputText value="Mois Fin"/>
+						<p:selectOneMenu id="txtMoisF" value="#{parametrageDateNotationB.moisFin}" valueChangeListener="#{parametrageDateNotationB.changeMoisFin}" >
+							<p:ajax event="change" update=":frm:txtMoisF"/>
+							<f:selectItem itemLabel="" itemValue="0"/>
+							<f:selectItem itemLabel="Janvier" itemValue="1"/>
+							<f:selectItem itemLabel="Février" itemValue="2"/>
+							<f:selectItem itemLabel="Mars" itemValue="3"/>
+							<f:selectItem itemLabel="Avril" itemValue="4"/>
+							<f:selectItem itemLabel="Mai" itemValue="5"/>
+							<f:selectItem itemLabel="Juin" itemValue="6"/>
+							<f:selectItem itemLabel="Juillet" itemValue="7"/>
+							<f:selectItem itemLabel="Aout" itemValue="8"/>
+							<f:selectItem itemLabel="Septembre" itemValue="9"/>
+							<f:selectItem itemLabel="Octobre" itemValue="10"/>
+							<f:selectItem itemLabel="Novembre" itemValue="11"/>
+							<f:selectItem itemLabel="Décembre" itemValue="12"/>
+						</p:selectOneMenu>
+              		</div>
+              		<div class="ui-g-12 ui-md-6">
+              			<h:outputText value="Duree Recours Notation (Jours)"/>
+						<p:inputText id="txtDureeRec" value="#{parametrageDateNotationB.dureeRecoursNotation}"/>
+              		</div>
+              	</div>	
+              	<div class="ui-g card">
+              		<div class="ui-g-12 ui-md-4">
+              			<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" value="Enregistrer" action="#{parametrageDateNotationB.save()}" update=":frm"/>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+              			<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash" value="Supprimer" onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false" 
+							action="#{parametrageDateNotationB.supprimer()}" update=":frm" styleClass="orange-btn"/>
+					</div>
+              		<div class="ui-g-12 ui-md-4">
+              			<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh" value="Initialiser" action="#{parametrageDateNotationB.initialiser()}" update=":frm"/>
+					</div>
+						
+              	</div>
+              
+         
+            </div>
+            
+       
+        </div>
+        
+      </h:form>  
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">	
+		<h:form id="frmValidationDemandeSortie" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.gestionConge()}" type="preRenderView"/>
+			</f:metadata>
+			
+			<p:growl id="message" autoUpdate="true" showDetail="true" sticky="true" />
+			<p:blockUI block="frmValidationDemandeSortie" trigger="btnSave"/>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+				
+				<div class="card">
+						  <div class="ui-g">
+						  	
+							<div class="ui-g-12 ui-md-6">
+			 				 	<p:commandButton value="Liste des demandes encours" icon="fa fa-search" action="#{saisieDemandeSortieB.initialiser()}" oncomplete="PF('dlgDemand').show();"/>
+							</div>
+							<div class="ui-g-12 ui-md-6">
+							 	<p:commandButton value="Liste des sorties déjà traitées" icon="fa fa-search" action="#{saisieDemandeSortieB.initialiser()}" oncomplete="PF('dlgValid').show();"/>
+							</div>
+						</div>
+					</div>
+					</div>
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Code/Matricule" />
+							<p:inputText id="txtcode" value="#{saisieDemandeSortieB.code}">
+								<p:ajax event="blur" listener="#{saisieDemandeSortieB.findByCode()}" update="frmValidationDemandeSortie" />
+							</p:inputText>
+							
+							<p:inputText id="txtNom"
+								value="#{saisieDemandeSortieB.employe.nomPrenom}"
+								readonly="true" />
+							
+						</p:panelGrid>
+					
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+								<p:outputLabel value="Date Demande"/>
+								<p:inputMask id="txtDateDem" value="#{saisieDemandeSortieB.dateDemandeS}" mask="99/99/9999" readonly="true" />
+								<p:outputLabel value="Date Sortie" />
+								<p:inputMask id="txtDateS" value="#{saisieDemandeSortieB.dateSortieS}" mask="99/99/9999" readonly="true" />
+								<p:outputLabel value="Heure Départ" />
+								<p:inputMask id="txtHeurDep" value="#{saisieDemandeSortieB.heureDepart}" mask="99:99" readonly="true" />
+					
+								<p:outputLabel value="Heure Retour" />
+								<p:inputMask id="txtHeureRet" value="#{saisieDemandeSortieB.heureRetour}" mask="99:99" 	readonly="true" />
+					
+								
+							</p:panelGrid>	
+							
+							<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<p:outputLabel value="Motif" />
+							<p:inputTextarea id="txtMotif" value="#{saisieDemandeSortieB.motifSortie}" 	readonly="true" />	
+							</p:panelGrid>
+						</div>
+							
+						</div>
+						<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+							<div class="card no-margin">
+							<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Date Decision" />
+							<p:inputMask id="txtDateDecis"
+								value="#{saisieDemandeSortieB.dateValidationS}"
+								mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{saisieDemandeSortieB.changeDateValidation()}"
+									update="txtDateDecis" />
+							</p:inputMask>
+							<h:outputText value="Décision" />
+							<p:selectOneMenu id="txtMois"
+									value="#{saisieDemandeSortieB.decision}">
+									<f:selectItem itemLabel="" itemValue="0" />
+									<f:selectItem itemLabel="Accepter" itemValue="1" />
+									<f:selectItem itemLabel="Refuser" itemValue="2" />
+									
+							</p:selectOneMenu>
+						</p:panelGrid>
+						<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<p:outputLabel value="Motif refus" />
+							<p:inputTextarea id="txtMotifRf" value="#{saisieDemandeSortieB.motifRefusSortie}"/>	
+							</p:panelGrid>
+							</div>
+						</div>
+
+
+			</div>
+				
+			
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer" action="#{saisieDemandeSortieB.saveDecision()}"
+									update=":frmValidationDemandeSortie" />
+							</div>
+
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+									value="Annuler" action="#{saisieDemandeSortieB.annuler()}"
+									update=":frmValidationDemandeSortie" styleClass="orange-btn"
+									disabled="#{saisieDemandeSortieB.desableSave}">
+									<p:confirm header="Confirmation"
+												message="Voulez-vous vraiement annuler ?"
+												icon="ui-icon-alert" />
+								</p:commandButton>
+							</div>
+
+							<div class="ui-g-4 ui-md-3">
+								<p:commandButton icon="fa fa-refresh" value="Edition"
+									action="#{saisieDemandeSortieB.printSortie()}" update=":frmValidationDemandeSortie" ajax="false"/>
+							</div>
+							<div class="ui-g-4 ui-md-3">
+								<p:commandButton icon="fa fa-refresh" value="Initialiser"
+									action="#{saisieDemandeSortieB.initialiser()}" update=":frmValidationDemandeSortie" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			
+
+
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+		
+		<p:dialog widgetVar="dlgDemand" header="Recherche Demande Sortie" modal="true" appendTo="@(body)" width="980">
+			<h:form id="frmRecherche">
+				
+			
+				<h:panelGrid columns="2" style="margin:auto;text-align:center">
+					<p:commandButton value="Charger" style="width:120px"
+						actionListener="#{saisieDemandeSortieB.findDemandeSortie()}"
+						update=":frmRecherche" />
+				</h:panelGrid>
+				<p:panelGrid id="output" columns="2" columnClasses="label, value" style="width:950px">
+					<p:dataTable value="#{saisieDemandeSortieB.allSaisieDemandeSortie}"
+						var="dem" selectionMode="single" id="tab"
+						selection="#{saisieDemandeSortieB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false" 
+						paginatorPosition="bottom" reflow="true" emptyMessage="Aucun élément à afficher">
+						
+						<p:ajax event="rowSelect" listener="#{saisieDemandeSortieB.onRowselected}" update=":frmValidationDemandeSortie" />
+
+						<p:column headerText="Employé" width="40%">
+							<h:outputText value="#{dem.employe.nomPrenom}" />
+						</p:column>
+						<p:column headerText="Date Sortie">
+							<h:outputText value="#{dem.dateSortieS}" />
+						</p:column>
+						<p:column headerText="Heure Départ">
+							<h:outputText value="#{dem.heureDepart}" />
+						</p:column>
+						<p:column headerText="Heure Retour">
+							<h:outputText value="#{dem.heureRetour}" />
+						</p:column>
+						
+					</p:dataTable>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="dlgValid" header="Recherche des demandes traités" modal="true" appendTo="@(body)" width="980">
+			<h:form id="frmRechercheValid">
+				
+			
+				<h:panelGrid columns="2">
+					<h:outputText value="Type décision" />
+							<p:selectOneMenu id="txtDec"
+									value="#{saisieDemandeSortieB.typeDec}">								
+									<f:selectItem itemLabel="Accepter" itemValue="1" />
+									<f:selectItem itemLabel="Refuser" itemValue="2" />
+									<p:ajax event="itemSelect" update="txtDec" />
+							</p:selectOneMenu>
+					<p:spacer/>		
+					<p:commandButton value="Charger" style="width:120px"
+						actionListener="#{saisieDemandeSortieB.findDemandeTraite()}"
+						update="tab" />
+				</h:panelGrid>
+				
+					<p:dataTable value="#{saisieDemandeSortieB.allSaisieDemandeSortie}"
+						var="dem" selectionMode="single" id="tab"
+						selection="#{saisieDemandeSortieB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false" 
+						paginatorPosition="bottom" reflow="true" emptyMessage="Aucun élément à afficher">
+						
+						<p:ajax event="rowSelect" listener="#{saisieDemandeSortieB.onRowselected}" update=":frmValidationDemandeSortie" />
+
+						<p:column headerText="Employé" width="40%">
+							<h:outputText value="#{dem.employe.nomPrenom}" />
+						</p:column>
+						<p:column headerText="Date Sortie">
+							<h:outputText value="#{dem.dateSortieS}" />
+						</p:column>
+						<p:column headerText="Heure Départ">
+							<h:outputText value="#{dem.heureDepart}" />
+						</p:column>
+						<p:column headerText="Heure Retour">
+							<h:outputText value="#{dem.heureRetour}" />
+						</p:column>
+						<p:column headerText="Décision">
+							<h:outputText value="#{dem.libelleDecision}" />
+						</p:column>
+					</p:dataTable>
+
+				
+			</h:form>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>

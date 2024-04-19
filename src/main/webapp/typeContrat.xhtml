@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content" onkeypress="if (event.keyCode == 13) { return false; }">
+
+		<h:form id="frmTypContrat">
+
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{authenticite.fichiersBase()}" />
+			</f:metadata>
+
+			<p:growl id="msgs" showDetail="true" />
+
+			
+				<div class="ui-g">
+						<div class="ui-g-12 ui-fluid card">
+							
+								<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-6"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								<p:outputLabel value="Référence" />
+								<p:inputText id="txtCode" value="#{baseVue.code}" autocomplete="off">
+									<p:ajax event="blur" listener="#{baseVue.changeCode()}"
+										update=":frmTypContrat:txtDes" />
+								</p:inputText>
+							
+								<p:outputLabel value="Libellé" />
+								<p:inputText id="txtDes" value="#{baseVue.designation}"
+									maxlength="200" autocomplete="off"/>
+							</p:panelGrid>
+
+							
+
+						</div>
+				
+
+				
+					<div class="ui-g-12 ui-fluid card">
+						<p:dataTable id="tbl" var="typ"
+							value="#{baseVue.listBase}" rowKey="#{typ.id}"
+							selectionMode="single" selection="#{baseVue.baseSelectionne}"
+							rows="10" reflow="true" scrollHeight="250"
+							emptyMessage=" ">
+
+							<p:ajax event="rowSelect"
+								listener="#{baseVue.takeSelection}"
+								update=":frmTypContrat"/>
+
+							<p:column headerText="Référence" width="10%">
+								<h:outputText value="#{typ.code}" />
+							</p:column>
+
+							<p:column headerText="Libellé">
+								<h:outputText value="#{typ.designation}" />
+							</p:column>
+
+						</p:dataTable>
+			
+				</div>
+				<div class="ui-g-12 ui-fluid card">
+							<div class="ui-g-12 ui-md-1"/>
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer" action="#{baseVue.insertUpdate()}"
+									update=":frmTypContrat" style="border-radius:10px"/>
+							</div>
+
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+									value="Supprimer" 
+									action="#{baseVue.delete()}" update=":frmTypContrat"
+									styleClass="orange-btn" style="border-radius:10px">
+									
+									<p:confirm header="Confirmation" disabled="#{baseVue.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+									</p:commandButton>
+							</div>
+
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnAnnuler" icon="fa fa-refresh" style="border-radius:10px"
+									value="Initialiser" action="#{baseVue.initialiserControles()}"
+									update=":frmTypContrat" />
+							</div>
+				</div>
+				</div>
+				
+		</h:form>
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+	</ui:define>
+</ui:composition>

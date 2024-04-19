@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Organisme supportant la base salariale</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<p:growl id="msgs" showDetail="true" />
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-2">
+
+									<h:outputText value="Code" />
+									<p:inputText id="txtCode"
+										value="#{organismeSupportantBaseSalarialB.code}" size="20">
+										<p:ajax event="blur"
+											listener="#{organismeSupportantBaseSalarialB.changeCode()}"
+											update=":frm" />
+									</p:inputText>
+								</div>
+								<div class="ui-g-12 ui-md-6">
+									<h:outputText value="Désignation" />
+									<p:inputText id="txtDes"
+										value="#{organismeSupportantBaseSalarialB.designation}"
+										size="68" />
+								</div>
+								<div class="ui-g-12 ui-md-4">
+									<h:outputText value="Compte base" />
+									<p:inputText id="txtCompt"
+										value="#{organismeSupportantBaseSalarialB.compteBase}"
+										size="68" />
+								</div>
+							</div>
+
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer"
+											action="#{organismeSupportantBaseSalarialB.enregistrer()}"
+											update=":frm" />
+									</div>
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer"
+											onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+											action="#{organismeSupportantBaseSalarialB.supprimer()}"
+											styleClass="orange-btn" update=":frm" />
+									</div>
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnAnnuler"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{organismeSupportantBaseSalarialB.initialiser()}"
+											update=":frm" />
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-12">
+
+									<p:dataTable id="tbl" var="orga"
+										value="#{organismeSupportantBaseSalarialB.listOrganismes}"
+										rowKey="#{orga.id}" selectionMode="single"
+										selection="#{organismeSupportantBaseSalarialB.selected}"
+										reflow="true" paginator="true" rows="10"
+										paginatorAlwaysVisible="false" paginatorPosition="bottom">
+
+										<p:ajax event="rowSelect"
+											listener="#{organismeSupportantBaseSalarialB.onRowSelected}"
+											update=":frm:txtCode,:frm:txtDes,:frm:txtCompt" />
+
+										<p:column headerText="Code">
+											<h:outputText value="#{orga.code}" />
+										</p:column>
+
+										<p:column headerText="Désignation">
+											<h:outputText value="#{orga.designation}" />
+										</p:column>
+
+										<p:column headerText="Compte base">
+											<h:outputText value="#{orga.compteBase}" />
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</h:form>
+		</body>
+	</ui:define>
+</ui:composition>

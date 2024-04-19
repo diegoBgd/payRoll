@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Ordre Virement</title>
+		</h:head>
+		<body>
+			<h:form id="frm" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}" type="preRenderView"/>
+				</f:metadata>
+			
+				<p:growl id="msgs" showDetail="true" />
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<p:panelGrid id="pnl1" columns="2"
+								columnClasses="ui-grid-col-2,ui-grid-col-2" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								
+								<p:outputLabel value="Date paie" />
+								<p:inputMask id="txtDate"
+								value="#{ordreVirementB.datePaieString}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{ordreVirementB.changeDatePaie()}"
+									update="txtDate,:frm" />
+								</p:inputMask>
+
+								
+							</p:panelGrid>
+							
+							<p:panelGrid id="pnl2" columns="2" rendered="false"
+								columnClasses="ui-grid-col-2,ui-grid-col-6" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								
+								<p:outputLabel value="Banque" />
+								<p:selectOneMenu id="smBk" value="#{ordreVirementB.idBank}"
+									valueChangeListener="#{ordreVirementB.changeBank}" autoWidth="true">
+									<f:selectItems value="#{ordreVirementB.listBank}" />
+									<p:ajax event="change" update="smBk" />
+								</p:selectOneMenu>
+								
+							</p:panelGrid>
+							
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+									<div class="ui-g-12 ui-md-4">
+									</div>
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnPdf" icon="fa fa-file-pdf-o" style="border-radius:10px" 
+											value="Visualiser" action="#{ordreVirementB.printOV()}"
+											ajax="false" />
+									</div>
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnExcel" icon="fa fa-file-excel-o" style="border-radius:10px" 
+											value="Visualiser" action="#{ordreVirementB.printOVExcel()}"
+											ajax="false" />
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</h:form>
+
+
+		</body>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+
+		<h:form id="frm">
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{authenticite.parametrage()}" />
+			</f:metadata>
+
+			<p:growl id="msgs" showDetail="true" />
+			<p:blockUI block="frm" trigger="btnSave" />
+			
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+				<div class="card">
+							<div class="ui-g">
+
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton value="Recherche" icon="fa fa-search"
+										onclick="PF('dlgBrm').show();" style="border-radius:10px"/>
+								</div>
+							</div>
+						</div>
+					<div class="card">
+						
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-6"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="N°" />
+								<p:inputNumber id="txtNumero" value="#{baremeIPRB.numero}"
+									inputStyle="text-align:right" decimalPlaces="0"
+									autocomplete="off">
+									<p:ajax event="blur" listener="#{baremeIPRB.changeNumero()}"
+										update=":frm" />
+								</p:inputNumber>
+
+								<p:outputLabel value="Libellé" />
+								<p:inputText value="#{baremeIPRB.description}"/>
+								
+								<p:outputLabel value="Type" />
+								<p:selectOneMenu id="smType" value="#{baremeIPRB.type}">
+									<f:selectItem itemLabel="Mensuel" itemValue="1" />
+									<f:selectItem itemLabel="Annuel" itemValue="2" />
+								
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Type d'employe" />
+								<p:selectOneMenu  value="#{baremeIPRB.typeEmploye}">
+									<f:selectItem itemLabel="EMPLOYES PERMANENTS" itemValue="1" />
+									<f:selectItem itemLabel="EMPLOYES OCCASIONNELS" itemValue="2" />
+									<f:selectItem itemLabel="DEUXIEME EMPLOYE" itemValue="3" />
+									<f:selectItem itemLabel="EMPLOYES DES O.N.G ETRANGERES " itemValue="4" />
+									
+									
+								</p:selectOneMenu>
+								<p:spacer/><p:spacer/>
+								<p:outputLabel value="Barème active" />
+								<p:selectBooleanCheckbox value="#{baremeIPRB.actif}"/>
+							</p:panelGrid>
+							</div>
+					
+					
+					<div class="card">
+					<p:panelGrid id="pnl3" columns="1" columnClasses="ui-grid-col-10"
+							style="border:0px none ; background-color:transparent;">
+
+							<p:dataTable id="tblDetail" var="deta"
+								value="#{baremeIPRB.listDetailBareme}" rowKey="#{deta.index}"
+								selection="#{baremeIPRB.detailBareme}" selectionMode="single"
+								reflow="true" emptyMessage="" paginatorPosition="bottom"
+								paginator="true" rows="10" paginatorAlwaysVisible="false">
+
+								<p:ajax event="rowSelect"
+									listener="#{baremeIPRB.onRowSelectedDetail}" update=":frm" />
+
+								<p:column headerText="N°" width="4%">
+									<h:outputText value="#{deta.index}" />
+								</p:column>
+
+								<p:column headerText="Borne Début" width="25%">
+									<h:outputText value="#{deta.borneDebutString}" />
+								</p:column>
+
+								<p:column headerText="Borne Fin" width="27%">
+									<h:outputText value="#{deta.borneFinString}" />
+								</p:column>
+
+								<p:column headerText="Pourc(%)" width="13%">
+									<h:outputText value="#{deta.pourcentage}" style="float:right" />
+								</p:column>
+								
+
+							</p:dataTable>
+
+						</p:panelGrid>
+
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+								<div class="ui-g-12 ui-md-1">
+									<p:inputText value="#{baremeIPRB.index}" readonly="true"
+										style="font-weight:bold" />
+								</div>
+								<div class="ui-g-12 ui-md-3">
+									<p:inputText id="txtBorneDebut"
+										value="#{baremeIPRB.borneDebutS}" readonly="true"
+										style="text-align:right;font-weight:bold">
+										<p:ajax event="blur"
+											listener="#{baremeIPRB.changeBorneDebut()}"
+											update=":frm:txtBorneDebut" />
+									</p:inputText>
+								</div>
+								<div class="ui-g-12 ui-md-4">
+									<p:inputText id="txtBorneFin" value="#{baremeIPRB.borneFinS}"
+										style="text-align:right;font-weight:bold" autocomplete="off">
+										<p:ajax event="blur" listener="#{baremeIPRB.changeBorneFin()}"
+											update=":frm:txtBorneFin,:frm:txtBorneDebut" />
+									</p:inputText>
+								</div>
+								<div class="ui-g-12 ui-md-2">
+									<p:inputNumber id="txtPourcentage" autocomplete="off"
+										value="#{baremeIPRB.pourcentage}"
+										inputStyle="text-align:right;font-weight:bold" />
+								</div>
+								<div class="ui-g-12 ui-md-1">
+									<p:commandButton 
+										action="#{baremeIPRB.charger()}" icon="fa fa-plus"
+										update=":frm:msgs,:frm:tblDetail" style="border-radius:10px"/>
+								</div>
+								<div class="ui-g-12 ui-md-1">
+									<p:commandButton 
+										action="#{baremeIPRB.enlever()}" icon="fa fa-minus"
+										update=":frm:tblDetail" styleClass="red-btn" style="border-radius:10px"/>
+								</div>
+
+							</div>
+							
+							
+							<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+								
+
+							</div>
+						
+						</div>
+					</div>
+					
+					<div class="card">
+					<div class="ui-g">
+					<div class="ui-g-12 ui-md-1"/>
+						<div class="ui-g-12 ui-md-3">
+						
+							<p:commandButton id="btnSave" icon="fa fa-save"
+								value="Enregistrer" action="#{baremeIPRB.enregistrer()}"
+								update=":frm" style="border-radius:10px"/>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+								value="Supprimer" style="border-radius:10px"
+							
+								action="#{baremeIPRB.supprimer()}" styleClass="orange-btn"
+								update=":frm">
+								<p:confirm header="Confirmation" disabled="#{baremeIPRB.disableMsg}" 
+												message="Voulez vous vraiment supprimer cet élément ?"
+												icon="ui-icon-alert"/>
+								</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnAnnuler" icon="fa fa-refresh" style="border-radius:10px"
+								value="Initialiser" action="#{baremeIPRB.initialiser()}"
+								update=":frm" />
+						</div>
+					</div>
+			
+					</div>
+					
+				</div>
+			</div>
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" widgetVar="cd" >
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			
+		<p:dialog widgetVar="confirmDialog" header="Avertissement"
+			modal="true" appendTo="@(body)" width="400">
+			<h:form id="frmConfirm">
+				<h:panelGrid columns="1" style="margin:auto;text-align:center">
+					<p:outputLabel value="Voulez vous cloturer ce bareme ?" />
+					<p:spacer height="30px"></p:spacer>
+
+					<h:panelGrid columns="2" style="margin:auto;text-align:center">
+						<p:commandButton value="Oui" style="width:120px"
+							actionListener="#{baremeIPRB.cloturerBaremeIRE()}" update=":frm"
+							oncomplete="PF('confirmDialog').hide();" />
+						<p:commandButton value="Non" style="width:120px"
+							actionListener="#{baremeIPRB.NoncloturerBaremeIRE()}"
+							update=":frm" oncomplete="PF('confirmDialog').hide();" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgBrm" header="Rechercher des barèmes IRE "
+				width="70%" height="40%" position="center" responsive="true">
+				<h:form id="frmBrm">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+							<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+
+									<p:panelGrid columns="2"
+										columnClasses="ui-grid-col-2,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+										<p:spacer/>
+										<p:commandButton value="Rechercher" style="border-radius:10px"
+											action="#{baremeIPRB.chargement()}" update=":frmBrm:tblBrm" />
+									</p:panelGrid>
+
+									<p:dataTable id="tblBrm"
+											value="#{baremeIPRB.listBareme}" var="brm"
+											selectionMode="single" emptyMessage=""
+											selection="#{baremeIPRB.bareme}"
+											rowKey="#{brm.id}" reflow="true">
+
+											<p:ajax event="rowSelect"
+												listener="#{baremeIPRB.onRowSelect}"
+												update=":frm" />
+
+											<p:column headerText="Numéro">
+												<h:outputText value="#{brm.numero}" />
+											</p:column>
+
+											<p:column headerText="Libellé">
+												<h:outputText value="#{brm.description}" />
+											</p:column>
+
+										
+
+										</p:dataTable>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+	</ui:define>
+</ui:composition>

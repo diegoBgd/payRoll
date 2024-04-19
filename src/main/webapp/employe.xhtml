@@ -1,0 +1,830 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+
+		<h:form id="frm" target="_blank"
+			onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{authenticite.profilEmploye()}" />
+			</f:metadata>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+
+			<p:blockUI block="frm" trigger="btnSave" />
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+				<div class="card no-margin">
+					<div class="ui-g">
+
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton value="Liste des employés " icon="fa fa-bars"
+								onclick="PF('dlgEmployes').show();" style="border-radius:10px" />
+						</div>
+					</div>
+				</div>
+
+				<div class="card no-margin">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-4">
+
+							<p:commandLink onclick="PF('pupload').show();">
+								<p:graphicImage name="Images/#{employeB.urlPhoto}"
+									title="séléctionner une photo" id="img"
+									style="display:inline-block;width:100%;height:260px;border:1px solid" />
+							</p:commandLink>
+
+						</div>
+
+						<div class="ui-g-12 ui-md-8">
+
+							<p:panelGrid columns="2"
+								columnClasses="ui-grid-col-3,ui-grid-col-3" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Matricule" />
+								<p:inputText value="#{employeB.code}" autocomplete="off">
+									<p:ajax event="blur" listener="#{employeB.findEmployeByCode()}"
+										update=":frm,:frmEmploye:tbl" />
+								</p:inputText>
+
+
+							</p:panelGrid>
+
+							<p:panelGrid columns="2"
+								columnClasses="ui-grid-col-3,ui-grid-col-9" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Nom et prénom" />
+								<p:inputText id="txtNom" value="#{employeB.nomPrenom}"
+									autocomplete="off" />
+
+							</p:panelGrid>
+
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="N° Carte d'identité" />
+								<p:inputText id="txtCarte" value="#{employeB.cni}"
+									autocomplete="off" />
+
+								<h:outputLabel value="Date de naissance" />
+								<p:inputMask id="txtDateNaissance"
+									value="#{employeB.dateNaissanceS}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{employeB.changeDateNaissance()}"
+										update="txtDateNaissance" />
+								</p:inputMask>
+
+
+								<p:outputLabel value="Téléphone" />
+								<p:inputText id="txtTelmob" value="#{employeB.telMobile}"
+									autocomplete="off" />
+
+								<p:outputLabel value="Sexe" />
+								<p:selectOneMenu value="#{employeB.sexe}" autoWidth="false">
+									<f:selectItem itemLabel="" itemValue="0" />
+									<f:selectItem itemLabel="Masculin" itemValue="1" />
+									<f:selectItem itemLabel="Féminin" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputLabel value="Lieu de naissance" />
+								<p:inputText value="#{employeB.lieuNaissance}"
+									autocomplete="off" />
+								<p:outputLabel value="Etat civil" />
+								<p:selectOneMenu value="#{employeB.etatCivil}" autoWidth="false">
+									<f:selectItem itemLabel="" itemValue="0" />
+									<f:selectItem itemLabel="Célibataire" itemValue="1" />
+									<f:selectItem itemLabel="Marié(e)" itemValue="2" />
+									<f:selectItem itemLabel="Veuf(ve)" itemValue="3" />
+									<f:selectItem itemLabel="Divorcé(e)" itemValue="4" />
+								</p:selectOneMenu>
+
+							</p:panelGrid>
+
+							<p:panelGrid columns="2"
+								columnClasses="ui-grid-col-3,ui-grid-col-9" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputLabel value="Résidence actuelle" />
+								<p:inputText value="#{employeB.lieuNaissance}"
+									autocomplete="off" />
+
+								<p:outputLabel value="E-mail" />
+								<p:inputText id="txtEmail" value="#{employeB.email}"
+									autocomplete="off" />
+
+							</p:panelGrid>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="card no-margin">
+
+					<p:tabView id="gener" style="font-size:13px">
+						<p:tab id="tab1" title="Informations sur la carrière">
+
+							<p:panelGrid columns="4" id="pnlCarierre"
+								columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+
+								<p:outputLabel value="Type de personnel" />
+								<p:selectOneMenu id="txtPersonl" value="#{employeB.idPersonnel}"
+									valueChangeListener="#{employeB.changePersonnel}"
+									autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItems value="#{employeB.listPersonnels}" />
+									<p:ajax event="change" update="txtPersonl,txtCateg" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Direction" />
+								<p:selectOneMenu id="txtOrgAdmin"
+									value="#{employeB.idDirection}"
+									valueChangeListener="#{employeB.changeDirection}" filter="true"
+									filterMatchMode="contains" autoWidth="false">
+
+									<f:selectItems value="#{employeB.listDirection}" />
+									<p:ajax event="change" update="txtDirectio,txtOrgAdmin" />
+								</p:selectOneMenu>
+
+
+								<p:outputLabel value="Catégorie" />
+								<p:selectOneMenu id="txtCateg" value="#{employeB.idCategorie}"
+									valueChangeListener="#{employeB.changeCategorie}" filter="true"
+									filterMatchMode="contains" autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItems value="#{employeB.listCategoriePersonnel}" />
+									<p:ajax event="change" update="txtCateg,txtGrad" />
+								</p:selectOneMenu>
+
+
+								<p:outputLabel value="Département" />
+								<p:selectOneMenu id="txtDirectio"
+									value="#{employeB.idDepartement}"
+									valueChangeListener="#{employeB.changeDepartement}"
+									filter="true" filterMatchMode="contains" autoWidth="false">
+
+									<f:selectItems value="#{employeB.listDepartement}" />
+									<p:ajax event="change" update="txtServic" />
+								</p:selectOneMenu>
+
+
+								<p:outputLabel value="Grade" />
+								<p:selectOneMenu id="txtGrad" value="#{employeB.idGrade}"
+									valueChangeListener="#{employeB.changeGrade}" filter="true"
+									filterMatchMode="contains" autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItems value="#{employeB.listgrade}" />
+									<p:ajax event="change" update="txtGrad,txtNive" />
+								</p:selectOneMenu>
+
+
+								<p:outputLabel value="Service" />
+								<p:selectOneMenu id="txtServic" value="#{employeB.idService}"
+									valueChangeListener="#{employeB.changeService}" filter="true"
+									filterMatchMode="contains" autoWidth="false">
+
+									<f:selectItems value="#{employeB.listServices}" />
+									<p:ajax event="change" update="txtServic" />
+								</p:selectOneMenu>
+
+
+
+								<p:outputLabel value="Niveau d'étude" />
+								<p:selectOneMenu id="txtNive"
+									value="#{employeB.idNiveauFormation}"
+									valueChangeListener="#{employeB.chargerNiveauFormation}"
+									filter="true" filterMatchMode="contains" autoWidth="false">
+									<f:selectItems value="#{employeB.listNiveauFormation}" />
+									<p:ajax event="change" update="" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Fonction" />
+								<p:selectOneMenu id="txtFxc" value="#{employeB.idFonction}"
+									valueChangeListener="#{employeB.changeFonction}" filter="true"
+									filterMatchMode="contains" autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItems value="#{employeB.listFonctions}" />
+									<p:ajax event="change" update="txtFxc" />
+								</p:selectOneMenu>
+
+
+								<p:outputLabel value="Lieu de travail" />
+								<p:selectOneMenu id="txtLieuTrv"
+									value="#{employeB.idLieuTravail}"
+									valueChangeListener="#{employeB.changeLieuTravail}"
+									filter="true" filterMatchMode="contains" autoWidth="false">
+									<f:selectItems value="#{employeB.listLieuTravail}" />
+									<p:ajax event="change" update="txtLieuTrv" />
+								</p:selectOneMenu>
+
+
+								<p:outputLabel value="Type de contrat" />
+								<p:selectOneMenu id="txtContrat" value="#{employeB.idContrat}"
+									valueChangeListener="#{employeB.changeContrat}" filter="true"
+									filterMatchMode="contains" autoWidth="false">
+
+									<f:selectItems value="#{employeB.listcontrat}" />
+									<p:ajax event="change" update="txtContrat" />
+								</p:selectOneMenu>
+
+
+								<p:outputLabel value="Date début du contrat" />
+								<p:inputMask id="txtDateDebCont"
+									value="#{employeB.dateDebutContratS}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{employeB.changeDateDebutContrat()}"
+										update="txtDateDebCont" />
+								</p:inputMask>
+
+
+								<p:outputLabel value="Date fin du contrat" />
+								<p:inputMask id="txtDateFinCont"
+									value="#{employeB.dateFinContratS}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{employeB.changeDateFinContrat()}"
+										update="txtDateFinCont" />
+								</p:inputMask>
+
+
+								<p:outputLabel value="Date entrée en fonction" />
+								<p:inputMask id="txtDateEntree" value="#{employeB.dateEntreS}"
+									mask="99/99/9999">
+									<p:ajax event="blur" listener="#{employeB.changeDateEntre()}"
+										update="txtDateEntree" />
+								</p:inputMask>
+
+
+								<p:outputLabel value="Date sortie en fonction" />
+								<p:inputMask id="txtDateSortie" value="#{employeB.dateSortieS}"
+									mask="99/99/9999">
+									<p:ajax event="blur" listener="#{employeB.changeDateSortie()}"
+										update="txtDateSortie" />
+								</p:inputMask>
+							</p:panelGrid>
+
+
+						</p:tab>
+						<p:tab id="tab3" title="Informations salairariales ">
+							<p:panelGrid columns="4" id="pnlSal"
+								columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Nombre heures normales" />
+								<p:inputNumber id="txtNbrHr"
+									value="#{employeB.nombreHeureNormal}"
+									thousandSeparator="&nbsp;" decimalPlaces="0">
+									<p:ajax event="blur" listener="#{employeB.changementHeure()}"
+										update=":frm:msgs" />
+									<p:ajax event="change" update="txtNbrHr" />
+								</p:inputNumber>
+
+								<p:outputLabel value="Base:H/M/J" />
+								<p:selectOneMenu value="#{employeB.basePaiement}"
+									autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItem itemLabel="Horaire" itemValue="1" />
+									<f:selectItem itemLabel="Journalier" itemValue="2" />
+									<f:selectItem itemLabel="Mensuel" itemValue="3" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Montant de base" />
+								<p:inputNumber id="txtSalBase" value="#{employeB.salaireBase}"
+									thousandSeparator="&nbsp;" inputStyle="text-align:right"
+									decimalPlaces="0" />
+								<p:outputLabel value="Pourcentage logement" />
+								<p:inputNumber value="#{employeB.pourcentageLogement}"
+									thousandSeparator="&nbsp;" inputStyle="text-align:right"
+									decimalPlaces="2" id="txtPrctLg">
+									<p:ajax event="blur"
+										listener="#{employeB.changementTauxLogement()}"
+										update="txtForfLog" />
+								</p:inputNumber>
+
+								<p:outputLabel value="Forfait logement" />
+								<p:inputNumber value="#{employeB.montantLogement}"
+									thousandSeparator="&nbsp;" id="txtForfLog"
+									inputStyle="text-align:right" decimalPlaces="0">
+									<p:ajax event="blur"
+										listener="#{employeB.changementMTLogement()}"
+										update="txtPrctLg" />
+								</p:inputNumber>
+
+								<p:outputLabel value="Type employé" />
+								<p:selectOneMenu value="#{employeB.typeEmploye}"
+									autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItem itemLabel="Employé permanent" itemValue="1" />
+									<f:selectItem itemLabel="Employé occasionnel" itemValue="2" />
+									<f:selectItem itemLabel="Deuxième emploie" itemValue="3" />
+									<f:selectItem itemLabel="Employé dans une ONG" itemValue="4" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Mode réglement" />
+								<p:selectOneMenu id="slctMR" value="#{employeB.modeReglement}"
+									autoWidth="false">
+									<f:selectItem itemLabel="Espèce" itemValue="0" />
+									<f:selectItem itemLabel="Virement" itemValue="1" />
+									<f:selectItem itemLabel="Chèque" itemValue="2" />
+									<f:selectItem itemLabel="Mandat" itemValue="3" />
+
+								</p:selectOneMenu>
+								<p:outputLabel value="Jours de congé annuel" />
+								<p:inputNumber value="#{employeB.jourConge}"
+									thousandSeparator="&nbsp;" id="txtJrCnj"
+									inputStyle="text-align:right" decimalPlaces="0">
+
+								</p:inputNumber>
+							</p:panelGrid>
+							<p:dataTable value="#{employeB.listBanquePaiement}" var="bankv"
+								id="tbe" selectionMode="single" style="border:solid 1px gray"
+								selection="#{employeB.banquePaiementSelected}"
+								rowKey="#{bankv.id}" reflow="true" rows="10" emptyMessage=" "
+								scrollable="true" scrollHeight="100">
+								<p:ajax event="rowSelect"
+									listener="#{employeB.onRowselectedDetailBanque}"
+									update="frm:gener:pnlBk" />
+
+								<p:column headerText="Référence" style="width:80px">
+									<p:outputLabel value="#{bankv.banque.code}" />
+								</p:column>
+								<p:column headerText="Banque">
+									<p:outputLabel value="#{bankv.banque.designation}" />
+								</p:column>
+								<p:column headerText="No Compte">
+									<p:outputLabel value="#{bankv.numeroCompte}" />
+								</p:column>
+								<p:column headerText="% salaire net" width="10%">
+									<p:outputLabel value="#{bankv.pourcentageSalaire}" />
+								</p:column>
+							</p:dataTable>
+							<p:panelGrid columns="8" id="pnlBk"
+								columnClasses="ui-grid-col-1,ui-grid-col-4,ui-grid-col-1,
+										ui-grid-col-2,ui-grid-col-1,
+									ui-grid-col-1,ui-grid-col-1,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Banque" />
+								<p:selectOneMenu id="txtbanque"
+									value="#{employeB.idBanquePaiement}"
+									valueChangeListener="#{employeB.chargerBanquePaiement}"
+									autoWidth="false">
+									<f:selectItems value="#{employeB.listBankPaiement}" />
+									<p:ajax event="itemSelect" update="txtbanque" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Compte " />
+								<p:inputText id="txtNumComptB"
+									value="#{employeB.numeroBanquePaiement}" autocomplete="off" />
+
+								<p:outputLabel value="Pourcentage " />
+								<p:inputNumber value="#{employeB.pourcentageSalaire}"
+									thousandSeparator="&nbsp;" inputStyle="text-align:right"
+									decimalPlaces="2" />
+
+								<p:commandButton icon="fa fa-plus" style="border-radius:10px"
+									action="#{employeB.ajouterBanquePaiement()}"
+									update="frm:gener:pnlBk,tbe" />
+
+								<p:commandButton icon="fa fa-minus" style="border-radius:10px"
+									action="#{employeB.enleverDetailBanque()}"
+									update="frm:gener:pnlBk,tbe" styleClass="red-btn" />
+							</p:panelGrid>
+
+						</p:tab>
+						<p:tab id="tab2" title="Variables de la paie">
+
+							<p:tabView id="gener2">
+								<p:tab id="tab2" title="Primes et indemnités">
+
+									<div class="ui-g-12 ui-md-12">
+										<div class="ui-g-12 ui-md-3">
+											<p:commandButton icon="fa fa-download"
+												value="Charger les éléments paramétrés"
+												action="#{employeB.addAllIndemnite()}"
+												update=":frm:gener:gener2:tblP,:frm:msgs"
+												styleClass="orange-btn" style="border-radius:10px" />
+										</div>
+									</div>
+									<div class="ui-g-12 ui-md-12">
+										<p:dataTable value="#{employeB.listeDetailPrime}" var="det"
+											id="tblP" rowKey="#{det.id}" style="border:solid 1px gray"
+											selection="#{employeB.selectedDetailPrime}"
+											scrollHeight="100" scrollable="true"
+											paginatorPosition="bottom" reflow="true" emptyMessage=""
+											selectionMode="single">
+
+											<p:ajax event="rowSelect"
+												listener="#{employeB.onRowselectedDetailPrime()}"
+												update="frm:gener:gener2:idpanelprime" />
+
+											<p:column headerText="Référence" style="width:10%">
+												<p:outputLabel value="#{det.prime.code}" />
+											</p:column>
+											<p:column headerText="Primes" width="50%">
+												<p:outputLabel value="#{det.prime.designation}" />
+											</p:column>
+											<p:column headerText="Montant" style="text-align:center"
+												width="20%">
+												<p:outputLabel value="#{det.montantS}" />
+											</p:column>
+											<p:column headerText="Taux" style="text-align:center"
+												width="10%">
+												<p:outputLabel value="#{det.taux}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+
+
+									<p:panelGrid columns="8" id="idpanelprime"
+										columnClasses="ui-grid-col-1,ui-grid-col-4,ui-grid-col-1,ui-grid-col-2,
+													  ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+
+										<p:outputLabel value="Primes" />
+										<p:selectOneMenu id="txtprim" value="#{employeB.idPrime}"
+											valueChangeListener="#{employeB.chargerIdPrime}"
+											autoWidth="false" filter="true" filterMatchMode="contains">
+											<p:ajax event="itemSelect" update="txtprim,txtMontPrime" />
+											<f:selectItem itemLabel=" " itemValue="0" />
+											<f:selectItems value="#{employeB.listPrime}" />
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Montant" />
+										<p:inputNumber id="txtMontPrime"
+											value="#{employeB.montantPrime}" thousandSeparator="&nbsp;"
+											decimalPlaces="0" inputStyle="text-align:right">
+											<p:ajax event="blur"
+												listener="#{employeB.changeValueForfait()}"
+												update="txtTxPrime" />
+										</p:inputNumber>
+
+										<p:outputLabel value="Taux prime" />
+										<p:inputNumber id="txtTxPrime" value="#{employeB.tauxPrm}"
+											thousandSeparator="&nbsp;" decimalPlaces="0"
+											inputStyle="text-align:right">
+											<p:ajax event="blur" listener="#{employeB.changeValueTaux()}"
+												update="txtMontPrime" />
+										</p:inputNumber>
+
+										<p:commandButton icon="fa fa-plus" style="border-radius:10px"
+											action="#{employeB.ajouterDetailPrime()}"
+											update=":frm:gener:gener2:idpanelprime,:frm:gener:gener2:tblP,:frm:msgs" />
+
+
+										<p:commandButton icon="fa fa-minus" style="border-radius:10px"
+											action="#{employeB.enleverDetailPrime()}"
+											update=":frm:gener:gener2:idpanelprime,:frm:gener:gener2:tblP,:frm:msgs"
+											styleClass="red-btn" />
+
+									</p:panelGrid>
+
+
+
+								</p:tab>
+
+
+
+								<p:tab id="tab4" title="Cotisations">
+
+									<div class="ui-g-12 ui-md-12">
+										<p:dataTable value="#{employeB.listeDetailCotisation}"
+											var="cot" id="tblr" rowKey="#{cot.id}" selectionMode="single"
+											selection="#{employeB.selectedDetailCotisation}"
+											reflow="true" style="border:solid 1px gray" scrollable="true"
+											scrollHeight="100" emptyMessage="">
+											<p:ajax event="rowSelect"
+												listener="#{employeB.onRowselectedDetailCotisation()}"
+												update=":frm:gener:gener2:idpanelCotisation" />
+
+
+											<p:column headerText="Référence" width="10%">
+												<p:outputLabel value="#{cot.cotisation.code}" />
+											</p:column>
+											<p:column headerText="Cotisations">
+												<p:outputLabel value="#{cot.cotisation.designation}" />
+											</p:column>
+											<p:column headerText="Part salarial"
+												style="text-align:center">
+												<p:outputLabel value="#{cot.montantSalarial}" />
+											</p:column>
+											<p:column headerText="Part patronal"
+												style="text-align:center">
+												<p:outputLabel value="#{cot.montantPatronal}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+
+									<p:panelGrid columns="8" id="idpanelCotisation"
+										columnClasses="ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,
+													  ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+
+
+
+										<p:outputLabel value="Cotisation" />
+										<p:selectOneMenu id="txtCotisatio"
+											value="#{employeB.idCotisation}"
+											valueChangeListener="#{employeB.chargerIdCotisation}"
+											autoWidth="false" filter="true" filterMatchMode="contains">
+											<p:ajax event="itemSelect"
+												update="txtCotisatio,txtMontSal,txtMontPatr" />
+											<f:selectItem itemLabel=" " itemValue="0" />
+											<f:selectItems value="#{employeB.listCotisation}" />
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Salarial" />
+										<p:inputNumber id="txtMontSal"
+											value="#{employeB.montantSalarial}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;"
+											decimalPlaces="0" />
+
+										<p:outputLabel value="Patronal" />
+										<p:inputNumber id="txtMontPatr"
+											value="#{employeB.montantPatronal}"
+											inputStyle="text-align:right" thousandSeparator="&nbsp;"
+											decimalPlaces="0" />
+
+										<p:commandButton icon="fa fa-plus" style="border-radius:10px"
+											action="#{employeB.ajouterDetailCotisation()}"
+											update=":frm:gener:gener2:idpanelCotisation,:frm:gener:gener2:tblr" />
+
+										<p:commandButton icon="fa fa-minus" style="border-radius:10px"
+											action="#{employeB.enleverDetailCotisation()}"
+											update=":frm:gener:gener2:idpanelCotisation,:frm:gener:gener2:tblr,:frm:msgs"
+											styleClass="red-btn" />
+
+									</p:panelGrid>
+
+
+
+								</p:tab>
+								<p:tab id="tab5" title="Retenues">
+
+									<div class="ui-g-12 ui-md-12">
+										<p:dataTable value="#{employeB.listeDetailDeduction}"
+											style="border:solid 1px gray" var="ded" id="tb"
+											rowKey="#{ded.id}" selectionMode="single" scrollable="true"
+											scrollHeight="100"
+											selection="#{employeB.selectedDetailDeduction}"
+											emptyMessage="">
+											<p:ajax event="rowSelect"
+												listener="#{employeB.onRowselectedDetailDeduction}"
+												update=":frm:gener:gener2:idpanelDeduction" />
+
+											<p:column headerText="Référence" style="width:80px">
+												<p:outputLabel value="#{ded.deduction.code}" />
+											</p:column>
+											<p:column headerText="Retenues">
+												<p:outputLabel value="#{ded.deduction.designation}" />
+											</p:column>
+
+											<p:column headerText="Montant" style="text-align:center"
+												width="22%">
+												<p:outputLabel value="#{ded.montantS}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+
+									<p:panelGrid columns="6" id="idpanelDeduction"
+										columnClasses="ui-grid-col-1,ui-grid-col-6,ui-grid-col-1,ui-grid-col-2,
+													  ui-grid-col-1,ui-grid-col-1"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:outputLabel value="Retenue" />
+										<p:selectOneMenu id="txtDeductio"
+											value="#{employeB.idDeduction}"
+											valueChangeListener="#{employeB.chargerIdDeduction}"
+											autoWidth="false" filter="true" filterMatchMode="contains">
+											<p:ajax event="itemSelect"
+												update="txtDeductio,txtMontDeduction" />
+											<f:selectItems value="#{employeB.listDeductions}" />
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Montant" />
+										<p:inputNumber id="txtMontDeduction"
+											value="#{employeB.montantDeduction}"
+											thousandSeparator="&nbsp;" inputStyle="text-align:right"
+											decimalPlaces="0" />
+
+										<p:commandButton icon="fa fa-plus" style="border-radius:10px"
+											action="#{employeB.ajouterDetailDeduction()}"
+											update=":frm:gener:gener2:idpanelDeduction,:frm:gener:gener2:tb,:frm:msgs" />
+
+										<p:commandButton icon="fa fa-minus" style="border-radius:10px"
+											action="#{employeB.enleverDetailDeduction()}"
+											update=":frm:gener:gener2:idpanelDeduction,:frm:gener:gener2:tb,:frm:msgs"
+											styleClass="red-btn" />
+
+
+									</p:panelGrid>
+
+
+								</p:tab>
+
+								<p:tab id="tab6" title="Comissions">
+
+									<div class="ui-g-12 ui-md-12">
+										<p:dataTable value="#{employeB.listeDetailComission}"
+											style="border:solid 1px gray" var="com" id="tbCm"
+											rowKey="#{com.id}" selectionMode="single" scrollable="true"
+											scrollHeight="100"
+											selection="#{employeB.selectedDetailComission}"
+											emptyMessage="">
+											<p:ajax event="rowSelect"
+												listener="#{employeB.onRowDetailComissionSelected}"
+												update=":frm:gener:gener2:idpanelCom" />
+
+											<p:column headerText="Référence" style="width:10%">
+												<p:outputLabel value="#{com.comission.code}" />
+											</p:column>
+											<p:column headerText="Libelle" style="width:40%">
+												<p:outputLabel value="#{com.comission.designation}" />
+											</p:column>
+
+											<p:column headerText="Montant" style="text-align:center"
+												width="20%">
+												<p:outputLabel value="#{com.montantS}" />
+											</p:column>
+											<p:column headerText="Taux" style="text-align:center"
+												width="10%">
+												<p:outputLabel value="#{com.taux}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+
+									<p:panelGrid columns="8" id="idpanelCom"
+										columnClasses="ui-grid-col-1,ui-grid-col-4,ui-grid-col-1,ui-grid-col-2,
+													  ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+
+
+										<p:outputLabel value="Comission" />
+										<p:selectOneMenu id="txtCom" value="#{employeB.idCom}"
+											valueChangeListener="#{employeB.changerIdComission}"
+											autoWidth="false" filter="true" filterMatchMode="contains">
+											<p:ajax event="itemSelect" update="txtCom" />
+											<f:selectItems value="#{employeB.listComission}" />
+										</p:selectOneMenu>
+
+										<p:outputLabel value="Montant" />
+										<p:inputNumber id="txtMontCom" value="#{employeB.montantCom}"
+											thousandSeparator="&nbsp;" inputStyle="text-align:right"
+											decimalPlaces="0" />
+
+										<p:outputLabel value="Taux" />
+										<p:inputNumber id="txtTxCom" value="#{employeB.tauxCom}"
+											thousandSeparator="&nbsp;" inputStyle="text-align:right"
+											decimalPlaces="0" />
+
+
+
+										<p:commandButton icon="fa fa-plus" style="border-radius:10px"
+											action="#{employeB.ajouterDetailComission()}"
+											update=":frm:gener:gener2:idpanelCom,:frm:gener:gener2:tbCm,:frm:msgs" />
+
+										<p:commandButton icon="fa fa-minus" style="border-radius:10px"
+											action="#{employeB.removeComission()}"
+											update=":frm:gener:gener2:idpanelCom,:frm:gener:gener2:tbCm,:frm:msgs"
+											styleClass="red-btn" />
+
+
+									</p:panelGrid>
+
+
+								</p:tab>
+							</p:tabView>
+						</p:tab>
+
+					</p:tabView>
+
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-2" />
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton icon="fa fa-save" value="Enregistrer"
+								style="border-radius:10px" action="#{employeB.save()}"
+								update=":frm" id="btnSave" />
+						</div>
+
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton icon="fa fa-trash-o" value="Supprimer"
+								style="border-radius:10px" action="#{employeB.delete()}"
+								update=":frm" styleClass="orange-btn">
+								<p:confirm header="Confirmation"
+									message="Voulez-vous vraiement supprimer  ?"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton icon="fa fa-refresh" value="Initialiser"
+								action="#{employeB.initialise()}" update=":frm"
+								style="border-radius:10px" />
+						</div>
+
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton icon="fa fa-address-card" value="Fiche employé"
+								action="#{employeB.visualiserFiche()}" ajax="false"
+								update=":frm" style="border-radius:10px" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				responsive="true">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+		<p:dialog header="Téléchargez Image" widgetVar="pupload"
+			hideEffect="slide" showEffect="slide" responsive="true">
+			<h:form enctype="multipart/form-data">
+				<p:fileUpload fileUploadListener="#{employeB.telecharger}"
+					uploadLabel="Charger photo" cancelLabel="Annuler"
+					label="Choix photo" auto="false"
+					allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="5000000000"
+					description="Select Images" update="preview" />
+				<h:panelGrid columns="1">
+
+					<p:graphicImage id="preview"
+						style="margin:auto;width:50%;height:50%"
+						name="Images/#{employeB.urlPhoto}" title="Apercu" />
+				</h:panelGrid>
+				<h:panelGrid columns="1" style="width:100%">
+					<p:commandButton value="Quitter" onclick="PF('pupload').hide();"
+						style="width:100%" update=":frm:img" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgEmployes" header="Recherche des Employés"
+			modal="true" height="300" width="1000" appendTo="@(body)">
+			<h:form id="frmEmploye">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<p:panelGrid columns="3" id="idpanelDeduction"
+							columnClasses="ui-grid-col-3,ui-grid-col-6,ui-grid-col-2"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<h:outputText value=" Recherche par nom et prénom" />
+							<p:inputText value="#{employeB.nomRecherche}" />
+
+							<p:commandButton value="rechercher" icon="fa fa-search"
+								style="border-radius:10px"
+								action="#{employeB.chargerEmployes()}"
+								update=":frm:msgs,:frmEmploye:tbl" />
+						</p:panelGrid>
+
+						<p:dataTable id="tbl" value="#{employeB.listEmploye}" var="emplo"
+							selectionMode="single" selection="#{employeB.selected}"
+							rowKey="#{emplo.id}" scrollable="true" scrollHeight="200"
+							emptyMessage="" reflow="true">
+
+							<p:ajax event="rowSelect"
+								listener="#{employeB.afficherEmployeSelectionne}" update=":frm" />
+
+							<p:column headerText="Matricule" width="10%">
+								<h:outputText value="#{emplo.code}" />
+							</p:column>
+
+							<p:column headerText="Nom et prénom">
+								<h:outputText value="#{emplo.nomPrenom}" />
+							</p:column>
+
+
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

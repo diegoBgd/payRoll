@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Saisie Avance Quinzaine</title>
+		</h:head>
+		<body>
+			<h:form id="frm"
+				onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+				<p:growl id="msgs" showDetail="true" />
+				<p:blockUI block="frm" trigger="cmdSave" />
+				<div class="ui-g">
+
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-2" />
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton value="Recherche" icon="fa fa-search"
+										onclick="PF('dlgAvnc').show();" style="border-radius:10px" />
+								</div>
+							</div>
+						</div>
+						<div class="card">
+
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-7,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Employe" />
+								<p:inputText id="txtCodeEmploye"
+									value="#{avanceQuinzaineB.codeEmploye}" autocomplete="off">
+									<p:ajax event="blur"
+										listener="#{avanceQuinzaineB.searchEmployee()}" update=":frm" />
+								</p:inputText>
+								<p:inputText id="txtNomEmploye"
+									value="#{avanceQuinzaineB.nomEmploye}" readonly="true" />
+								<p:commandButton icon="fa fa-search"
+									onclick="PF('dlgEmploye').show();" style="border-radius:10px" />
+
+							</p:panelGrid>
+
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-5"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+
+								<h:outputText value="Date" />
+								<p:inputMask id="txtDate" value="#{avanceQuinzaineB.dateS}"
+									mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{avanceQuinzaineB.changeDate()}" update=":frm" />
+								</p:inputMask>
+
+								<p:outputLabel value="Banque" />
+								<p:inputText id="txtNomBanque"
+									value="#{avanceQuinzaineB.nomBanque}" readonly="true" />
+							</p:panelGrid>
+
+
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-5"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+
+								<p:outputLabel value="Mode paiment" />
+								<p:selectOneMenu value="#{avanceQuinzaineB.typeReglrment}"
+									valueChangeListener="#{avanceQuinzaineB.changeModereglement}">
+									<f:selectItem itemLabel="ESPECE" itemValue="1" />
+									<f:selectItem itemLabel="CHEQUE" itemValue="2" />
+									<f:selectItem itemLabel="MANDAT" itemValue="3" />
+									<f:selectItem itemLabel="VIREMENT" itemValue="4" />
+									<p:ajax event="itemSelect"
+										update="txtNomBanque,txtNumeroCompte" />
+
+								</p:selectOneMenu>
+
+
+								<h:outputText value="Compte" />
+								<p:inputText id="txtNumeroCompte"
+									value="#{avanceQuinzaineB.numeroCompte}" readonly="true"
+									autocomplete="off" />
+							</p:panelGrid>
+
+
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-5"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+
+								<h:outputText value="Montant avance" />
+								<p:inputNumber id="txtMontant"
+									value="#{avanceQuinzaineB.montant}" decimalPlaces="0"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;" />
+
+								<p:spacer/>
+								
+									<p:commandButton value="Calculer a base de la paie" onclick="PF('dlgPaie').show();" 
+												 style="border-radius:10px;background: #fff;border:solid 1px #008B8F;color:#008B8F"/>
+							</p:panelGrid>
+
+							<p:dataTable id="tblDet" value="#{avanceQuinzaineB.listDet}"
+								scrollHeight="200" scrollable="true" var="det"
+								selection="#{avanceQuinzaineB.selectedDetail}">
+								<f:facet name="header">
+									Rembourssement
+								</f:facet>
+
+								<p:column headerText="Mois " width="10%">
+									<h:outputText value="#{det.printMois}" />
+								</p:column>
+
+								<p:column headerText="Montant" width="10%">
+
+									<p:inputNumber id="clnMontant" value="#{det.montant}"
+										disabled="#{det.disable}" inputStyle="text-align:right"
+										thousandSeparator="&nbsp;" decimalPlaces="0">
+
+									</p:inputNumber>
+
+								</p:column>
+
+								<p:column headerText="" width="2%">
+									<p:selectBooleanCheckbox id="chkSelect"
+										value="#{det.seleceted}">
+										<p:ajax event="change" listener="#{det.checkDetail()}"
+											update="clnMontant" />
+									</p:selectBooleanCheckbox>
+								</p:column>
+
+
+							</p:dataTable>
+
+						</div>
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-1" />
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton value="Enregistrer" id="cmdSave"
+										style="border-radius:10px"
+										action="#{avanceQuinzaineB.enregistrer()}"
+										icon="ui-icon ui-icon-disk" update=":frm" />
+								</div>
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton value="Supprimer" style="border-radius:10px"
+										action="#{avanceQuinzaineB.supprimer()}"
+										styleClass="orange-btn" icon="ui-icon ui-icon-trash"
+										update=":frm">
+										<p:confirm header="Confirmation"
+											disabled="#{avanceQuinzaineB.disableMsg}"
+											message="Voulez-vous vraiment supprimer ?"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+								</div>
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton value="initialiser" style="border-radius:10px"
+										action="#{avanceQuinzaineB.initialiser()}"
+										icon="ui-icon ui-icon-refresh" update=":frm" />
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</h:form>
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			<p:dialog widgetVar="dlgEmploye" header="Rechercher Employé"
+				height="40%" width="70%" responsive="true" position="center">
+				<h:form id="frmEmploye">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-3,ui-grid-col-7" layout="grid"
+									styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+
+
+									<h:outputText value="Recherche par nom" />
+									<p:inputText value="#{avanceQuinzaineB.nomEmployeRecherche}" />
+
+									<p:spacer />
+									<p:commandButton value="Rechercher"
+										action="#{avanceQuinzaineB.chargerEmploye()}"
+										update=":frmEmploye:tblEmploye,:frm:msgs" />
+								</p:panelGrid>
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+
+										<p:dataTable id="tblEmploye"
+											value="#{avanceQuinzaineB.employes}" var="emplo"
+											selectionMode="single"
+											selection="#{avanceQuinzaineB.employe}" rowKey="#{emplo.id}"
+											reflow="true" scrollable="true" scrollHeight="150">
+
+											<p:ajax event="rowSelect"
+												listener="#{avanceQuinzaineB.onRowSelectEmploye}"
+												update=":frm:txtCodeEmploye,:frm:txtNomEmploye" />
+
+											<p:column headerText="Code" width="10%">
+												<h:outputText value="#{emplo.code}" />
+											</p:column>
+
+											<p:column headerText="Nom">
+												<h:outputText value="#{emplo.nomPrenom}" />
+											</p:column>
+
+
+										</p:dataTable>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</h:form>
+			</p:dialog>
+
+
+
+			<p:dialog widgetVar="dlgAvnc" header="Rechercher Avance quinzaine"
+				width="70%" height="40%" position="center" responsive="true">
+				<h:form id="frmAvc">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Mois" />
+									<p:selectOneMenu value="#{avanceQuinzaineB.mois}">
+										<f:selectItem itemLabel="" itemValue="0" />
+										<f:selectItem itemLabel="Janvier" itemValue="1" />
+										<f:selectItem itemLabel="Février" itemValue="2" />
+										<f:selectItem itemLabel="Mars" itemValue="3" />
+										<f:selectItem itemLabel="Avril" itemValue="4" />
+										<f:selectItem itemLabel="Mais" itemValue="5" />
+										<f:selectItem itemLabel="Juin" itemValue="6" />
+										<f:selectItem itemLabel="Juillet" itemValue="7" />
+										<f:selectItem itemLabel="Août" itemValue="8" />
+										<f:selectItem itemLabel="Septembre" itemValue="9" />
+										<f:selectItem itemLabel="Octobre" itemValue="10" />
+										<f:selectItem itemLabel="Novembre" itemValue="11" />
+										<f:selectItem itemLabel="Décembre" itemValue="12" />
+
+									</p:selectOneMenu>
+
+									<p:commandButton value="Rechercher" icon="fa fa-search"
+										action="#{avanceQuinzaineB.chargerAvance()}" update=":frmAvc"
+										style="border-radius:10px" />
+								</p:panelGrid>
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+
+										<p:dataTable id="tblAvc"
+											value="#{avanceQuinzaineB.listAvance}" var="avc"
+											selectionMode="single" emptyMessage=""
+											selection="#{avanceQuinzaineB.avanceQuinzaine}"
+											rowKey="#{avc.id}" reflow="true">
+
+											<p:ajax event="rowSelect"
+												listener="#{avanceQuinzaineB.onRowAvanceSelect}"
+												update=":frm" />
+
+											<p:column headerText="Date">
+												<h:outputText value="#{avc.dateString}" />
+											</p:column>
+
+											<p:column headerText="Employé">
+												<h:outputText value="#{avc.nomEmploye}" />
+											</p:column>
+
+											<p:column headerText="Montant" style="text-align:right">
+												<h:outputText value="#{avc.montant}" />
+											</p:column>
+
+										</p:dataTable>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgPaie" header="Situation de la paie"
+				width="70%" height="40%" position="center" responsive="true">
+				<h:form id="frmPaie">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+
+									<p:outputLabel value="Mois" />
+									<p:selectOneMenu value="#{avanceQuinzaineB.mois}">
+										<f:selectItem itemLabel="" itemValue="0" />
+										<f:selectItem itemLabel="Janvier" itemValue="1" />
+										<f:selectItem itemLabel="Février" itemValue="2" />
+										<f:selectItem itemLabel="Mars" itemValue="3" />
+										<f:selectItem itemLabel="Avril" itemValue="4" />
+										<f:selectItem itemLabel="Mais" itemValue="5" />
+										<f:selectItem itemLabel="Juin" itemValue="6" />
+										<f:selectItem itemLabel="Juillet" itemValue="7" />
+										<f:selectItem itemLabel="Août" itemValue="8" />
+										<f:selectItem itemLabel="Septembre" itemValue="9" />
+										<f:selectItem itemLabel="Octobre" itemValue="10" />
+										<f:selectItem itemLabel="Novembre" itemValue="11" />
+										<f:selectItem itemLabel="Décembre" itemValue="12" />
+
+									</p:selectOneMenu>
+
+									<p:commandButton value="Charger la paie" icon="fa fa-gears"
+										action="#{avanceQuinzaineB.chargerPaie()}" update=":frmPaie,:frm"
+										style="border-radius:10px" />
+										
+									<h:outputLabel value="Salaire net"/>
+										<p:inputNumber value="#{avanceQuinzaineB.salaireNet}" decimalPlaces="0"
+									inputStyle="text-align:right;font-weight:bold;color:blue" 
+									thousandSeparator="&nbsp;" readonly="true" />
+										<p:spacer/> 
+										
+										<h:outputLabel value="Avance quinzaine"/>
+										<p:inputNumber value="#{avanceQuinzaineB.montant}" decimalPlaces="0"
+									inputStyle="text-align:right;font-weight:bold;color:red" 
+									thousandSeparator="&nbsp;" readonly="true"/>
+									<p:spacer/>
+									
+								</p:panelGrid>
+
+								
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+		</body>
+	</ui:define>
+</ui:composition>

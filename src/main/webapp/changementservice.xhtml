@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+<h:head>
+<title>Changement de Service</title>
+</h:head> 
+  <body> 
+     <h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+	     <p:growl id="message" autoUpdate="true"  showDetail="true" sticky="true"/>
+	     
+	     <p:separator><b>Employé</b></p:separator>
+	     <h:panelGrid columns="2" cellpadding="5">
+	     
+	     <h:panelGrid columns="6"  cellpadding="5" >
+			        <h:outputLabel value="Code Employ" />
+			        <p:inputText id="txtcode" value="#{changementUniteB.code}"  style="width:70px">
+			        <p:ajax event="blur" listener="#{changementUniteB.findByCode()}" update=":frm"/>
+					</p:inputText>
+					<h:outputLabel value="Noms" />
+					<p:inputText id="txtNom" value="#{changementUniteB.employe.nom}" readonly="true"  style="width:170px"/>
+					<p:inputText  id="txtPrenom"  value="#{changementUniteB.employe.prenom}" readonly="true"  style="width:170px"/>
+			        <p:commandButton value="..."  update="tab" action="#{changementUniteB.clear2()}" oncomplete="PF('dlg').show()" />
+	    </h:panelGrid>
+	    <h:panelGrid columns="2" style="margin-left:50px" cellpadding="5">
+        			<p:selectOneRadio id="city" value="#{changementUniteB.action}"  layout="grid" columns="1"  valueChangeListener="#{changementUniteB.changePanel}" >
+            			<f:selectItems value="#{changementUniteB.actes}" var="c" />
+            			<p:ajax event="click" update=":frm"/>
+        			</p:selectOneRadio>
+    	 </h:panelGrid>
+	     </h:panelGrid>
+	     <h:panelGrid columns="4" cellpadding="5" >
+			        <h:outputLabel value="Niveau Hierarchique" />
+			        <p:inputText id="txtNiveau" value="#{changementUniteB.employe.detailOrgane.organe.niveau.designation}" size="30"  readonly="true"/>
+			        <h:outputLabel value="Organe" />
+			        <p:inputText id="txtOrgane" value="#{changementUniteB.employe.detailOrgane.organe.designation}"  size="30" readonly="true"/>
+			        <h:outputLabel value="Profession"/>
+			        <p:inputText id="txtProfession" value="#{changementUniteB.employe.detailProfession.profession.designation}" size="30"  readonly="true"/>
+			        <h:outputLabel value="lieu de travail" />
+			        <p:inputText id="txtlieu" value="#{changementUniteB.employe.lieuTravail.designation}"  size="30" readonly="true"/>
+			        <h:outputLabel value="Catégorie" />
+			        <p:inputText id="txtcategorie" value="#{changementUniteB.employe.detailEchelon.echellon.grade.categorie.designation}"  size="30" readonly="true"/>
+			        <h:outputLabel value="Grade" />
+			        <p:inputText id="txtgrade" value="#{changementUniteB.employe.detailEchelon.echellon.grade.designation}"  size="30" readonly="true"/>
+			        <h:outputLabel value="Echellon" />
+			        <p:inputText id="txtechellon" value="#{changementUniteB.employe.detailEchelon.echellon.designation}"  size="30" readonly="true"/>
+	     </h:panelGrid> 
+	     <p:separator><b></b></p:separator>
+	  	 <h:panelGrid columns="1">
+	     <h:panelGrid columns="2">
+	        <p:outputLabel value="Niveau" />
+			<p:selectOneMenu value="#{changementUniteB.idNiveau}" id="txtNiv"  valueChangeListener="#{changementUniteB.changeNiveau}" style="width:250px">
+				<f:selectItem itemLabel="Séléctionner le niveau" itemValue="0" noSelectionOption="true" />
+				<f:selectItems value="#{changementUniteB.listNiveau}" />
+				<p:ajax event="itemSelect"  update="txtOrg,txtNiv" />
+			</p:selectOneMenu>
+	        <h:outputLabel value="Nouvelle Organe"/>
+	        <p:selectOneMenu value="#{changementUniteB.idOrgane}" id="txtOrg" valueChangeListener="#{changementUniteB.changeOrgane}"  style="width:250px">
+				<f:selectItem itemLabel="Séléctionner l'organe" itemValue="0" noSelectionOption="true" />
+				<f:selectItems value="#{changementUniteB.listOrgane}"/>
+				<p:ajax event="itemSelect"  update="txtOrg" />
+			</p:selectOneMenu>
+			 <h:outputLabel value="Date "/>
+		  	 <p:inputMask id="txtDateD" value="#{changementUniteB.dateUniteS}" mask="99/99/9999" size="20" >
+					<p:ajax event="blur" listener="#{changementUniteB.changeDateUnite()}" update="txtDateD" />	
+			</p:inputMask>
+			<h:outputLabel value="Observation"/>
+			<p:inputTextarea value="#{changementUniteB.observation}" style="width:500px"/>
+	     </h:panelGrid>
+	     </h:panelGrid>
+	      <h:panelGrid columns="3">
+			         <p:commandButton value="Enregistrer" action="#{changementUniteB.save()}" icon="ui-icon-disk" update=":frm"/> 
+			         <p:commandButton value="Supprimer"  action="#{changementUniteB.delete()}" icon="ui-icon-trash" update=":frm">
+					 <p:confirm header="Confirmation" message="Voulez-vous supprimer ce service?" icon="ui-icon-alert" />
+				 </p:commandButton>
+		        
+		</h:panelGrid>
+
+	
+	<p:dialog header="Values" resizable="false" showEffect="fade" widgetVar="dlg">
+		
+		<h:panelGrid columns="6">
+			
+			<h:outputText value="Code" />
+			<p:inputText id="SCode" value="#{changementUniteB.codeEmployeRecherche}" style="width:250px" />
+			<h:outputText value="SNom" />
+			<p:inputText value="#{changementUniteB.nomEmployeRecherche}" style="width:250px" />
+			<h:outputText value="SPrénom" />
+			<p:inputText value="#{changementUniteB.prenomEmployeRecherche}" style="width:250px" />
+			<p:spacer width="1" height="1" />
+			<p:commandButton value="Rechercher" action="#{changementUniteB.chargerEmploye()}" update=":frm:tab" style="width:260px" />
+		</h:panelGrid>
+					 
+        <p:panelGrid id="output" columns="2" columnClasses="label, value" style="width:950px">
+        <p:dataTable value="#{changementUniteB.listEmploye}" var="empl" selectionMode="single" id="tab" selection="#{changementUniteB.selection}"
+							rowKey="#{empl.id}" scrollable="true" scrollHeight="150">
+		<p:ajax event="rowDblselect" listener="#{changementUniteB.onRowselected1}" update=":frm"/>
+		          
+					<p:column headerText="Nom">
+						<h:outputText value="#{empl.nom}" />
+					</p:column>
+					<p:column headerText="Prénom">
+						<h:outputText value="#{empl.prenom}" />
+					</p:column>
+					<p:column headerText="profession">
+						<h:outputText value="#{empl.detailProfession.profession.designation}" />
+					</p:column>
+					<p:column headerText="Lieu de Travail">
+						<h:outputText value="#{empl.lieuTravail.designation}" />
+					</p:column>
+					<p:column headerText="Catégorie">
+						<h:outputText value="#{empl.detailEchelon.echellon.grade.categorie.designation}" />
+					</p:column>
+					<p:column headerText="Grade">
+						<h:outputText value="#{empl.detailEchelon.echellon.grade.designation}" />
+					</p:column>
+					<p:column headerText="Echellon">
+						<h:outputText value="#{empl.detailEchelon.echellon.designation}" />
+					</p:column>
+					<p:column headerText="Niveau Hierarchique">
+						<h:outputText value="#{empl.detailOrgane.organe.niveau.designation}" />
+					</p:column>
+					<p:column headerText="Organe">
+						<h:outputText value="#{empl.detailOrgane.organe.designation}" />
+					</p:column>
+		</p:dataTable>
+           
+        </p:panelGrid>
+
+	
+    </p:dialog>
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+		        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+	</h:form>
+
+  </body>
+ </ui:define>
+</ui:composition>

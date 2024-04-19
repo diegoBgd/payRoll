@@ -1,0 +1,244 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frmRtr" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<p:blockUI block="frmRtr" trigger="btnSave"/>
+			<f:metadata>
+					<f:event  type="preRenderView"  listener="#{authenticite.demandeAnticipeRetraite()}" />
+				</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+
+							<div class="ui-g-12 ui-md-6">
+								<p:commandButton value="Recherche" icon="fa fa-search"
+									onclick="PF('dlgDmd').show();" />
+							</div> 
+						</div>
+					</div>
+
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+						<p:panelGrid columns="9"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Employé" />
+							<p:inputText id="txtcode"
+								value="#{demandeRetraiteAnticipeB.code}">
+								<p:ajax event="blur"
+									listener="#{demandeRetraiteAnticipeB.findByCode()}"
+									update=":frmRtr" />
+							</p:inputText>
+
+							<p:inputText id="txtNom"
+								value="#{demandeRetraiteAnticipeB.employe.nomPrenom}"
+								readonly="true" />
+							<p:commandButton value="..." oncomplete="PF('dlg').show()"></p:commandButton>
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+							<h:outputLabel value="Personnel" />
+							<p:inputText id="txtPersonnel"
+								value="#{demandeRetraiteAnticipeB.personel}"
+								readonly="true" />
+							<h:outputLabel value="Catégorie" />
+							<p:inputText id="txtCategorie"
+								value="#{demandeRetraiteAnticipeB.categorie}"
+								readonly="true" />
+							<h:outputLabel value=" Grade " />
+							<p:inputText id="txtGrade" readonly="true"
+								value="#{demandeRetraiteAnticipeB.grade}" />
+
+							<h:outputLabel value=" Niveau formation " />
+							<p:inputText id="txtNv" readonly="true"
+								value="#{demandeRetraiteAnticipeB.niveauFrm}" />
+
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Date demande" />
+							<p:inputMask id="txtDateDem"
+								value="#{demandeRetraiteAnticipeB.dateDemandeS}"
+								mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{demandeRetraiteAnticipeB.changeDateDemande()}"
+									update="txtDateDem" />
+							</p:inputMask>
+							<h:outputLabel value="Date entrée en fonction" />
+							<p:inputMask id="txtDateEnt"
+								value="#{demandeRetraiteAnticipeB.employe.dateEntreS}" 
+								mask="99/99/9999" readonly="true"/>
+							<h:outputText value="Ancienneté" />
+							<p:inputNumber value="#{demandeRetraiteAnticipeB.anciennette}" 
+								decimalPlaces="0" inputStyle="text-align:right"/>
+							<h:outputLabel value="Date début Retraite" />
+							<p:inputMask id="txtDateDebu"
+								value="#{demandeRetraiteAnticipeB.dateDebutRetraiteS}"
+								mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{demandeRetraiteAnticipeB.changeDateDebutRetraite()}"
+									update="txtDateDem" />
+							</p:inputMask>
+							
+							<p:outputLabel value="Age"/>
+							<p:inputNumber value="#{demandeRetraiteAnticipeB.age}" readonly="true" 
+								decimalPlaces="0" inputStyle="text-align:right"/>
+							
+							<p:outputLabel value="Motif" />
+							<p:selectOneMenu id="txtMotif" autoWidth="false"
+								value="#{demandeRetraiteAnticipeB.idMotifDemande}"
+								valueChangeListener="#{demandeRetraiteAnticipeB.changeMotif}">
+								<p:ajax event="itemSelect" update="txtMotif" />
+							
+								<f:selectItems
+									value="#{demandeRetraiteAnticipeB.listMotif}" />
+							</p:selectOneMenu>
+						</p:panelGrid>
+					</div>
+
+					<p:dialog header="Recherche employé" widgetVar="dlg" modal="true"
+						height="450" width="900" resizable="true" draggable="true"
+						responsive="true">
+
+						<div class="ui-g card">
+							
+							<div class="ui-g-12 ui-md-2">
+								<h:outputLabel value="Recherche par nom" />
+							</div>
+							<div class="ui-g-12 ui-md-4">
+								<p:inputText
+									value="#{demandeRetraiteAnticipeB.nomEmployeRecherche}" />
+							</div>
+							
+							<div class="ui-g-12 ui-md-1"></div>
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton value="Rechercher"
+									action="#{demandeRetraiteAnticipeB.chargerEmploye()}"
+									update=":frmRtr:tab" />
+							</div>
+
+						
+
+						<p:dataTable value="#{demandeRetraiteAnticipeB.listEmploye}"
+							var="empl" selectionMode="single" id="tab"
+							selection="#{demandeRetraiteAnticipeB.selection}"
+							rowKey="#{empl.id}" reflow="true" scrollHeight="300" scrollable="true">
+							<p:ajax event="rowDblselect"
+								listener="#{demandeRetraiteAnticipeB.onRowselected1}"
+								update=":frmRtr" />
+
+							<p:column headerText="Code" width="10%">
+								<h:outputText value="#{empl.code}" />
+							</p:column>
+							
+							<p:column headerText="Nom et prenom">
+								<h:outputText value="#{empl.nomPrenom}" />
+							</p:column>
+						</p:dataTable>
+						</div>
+					</p:dialog>
+
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" disabled="#{demandeRetraiteAnticipeB.disableSave}"
+								action="#{demandeRetraiteAnticipeB.enregistrerDemande()}"
+								update=":frmRtr" />
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+								value="Supprimer"
+								action="#{demandeRetraiteAnticipeB.supprimer()}" update=":frmRtr"
+								styleClass="orange-btn">
+								
+								<p:confirm header="Confirmation"
+												message="Voulez-vous supprimer cet élément ?"
+												icon="ui-icon-alert" />
+												
+							</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser"
+								action="#{demandeRetraiteAnticipeB.initialiser()}" update=":frmRtr" />
+						</div>
+
+					</div>
+
+
+				</div>
+			</div>
+		</h:form>
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+		<p:dialog widgetVar="dlgDmd" header="Liste des demamndes"
+			width="70%" height="40%" position="center" responsive="true">
+			<h:form id="frmRtrDmd">
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+						
+						<div class="ui-g">
+							
+							<div class="ui-g-12 ui-md-4">
+							<p:commandButton id="btnChrg" icon="ui-icon ui-icon-refresh"
+								value="Charger"
+								action="#{demandeRetraiteAnticipeB.chargement()}"
+								update="tbdema"/>
+							</div>
+							<div class="ui-g-12 ui-md-8"/>
+							
+							<p:dataTable id="tbdema" var="dema"
+								value="#{demandeRetraiteAnticipeB.listDemande}"
+								rowKey="#{dema.id}" selectionMode="single"
+								selection="#{demandeRetraiteAnticipeB.selected}"
+								paginator="true" paginatorAlwaysVisible="false"
+								paginatorPosition="bottom" rows="10">
+
+								<p:ajax event="rowSelect"
+									listener="#{demandeRetraiteAnticipeB.onRowSelected}"
+									update=":frmRtr" />
+
+								<p:column headerText="Employé" width="50%">
+									<h:outputText value="#{dema.employe.nomPrenom}" />
+								</p:column>
+								<p:column headerText="Date Demande">
+									<h:outputText value="#{dema.dateDemandeS}" />
+								</p:column>
+								<p:column headerText="ancienneté">
+									<h:outputText value="#{dema.anciennette}" />
+								</p:column>
+								<p:column headerText="Date de retraite">
+									<h:outputText value="#{dema.dateDebutRetraiteS}" />
+								</p:column>
+								
+							</p:dataTable>
+						</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

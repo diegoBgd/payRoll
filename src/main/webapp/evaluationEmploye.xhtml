@@ -1,0 +1,327 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<body>
+			<h:form id="frm"
+				onkeypress="if (event.keyCode == 13) { return false; }">
+
+				<p:blockUI block="frm" trigger="btnSave" />
+				<p:growl id="msgs" showDetail="true" />
+				<f:metadata>
+					<f:event listener="#{authenticite.premierEvaluation()}"
+						type="preRenderView" />
+				</f:metadata>
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card no-margin">
+
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-7,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="background-color:transparent;">
+								<h:outputLabel value="Employé" />
+								<p:inputText id="txtcode" value="#{evaluationEmployeB.code}"
+									autocomplete="off">
+									<p:ajax event="blur"
+										listener="#{evaluationEmployeB.findByCode()}" update=":frm" />
+								</p:inputText>
+
+								<p:inputText id="txtNom"
+									value="#{evaluationEmployeB.employe.nomPrenom}" readonly="true" />
+								<p:commandButton icon="fa fa-search" oncomplete="PF('dlg').show()" 
+								style="border-radius:10px" />
+							</p:panelGrid>
+
+							
+
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-2,ui-grid-col-3"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="background-color:transparent;">
+								<h:outputLabel value="Date évaluation" />
+								<p:inputMask id="txtDateE"
+									value="#{evaluationEmployeB.dateEvaluationS}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{evaluationEmployeB.changeDateEvaluation()}"
+										update=":frm" />
+								</p:inputMask>
+								<h:outputLabel value="Année à évaluer" />
+								<p:inputMask mask="9999"
+									value="#{evaluationEmployeB.anneeValidite}">
+									
+								</p:inputMask>
+								
+							</p:panelGrid>
+						</div>
+
+						<div class="ui-g card">
+						<p:tabView id="evalu">
+						<p:tab id="tab1" title="Evaluation">
+							<p:dataTable var="detail"
+								value="#{evaluationEmployeB.listDetailEvaluation}"
+								id="tabl"
+								rowKey="#{detail.id}" paginator="true" reflow="true"
+								paginatorAlwaysVisible="false" paginatorPosition="bottom"
+								rows="10">
+								<f:facet name="header">
+		          					 Tableau d'évaluation
+		       			 </f:facet>
+
+
+
+								<p:columnGroup type="header">
+
+									<p:row>
+
+										<p:column rowspan="2" headerText="Critères " />
+										<p:column rowspan="2" headerText="Elément à évaluer" />
+										<p:column colspan="2" headerText="Appréciation " width="20%" />
+										<p:column rowspan="2" headerText="L'élément considéré "
+											width="10%" />
+									</p:row>
+									<p:row>
+										<p:column headerText="Note obtenu" width="10%" />
+										<p:column headerText="Note pondérale" width="10%" />
+									</p:row>
+								</p:columnGroup>
+
+
+								<p:column groupRow="true">
+									<h:outputText
+										value="#{detail.detailCritere.critere.designation}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{detail.detailCritere.designation}" />
+								</p:column>
+								<p:column>
+									<h:inputText id="txtNote" value="#{detail.noteObtenueS}"
+										style="width:90%;text-align:right"
+										disabled="#{detail.disable}">
+										<p:ajax event="blur" listener="#{detail.changeNote()}"
+											update=":frm:calcul,txtNote,:frm:msgs" />
+									</h:inputText>
+								</p:column>
+								<p:column>
+									<h:outputText value="#{detail.detailCritere.noteS}" />
+
+								</p:column>
+								<p:column>
+									<p:selectBooleanCheckbox value="#{detail.applicable}">
+										<p:ajax update=":frm:calcul,txtNote"
+											listener="#{detail.changeApplicable()}" />
+									</p:selectBooleanCheckbox>
+								</p:column>
+
+
+							</p:dataTable>
+							</p:tab>
+							<p:tab id="tab2" title="Avancement">
+							<div class="card no-margin" >
+							
+								<h5 style="margin-top: 2px">Avancement de traitement</h5>
+								<p:panelGrid columns="4"
+									columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									<h:outputLabel value="Taux Augmentation (%)" />
+									<p:inputNumber id="txtTauxAugm"
+										value="#{evaluationEmployeB.tauxAvSal}"
+										readonly="true" inputStyle="text-align:right" />
+										 				
+									<h:outputLabel value="Ancien Salaire de Base" />
+									<p:inputNumber id="txtAncSal" inputStyle="text-align:right" 
+														decimalPlaces="0"
+										value="#{evaluationEmployeB.ancienSalaire}"
+										readonly="true" />
+									<h:outputLabel value="Nouveau Salaire de Base" />
+									<p:inputNumber id="txtNouvSal" 
+														decimalPlaces="0"
+										value="#{evaluationEmployeB.nvSalaire}"
+										readonly="true" inputStyle="text-align:right"/>
+									<h:outputLabel value="Date debut salaire" />
+									<p:inputMask id="txtdatetr" mask="99/99/9999"
+										value="#{evaluationEmployeB.dateApplicationS}">
+										<p:ajax event="blur"
+											listener="#{evaluationEmployeB.changeDateApplication()}"
+											update="txtdatetr" />
+									</p:inputMask>
+								</p:panelGrid>
+							
+							</div>
+							
+							<div class="card no-margin" >
+							
+							<h5 style="margin-top: 2px">Avancement grade</h5>
+								<p:panelGrid columns="2"
+									columnClasses="ui-grid-col-2,ui-grid-col-6"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="background-color:transparent;">
+									
+									<h:outputLabel value="Nouveau grade" />
+									<p:inputText id="txtNvgrd"
+										value="#{evaluationEmployeB.nouveauGrad}"
+										readonly="true" />
+										
+									<h:outputLabel value="Salaire du Nouveau grade" />
+									<p:inputNumber id="txtNvSal"
+										value="#{evaluationEmployeB.nvSalaire}" inputStyle="text-align:right"
+										readonly="true"  decimalPlaces="0"/>
+									
+								</p:panelGrid>
+								</div>
+								
+						<div class="card no-margin" >
+							
+							<h5 style="margin-top: 2px">Cotations précédantes</h5>
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+										<p:dataTable 
+											value="#{evaluationEmployeB.listCotation}" var="det"
+											id="tblP" rowKey="#{det.id}" emptyMessage="">
+
+											<p:column headerText="Date" style="width:10%">
+												<p:outputLabel value="#{det.dateEvaluationS}" />
+											</p:column>
+											<p:column headerText="Mérite" width="20%">
+												<p:outputLabel value="#{det.typeNotation.designation}" />
+											</p:column>
+											<p:column headerText="Appréciation" width="20%">
+												<p:outputLabel value="#{det.typeAppreciation.designation}" />
+											</p:column>
+
+										</p:dataTable>
+									</div>
+								</div>
+							</div>		
+						</p:tab>
+							</p:tabView>
+						</div>
+
+						<div class="card no-margin">
+							<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="background-color:transparent;" id="calcul">
+								<h:outputLabel value="Total Obtenue" />
+								<p:inputText id="txtTot"
+									value="#{evaluationEmployeB.noteEvaluationS} / #{evaluationEmployeB.noteGeneraleS}"
+									readonly="true" />
+								<h:outputLabel value="Pourcentage" />
+								<p:inputText id="txtPourc"
+									value="#{evaluationEmployeB.pourcentageS} %" readonly="true" />
+								<h:outputLabel value="Notation" />
+								<p:selectOneMenu id="txtNot"
+									value="#{evaluationEmployeB.idTypeNotation}" disabled="true" 
+									valueChangeListener="#{evaluationEmployeB.changeNotation}">
+									<p:ajax event="itemSelect" update="txtNot" />
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItems value="#{evaluationEmployeB.listTypeNotation}" />
+								</p:selectOneMenu>
+								<h:outputLabel value="Appréciation" />
+								<p:selectOneMenu id="txtAppr"
+									value="#{evaluationEmployeB.idAppreciation}"
+									valueChangeListener="#{evaluationEmployeB.changeAppreciation}">
+									<p:ajax event="itemSelect" update=":frm" />
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItems
+										value="#{evaluationEmployeB.listAppreciationAvancement}" />
+								</p:selectOneMenu>
+							</p:panelGrid>
+							
+
+						</div>
+
+						<div class="ui-g card">
+							<div class="ui-g-12 ui-md-1"/>
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								    style="border-radius:10px"
+									value="Enregistrer" disabled="#{evaluationEmployeB.disableSave}"
+									action="#{evaluationEmployeB.enregistrer()}" update=":frm" />
+							</div>
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+									value="Supprimer" style="border-radius:10px"									
+									action="#{evaluationEmployeB.supprimer()}" update=":frm"
+									styleClass="orange-btn">
+									<p:confirm header="Confirmation" disabled="#{evaluationEmployeB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+									</p:commandButton>
+							</div>
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+									value="Initialiser" style="border-radius:10px"
+									action="#{evaluationEmployeB.initialiser()}" update=":frm" />
+							</div>
+
+						</div>
+
+
+					</div>
+
+
+				</div>
+
+			</h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			<p:dialog header="Recherche employé" widgetVar="dlg" modal="true"
+				height="400" width="900" resizable="true" draggable="true"
+				responsive="true">
+				<h:form id="frmRech">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-6,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+									
+									<h:outputLabel value="Recherche par nom" />
+									<p:inputText value="#{evaluationEmployeB.nomEmployeRecherche}"/>
+									
+									<p:commandButton value="Rechercher" style="border-radius:10px"
+												action="#{evaluationEmployeB.chargerEmploye()}" update="tab" />
+								</p:panelGrid>
+								
+
+
+								<p:dataTable value="#{evaluationEmployeB.listEmploye}"
+									var="empl" selectionMode="single" id="tab"
+									selection="#{evaluationEmployeB.selection}" rowKey="#{empl.id}"
+									scrollable="true" scrollHeight="200" emptyMessage="">
+									<p:ajax event="rowDblselect"
+										listener="#{evaluationEmployeB.onRowselected1}" update=":frm" />
+
+									<p:column headerText="Matricule" width="20%">
+										<h:outputText value="#{empl.code}" />
+									</p:column>
+									<p:column headerText="Nom et prénom">
+										<h:outputText value="#{empl.nomPrenom}" />
+									</p:column>
+
+								</p:dataTable>
+
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+
+		</body>
+	</ui:define>
+
+</ui:composition>

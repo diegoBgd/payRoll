@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Directions</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{authenticite.OrganisationAcademique()}" />
+				</f:metadata>
+				<p:growl id="msg" life="21600" showDetail="true" sticky="false" />
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-fluid">
+						<div class="card no-margin">
+							<div class="ui-g">
+								
+								<div class="ui-g-4">
+									<h:outputText value="Code" />
+									<p:inputMask id="txtCode" value="#{conseilB.code}"
+										mask="99"/>
+										
+								</div>
+								<div class="ui-g-8">
+									<h:outputLabel value="Désignation" />
+									<p:inputText id="txtDes" value="#{conseilB.designation}"
+										maxlength="100" />
+								</div>								
+
+								<div class="ui-g-12">
+									<p:dataTable id="tblDet" var="det"
+										emptyMessage="Pas de données à afficher"
+										value="#{conseilB.listeDetail}" rowKey="#{det.roleMembreOrgane.id}"
+										selectionMode="single" selection="#{conseilB.detail}"
+										reflow="true" paginator="true" rows="5"
+										paginatorPosition="bottom" paginatorAlwaysVisible="false">
+										<p:ajax event="rowSelect"
+											listener="#{conseilB.affecterDetail()}"
+											update=":frm" />
+										<p:column headerText="Roles">
+											<h:outputText
+												value="#{det.roleMembreOrgane.code}   #{det.roleMembreOrgane.designation}" />
+										</p:column>
+										<p:column headerText="Fonctions">
+											<h:outputText
+												value="#{det.fonction.code}   #{det.fonction.designation}" />
+										</p:column>
+										<p:column headerText="Autre Désignation" >
+												<h:outputText value="#{det.designationAutre}"/>
+										</p:column>
+										<p:column headerText="Origine membre" >
+												<h:outputText value="#{det.designationAutre}"/>
+										</p:column>
+									</p:dataTable>
+								</div>
+								<div class="ui-g-12 ui-md-6">
+									<h:outputLabel value="Fonction" />
+									<p:selectOneMenu id="smFonction"
+										value="#{conseilB.idFonction}"
+										valueChangeListener="#{conseilB.changeFonction}"
+										autoWidth="false" filter="true" filterMatchMode="contains">
+										<f:selectItems value="#{conseilB.listeFonction}" />
+										<p:ajax event="itemSelect" update=":frm:smFonction" />
+									</p:selectOneMenu>
+								</div>
+								<div class="ui-g-12  ui-md-6">
+									<h:outputLabel value="Role membre" />
+									<p:selectOneMenu id="smRole"
+										value="#{conseilB.idRole}"
+										valueChangeListener="#{conseilB.changeRole}"
+										autoWidth="false">
+										<f:selectItems value="#{conseilB.listeRoleMembre}" />
+										<p:ajax event="itemSelect" update=":frm:smRole" />
+									</p:selectOneMenu>
+								</div>
+								<div class="ui-g-12  ui-md-6">
+									<h:outputLabel value="Orignine membre" />
+									<p:inputText value="#{conseilB.origineMembreDetail}"/> 
+								</div>
+								<div class="ui-g-12  ui-md-6">
+									<h:outputLabel value="Nombre" />
+									<p:inputText value="#{conseilB.nombreDetail}"/> 
+								</div>
+								<div class="ui-g-12  ui-md-6">
+									<h:outputLabel value="Désigantion autre membre" />
+									<p:inputText value="#{conseilB.designationAutreDetail}"/> 
+								</div>
+								<div class="ui-g-12 ui-md-3" />
+								<div class="ui-g-12 ui-md-3" />
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton value="Ajouter" icon="fa fa-plus"
+										action="#{conseilB.ajouterDetail()}"
+										update=":frm,:frm:tblDet" />
+								</div>
+								<div class="ui-g-12 ui-md-3">
+									<p:commandButton value="Enlever" icon="fa fa-minus"
+										action="#{conseilB.enleverDetail()}"
+										update=":frm,:frm:tblDet" />
+								</div>
+								<div class="ui-g-12 ui-md-3" />
+							</div>
+							
+						</div>
+					</div>
+					<div class="ui-g-12 ui-fluid card">
+						<div class="ui-g-4">
+							<p:commandButton value="Enregistrer"
+								action="#{conseilB.enregistrer()}" icon="ui-icon-disk"
+								update=":frm,:frm:tblDet" />
+						</div>						
+						<div class="ui-g-4">
+							<p:commandButton value="Supprimer"
+								onclick="if (!confirm('Voulez-vous vraiment Supprimer?')) return false"
+								icon="ui-icon-trash" action="#{conseilB.supprimer()}"
+								update=":frm,:frm:msg,:frm:tblDet"
+								styleClass="orange-btn" />
+						</div>	
+						<div class="ui-g-4">
+							<p:commandButton value="Initialiser"
+								action="#{conseilB.initialiser()}"
+								icon="ui-icon ui-icon-refresh"
+								update=":frm,:frm:msg,:frm:tblDet" />
+						</div>					
+					</div>
+					<div class="ui-g-12 ui-fluid card no-margin">
+						<p:dataTable id="tbl" var="dir"
+							value="#{conseilB.listeConseil}" rowKey="#{dir.id}"
+							selectionMode="single" selection="#{conseilB.selected}"
+							reflow="true" paginator="true" rows="20"
+							paginatorPosition="bottom" paginatorAlwaysVisible="false">
+							<p:ajax event="rowSelect" listener="#{conseilB.onRowSelected}"
+								update=":frm,:frm:tblDet" />
+
+							<p:column headerText="Code" style="width:100px;">
+								<h:outputText value="#{dir.code}" />
+							</p:column>
+							<p:column headerText="Désignation">
+								<h:outputText value="#{dir.designation}" />
+							</p:column>
+
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+			
+		</body>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm">
+			<f:metadata>
+				<f:event listener="#{authenticite.parametrage()}" type="preRenderView"/>
+			</f:metadata>
+			<p:growl id="msgs" showDetail="true" life="21600"/>
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-g-12 ui-fluid content-form">
+					<div class="card">
+						<div class="ui-g">
+						
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Code" />
+								<p:inputText id="txtCode" value="#{natureCongeB.code}" size="30" autocomplete="off">
+									<p:ajax event="blur" listener="#{natureCongeB.changeCode()}"
+										update=":frm" />
+								</p:inputText>
+							</div>
+							
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Désignation" />
+								<p:inputText id="txtDes" value="#{natureCongeB.designation}" autocomplete="off"/>
+							</div>
+						
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Numéro référence document"/>
+								<p:inputText id="txtRef" value="#{natureCongeB.numReferenceDecision}"/>								
+							</div>
+							
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Date décision"/>
+								<p:inputMask id="txtDatDeb" value="#{natureCongeB.dateDecisionS}" mask="99/99/9999">
+		     						<p:ajax event="change" listener="#{natureCongeB.changeDateDebutDecision()}" update="txtDatDeb"/>
+		     					</p:inputMask>
+							</div>
+							
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Date fin décision"/>
+								<p:inputMask id="txtDatFin" value="#{natureCongeB.dateFinDecisionS}" mask="99/99/9999">
+		     						<p:ajax event="change" listener="#{natureCongeB.changeDateFinDecision()}" update="txtDatFin"/>
+		     					</p:inputMask>	
+							</div>
+						
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Personnel" />
+								<p:selectOneMenu id="txtPerson" value="#{natureCongeB.idPersonnel}"
+									valueChangeListener="#{natureCongeB.changePersonnel}" autoWidth="false">																
+									<f:selectItems value="#{natureCongeB.listPersonnel}" />
+									<p:ajax event="itemSelect" />		
+								</p:selectOneMenu>
+							</div>
+							
+							
+							
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Jours considerés" />
+								<p:selectOneMenu id="txtNiveau"
+									value="#{natureCongeB.joursConge}" autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItem itemLabel="Jours Ouvrables" itemValue="1" />
+									<f:selectItem itemLabel="Toute la semaine" itemValue="2" />
+								</p:selectOneMenu>
+							</div>
+							
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Nombre Jours Congés" />
+								<p:inputNumber id="txtNbreJA"
+									value="#{natureCongeB.nombreJoursAnnuel}"
+									thousandSeparator="&nbsp;" decimalPlaces="0" />
+							</div>
+
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Nombre Jours Max" />
+								<p:inputNumber id="txtNbreJM" value="#{natureCongeB.dureeMax}"
+									thousandSeparator="&nbsp;" decimalPlaces="0" />
+							</div>
+							
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Type Congé" />
+								<p:selectOneMenu id="txtType" value="#{natureCongeB.idType}"
+									valueChangeListener="#{natureCongeB.chargerTypeConge}"
+									autoWidth="false">
+									<p:ajax event="itemSelect" update="txtType" />
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItems value="#{natureCongeB.listTypeConge}" />
+								</p:selectOneMenu>
+							</div>
+
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="Ajouter(jours)" />
+								<p:inputText value="#{natureCongeB.nombreJoursAjoutes}" />
+							</div>
+
+							<div class="ui-g-12 ui-md-4">
+								<p:outputLabel value="après(ans)" />
+								<p:inputText value="#{natureCongeB.nombreAnneesAjoutJour}" />
+							</div>
+
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer" action="#{natureCongeB.enregistrer()}"
+									update=":frm" />
+							</div>
+
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+									value="Supprimer" action="#{natureCongeB.supprimer()}"
+									onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+									update=":frm" styleClass="orange-btn" />
+							</div>
+
+							<div class="ui-g-4 ui-md-4">
+								<p:commandButton icon="fa fa-refresh" value="Initialiser"
+									action="#{natureCongeB.initialiser()}" update=":frm" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-g-12 ui-fluid content-form">
+					<div class="card">
+						<p:dataTable id="tbl" var="typ"
+							value="#{natureCongeB.natureConges}" rowKey="#{typ.id}"
+							selectionMode="single" selection="#{natureCongeB.selected}"
+							reflow="true" rows="10" emptyMessage="Aucun élément enregistré" 
+							paginatorAlwaysVisible="false" paginatorPosition="bottom">
+
+							<p:ajax event="rowSelect"
+								listener="#{natureCongeB.onRowSelected}" update=":frm" />
+						
+
+							<p:column headerText="Code" width="8%">
+								<h:outputText value="#{typ.code}" />
+							</p:column>
+
+							<p:column headerText="Désignation">
+								<h:outputText value="#{typ.designation}" />
+							</p:column>
+
+							<p:column headerText="nbre jours annuel" width="10%">
+								<h:outputText value="#{typ.nombreJoursAnnuel}" />
+							</p:column>
+										
+							<p:column headerText="Réf. Document" width="20%">
+								<h:outputText value="#{typ.numReferenceDecision}" />
+							</p:column>
+							
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

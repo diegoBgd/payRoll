@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frmValidationDemandeConge"
+			onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.gestionConge()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:blockUI block="frmValidationDemandeConge" trigger="btnSave" />
+			<p:growl id="message" autoUpdate="true" showDetail="true"
+				sticky="true" />
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+					<div class="card">
+						<div class="ui-g">
+
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Liste des demandes encours"
+									icon="fa fa-search"
+									action="#{saisieDemandeCongeB.initialiser()}"
+									style="border-radius:10px"
+									oncomplete="PF('rechercheDialog').show();" />
+							</div>
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Liste des congés traités"
+									icon="fa fa-search" style="border-radius:10px"
+									action="#{saisieDemandeCongeB.initialiser()}"
+									oncomplete="PF('rechercheDialog1').show();" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="card no-margin">
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							<h:outputLabel value="Employé" />
+							<p:inputText id="txtcode" value="#{saisieDemandeCongeB.code}">
+								<p:ajax event="blur"
+									listener="#{saisieDemandeCongeB.findByCode()}"
+									update=":frmValidationDemandeConge" />
+							</p:inputText>
+
+							<p:inputText id="txtNom"
+								value="#{saisieDemandeCongeB.employe.nomPrenom}" readonly="true" />
+
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+
+
+						</p:panelGrid>
+
+						<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+
+							<p:outputLabel value="Type Congé" />
+							<p:selectOneMenu id="txtType"
+								value="#{saisieDemandeCongeB.idType}"
+								valueChangeListener="#{saisieDemandeCongeB.chargerTypeConge}"
+								autoWidth="false">
+								<p:ajax event="itemSelect" update="txtType" />
+								<f:selectItems value="#{parametrageDureeCongeB.listTypeConge}" />
+							</p:selectOneMenu>
+
+						</p:panelGrid>
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+
+
+							<p:outputLabel value="Nbr jours par an" />
+							<p:inputNumber id="txtJrDu"
+								value="#{saisieDemandeCongeB.jourCongeAnnuelDu}" readonly="true"
+								inputStyle="text-align:right" thousandSeparator="&nbsp;"
+								decimalPlaces="0" />
+
+							<p:outputLabel value="Nbr de jours déjà pris" />
+							<p:inputNumber id="txtJrPris"
+								value="#{saisieDemandeCongeB.jourCongeAnnuelPris}"
+								readonly="true" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" decimalPlaces="0" />
+
+							<p:outputLabel value="Date Debut" />
+							<p:inputMask id="txtDateD"
+								value="#{saisieDemandeCongeB.dateDebutS}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{saisieDemandeCongeB.changeDateDebut()}"
+									update="txtDateD,:frmValidationDemandeConge" />
+							</p:inputMask>
+
+							<p:outputLabel value="Solde (en jours)" />
+							<p:inputNumber id="txtSolde" value="#{saisieDemandeCongeB.solde}"
+								readonly="true" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" decimalPlaces="0" />
+
+							<p:outputLabel value="Date fin" />
+							<p:inputMask id="txtDateF"
+								value="#{saisieDemandeCongeB.dateFinS}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{saisieDemandeCongeB.changeDateFin()}"
+									update="txtDateF" />
+							</p:inputMask>
+
+							<p:outputLabel value="Nbr de jrs demandés" />
+							<p:inputNumber value="#{saisieDemandeCongeB.duree}" id="txtDuree"
+								inputStyle="text-align:right" thousandSeparator="&nbsp;"
+								decimalPlaces="0" readonly="true" />
+
+							<p:outputLabel value="Décision" />
+							<p:selectOneMenu id="txtDecis"
+								value="#{saisieDemandeCongeB.decision}"
+								valueChangeListener="#{saisieDemandeCongeB.changeDecision}">
+								<f:selectItem itemLabel=" " itemValue="1" />
+								<f:selectItem itemLabel="Accordé" itemValue="2" />
+								<f:selectItem itemLabel="Refusé" itemValue="3" />
+
+								<p:ajax event="itemSelect" update="txtDecis,textMotifRefus" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Date décision " />
+							<p:inputMask id="txtDateDec"
+								value="#{saisieDemandeCongeB.dateDecisionS}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{saisieDemandeCongeB.changeDateDecision()}"
+									update="txtDateDec" />
+							</p:inputMask>
+						</p:panelGrid>
+
+						<p:panelGrid id="textMotifRefus" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+
+
+							<p:outputLabel value="Motif" />
+							<p:inputTextarea id="txtMotif"
+								disabled="#{saisieDemandeCongeB.disableMotif}"
+								value="#{saisieDemandeCongeB.motif}" />
+
+						</p:panelGrid>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer" style="border-radius:10px"
+									action="#{saisieDemandeCongeB.saveDecision()}"
+									update=":frmValidationDemandeConge" />
+							</div>
+
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+									style="border-radius:10px" value="Annuler"
+									action="#{saisieDemandeCongeB.annuler()}"
+									update=":frmValidationDemandeConge" styleClass="orange-btn">
+
+									<p:confirm header="Confirmation"
+										message="Voulez-vous vraiement annuler ?" icon="ui-icon-alert" />
+
+
+								</p:commandButton>
+							</div>
+
+							<div class="ui-g-4 ui-md-3">
+								<p:commandButton icon="fa fa-refresh" value="Initialiser"
+									action="#{saisieDemandeCongeB.initialiser()}"
+									style="border-radius:10px" update=":frmValidationDemandeConge" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<p:dialog header="Employé" resizable="false" showEffect="fade"
+				widgetVar="dlg">
+
+				<h:panelGrid columns="2">
+
+					<h:outputText value="Code" />
+					<p:inputText id="SCode"
+						value="#{saisieDemandeCongeB.codeEmployeRecherche}"
+						style="width:250px" />
+					<h:outputText value="Nom" />
+					<p:inputText value="#{saisieDemandeCongeB.nomEmployeRecherche}"
+						style="width:250px" />
+					<h:outputText value="Prénom" />
+					<p:inputText value="#{saisieDemandeCongeB.prenomEmployeRecherche}"
+						style="width:250px" />
+					<p:spacer width="1" height="1" />
+					<p:commandButton value="Rechercher"
+						action="#{saisieDemandeCongeB.chargerEmploye()}"
+						update=":frmValidationDemandeConge:tab" style="width:260px" />
+				</h:panelGrid>
+
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable value="#{saisieDemandeCongeB.listEmploye}" var="empl"
+						selectionMode="single" id="tab"
+						selection="#{saisieDemandeCongeB.selection}" rowKey="#{empl.id}"
+						scrollable="true" scrollHeight="150">
+						<p:ajax event="rowDblselect"
+							listener="#{saisieDemandeCongeB.onRowselected1}"
+							update=":frmValidationDemandeConge" />
+
+						<p:column headerText="Code" width="10%">
+							<h:outputText value="#{empl.code}" />
+						</p:column>
+						<p:column headerText="Nom et prénom">
+							<h:outputText value="#{empl.nomPrenom}" />
+						</p:column>
+
+
+					</p:dataTable>
+
+				</p:panelGrid>
+
+
+			</p:dialog>
+
+
+		</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+		</h:form>
+		<p:dialog widgetVar="rechercheDialog" header="Demandes encours"
+			modal="true" appendTo="@(body)" width="980">
+			<h:form id="frmRecherche">
+
+
+				<h:panelGrid columns="2" style="margin:auto;text-align:center">
+					<p:commandButton value="Rechercher"
+						style="width:120px;border-radius:10px"
+						actionListener="#{saisieDemandeCongeB.findDemandeEncour()}"
+						update="tabDmd" />
+				</h:panelGrid>
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable value="#{saisieDemandeCongeB.listSaisieDemandeConge}"
+						var="dem" selectionMode="single" id="tabDmd"
+						selection="#{saisieDemandeCongeB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true"
+						emptyMessage="Aucun élément à afficher">
+
+						<p:ajax event="rowSelect"
+							listener="#{saisieDemandeCongeB.onRowselected}"
+							update=":frmValidationDemandeConge" />
+
+						<p:column headerText="Code" width="10%">
+							<h:outputText value="#{dem.employe.code}" />
+						</p:column>
+						<p:column headerText="Nom et Prénom">
+							<h:outputText value="#{dem.employe.nomPrenom}" />
+						</p:column>
+
+						<p:column headerText="Date Début">
+							<h:outputText value="#{dem.dateDebutS}" width="10%" />
+						</p:column>
+						<p:column headerText="Date Fin">
+							<h:outputText value="#{dem.dateFinS}" width="10%" />
+						</p:column>
+
+						<p:column headerText="Durée">
+							<h:outputText value="#{dem.duree}" width="5%" />
+						</p:column>
+					</p:dataTable>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="rechercheDialog1" header="Les congés traités"
+			modal="true" appendTo="@(body)" width="980">
+			<h:form id="frmValidation">
+				<p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-4"
+					layout="grid" styleClass="ui-panelgrid-blank"
+					style="background-color:transparent;">
+					<p:outputLabel value="Type de décision" />
+					<p:selectOneMenu id="txtTypDecis"
+						value="#{saisieDemandeCongeB.typeDecision}">
+
+						<f:selectItem itemLabel="" itemValue="1" />
+						<f:selectItem itemLabel="Accordé" itemValue="2" />
+						<f:selectItem itemLabel="Refusé" itemValue="3" />
+						<p:ajax event="itemSelect" update="txtTypDecis" />
+					</p:selectOneMenu>
+
+					<p:spacer />
+					<p:commandButton value="Rechercher"
+						style="width:120px;border-radius:10px"
+						actionListener="#{saisieDemandeCongeB.findDemandeConge()}"
+						update="tabVld" />
+				</p:panelGrid>
+
+				<p:panelGrid id="output" columns="2" columnClasses="label, value"
+					style="width:950px">
+					<p:dataTable value="#{saisieDemandeCongeB.listSaisieDemandeConge}"
+						var="dem" selectionMode="single" id="tabVld"
+						selection="#{saisieDemandeCongeB.selected}" rowKey="#{dem.id}"
+						rows="6" paginator="true" paginatorAlwaysVisible="false"
+						paginatorPosition="bottom" reflow="true"
+						emptyMessage="Aucun élément à afficher">
+
+						<p:ajax event="rowSelect"
+							listener="#{saisieDemandeCongeB.onValidRowSelected}"
+							update=":frmValidationDemandeConge" />
+
+						<p:column headerText="Code" width="10%">
+							<h:outputText value="#{dem.employe.code}" />
+						</p:column>
+						<p:column headerText="Nom et Prénom">
+							<h:outputText value="#{dem.employe.nomPrenom}" />
+						</p:column>
+
+						<p:column headerText="Date Début">
+							<h:outputText value="#{dem.dateDebutS}" width="10%" />
+						</p:column>
+						<p:column headerText="Date Fin">
+							<h:outputText value="#{dem.dateFinS}" width="10%" />
+						</p:column>
+
+						<p:column headerText="Durée">
+							<h:outputText value="#{dem.duree}" width="5%" />
+						</p:column>
+
+					</p:dataTable>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.parametrage()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+				<div class="card">
+							<div class="ui-g">
+
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton value="Recherche" icon="fa fa-search"
+										onclick="PF('dlgJrnl').show();" style="border-radius:10px"/>
+								</div>
+							</div>
+						</div>		
+					<div class="ui-g-12 ui-fluid card">
+
+						<p:panelGrid id="pnl1" columns="4"
+							columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-6" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Journal" />
+
+							<p:inputText value="#{parametreJournalPaieB.code}"  autocomplete="off">
+								<p:ajax event="blur"
+									listener="#{parametreJournalPaieB.searchParametre()}"
+									update=":frm" />
+							</p:inputText>
+
+							<p:outputLabel value="Libellé" />
+							<p:inputText value="#{parametreJournalPaieB.libelle}"   autocomplete="off"/>
+
+						</p:panelGrid>
+						
+
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-12 ui-lg-5 ui-fluid contact-form">
+					<div class="ui-g-12 ui-fluid card">
+						
+							<p:panelGrid id="pnl4" columns="2"
+								columnClasses="ui-grid-col-4,ui-grid-col-6" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Titre colonne" />
+								<p:inputText id="txtTitre" maxlength="10"
+									value="#{parametreJournalPaieB.titreElement}"  autocomplete="off"/>
+
+							
+							<p:outputLabel value="Type de données" />
+							<p:selectOneMenu value="#{parametreJournalPaieB.typeElmt}"
+								id="txtTyp" autoWidth="false" valueChangeListener="#{parametreJournalPaieB.changeType}">
+								<f:selectItem itemLabel=" " itemValue="0" />
+								<f:selectItem itemLabel="Eléments genéraux" itemValue="1" />
+								<f:selectItem itemLabel="Primes et indemnité" itemValue="2" />
+								<f:selectItem itemLabel="Cotisations salariales" itemValue="3" />
+								<f:selectItem itemLabel="Cotisations patronales" itemValue="4" />
+								<f:selectItem itemLabel="Déductions" itemValue="5" />
+							
+								<p:ajax event="change" update="txtTyp,tblCol"/>
+							</p:selectOneMenu>
+
+
+						</p:panelGrid>
+							<p:dataTable id="tblElement"
+								value="#{parametreJournalPaieB.listeDetail}" var="elmt"
+								rowKey="#{elmt.indexNum}" selectionMode="single" emptyMessage=""
+								selection="#{parametreJournalPaieB.selectedDetail}"
+								scrollable="true" scrollHeight="135">
+
+								<p:ajax event="rowSelect"
+									listener="#{parametreJournalPaieB.onRowSelected}"
+									update=":frm:tblCol,:frm:txtTitre,:frm:txtTyp" />
+
+							
+								<p:column headerText="Titres">
+									<h:outputText value="#{elmt.titrElement}" />
+								</p:column>
+								
+									
+							
+
+
+							</p:dataTable>
+						<p:panelGrid id="pnlBtn" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-2"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+							<p:commandButton icon="fa fa-plus" style="border-radius:10px"
+								action="#{parametreJournalPaieB.addDetail()}"
+								update="tblElement,txtTitre,txtTyp,tblCol" />
+
+							<p:commandButton  icon="fa fa-remove"
+								styleClass="red-btn" style="border-radius:10px"
+								action="#{parametreJournalPaieB.removeDetail()}"
+								update="tblElement,txtTitre,txtTyp,tblCol" />
+						</p:panelGrid>
+					</div>
+				
+				</div>
+				<div class="ui-g-12 ui-md-12 ui-lg-7 ui-fluid contact-form">
+			<div class="ui-g-12 ui-fluid card">
+						<div class="ui-g">
+							
+							<div class="ui-g-12 ui-md-12">
+								<p:dataTable id="tblCol"
+									value="#{parametreJournalPaieB.listDetElement}" var="col"
+									rowKey="#{col.idElement}" 
+									emptyMessage=""
+									selection="#{parametreJournalPaieB.selectedElement}"
+									scrollable="true" scrollHeight="240"
+									paginatorAlwaysVisible="false">
+
+
+									<p:column headerText="Eléments d'une colonne" width="80%">
+										<h:outputText value="#{col.libelleElment}" />
+									</p:column>
+
+									<p:column headerText="" width="10%">
+										<p:selectBooleanCheckbox value="#{col.added}" />
+									</p:column>
+
+									<p:column headerText="" width="10%">
+										<p:selectOneMenu value="#{col.signe}"
+												id="txtSgn" autoWidth="false" valueChangeListener="#{col.changeSigne}">
+												<f:selectItem itemLabel="+" itemValue="0" />
+												<f:selectItem itemLabel="-" itemValue="1" />
+											<p:ajax event="change" update="txtSgn"/>
+										</p:selectOneMenu>
+									</p:column>
+								</p:dataTable>
+								
+							</div>
+								</div>
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="ui-g-12 ui-fluid card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton value="Enregistrer" style="border-radius:10px"
+											action="#{parametreJournalPaieB.save()}"
+											icon="ui-icon ui-icon-disk" update=":frm" id="cmdSave" />
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton value="Supprimer" style="border-radius:10px"
+											action="#{parametreJournalPaieB.supprimer()}"
+											styleClass="orange-btn" icon="fa fa-remove" update=":frm">
+											<p:confirm header="Confirmation"
+												message="Voulez-vous supprimer ce paramètre ?"
+												icon="ui-icon-alert" />
+									</p:commandButton>
+
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton value="initialiser" style="border-radius:10px"
+											action="#{parametreJournalPaieB.initialize()}"
+											icon="ui-icon ui-icon-refresh" update=":frm" />
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
+			
+				</div>
+		</h:form>
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+			<p:dialog widgetVar="dlgJrnl" modal="true" position="center"
+				responsive="true" width="700" height="400">
+
+				<h:form id="frmPrm">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+
+										<div class="ui-g-12 ui-md-4"></div>
+										<div class="ui-g-12 ui-md-8">
+
+											<p:commandButton value="Chargement"
+												action="#{parametreJournalPaieB.chargerParametrage()}"
+												update="tblJrnl" />
+
+										</div>
+									</div>
+								</div>
+								<p:dataTable id="tblJrnl" value="#{parametreJournalPaieB.listJournal}"
+									var="jrnl" rowKey="#{jrnl.id}" selectionMode="single"
+									reflow="true" selection="#{parametreJournalPaieB.selectedParametre}">
+
+									<p:ajax event="rowSelect"
+											listener="#{parametreJournalPaieB.takeSelectedJournal()}"
+											update=":frm" />
+
+									<p:column headerText="Code " width="10%">
+										<h:outputText value="#{jrnl.code}" />
+									</p:column>
+
+									<p:column headerText="Libellé">
+										<h:outputText value="#{jrnl.libelle}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+
+						</div>
+					</div>
+
+				</h:form>
+
+			</p:dialog>
+	</ui:define>
+</ui:composition>

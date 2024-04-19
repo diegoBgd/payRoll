@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.parametrage()}" type="preRenderView"/>
+			</f:metadata>
+			<p:growl id="msgs" showDetail="true" life="21600"/>
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-g-12 ui-fluid content-form">
+				<div class="card">
+						  <div class="ui-g">
+						  	
+							<div class="ui-g-12 ui-md-4">
+							 	<p:commandButton value="Liste des paramètres"  action="a" update=":frmRech:tbl"
+							 	icon="fa fa-search"  oncomplete="PF('rechercheDialog').show();"/>
+							</div>
+							
+						</div>
+					</div>
+					<div class="card">
+						
+								<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+							<p:outputLabel value="Personnel" />
+								<p:selectOneMenu id="txtPerson" value="#{parametrageDureeCongeB.idPersonnel}"
+									valueChangeListener="#{parametrageDureeCongeB.changePersonnel}" autoWidth="false">																
+									<f:selectItems value="#{parametrageDureeCongeB.listPersonnel}" />
+									<p:ajax event="itemSelect" update="txtPerson"/>		
+								</p:selectOneMenu>
+								
+									<p:outputLabel value="Nombre Jours Congés" />
+								<p:inputNumber id="txtNbreJA"
+									value="#{parametrageDureeCongeB.nombreJoursAnnuel}"
+									thousandSeparator="&nbsp;" decimalPlaces="0" inputStyle="text-align:right"/>
+							
+								
+								<p:outputLabel value="Type Congé" />
+								<p:selectOneMenu id="txtType" value="#{parametrageDureeCongeB.idType}"
+									valueChangeListener="#{parametrageDureeCongeB.chargerTypeConge}"
+									autoWidth="false">
+									<p:ajax event="itemSelect" update="txtType" />								
+									<f:selectItems value="#{parametrageDureeCongeB.listTypeConge}" />
+								</p:selectOneMenu>
+								
+								
+									<p:outputLabel value="après(ans)" />
+								<p:inputNumber value="#{parametrageDureeCongeB.nombreAnneesAjoutJour}" 
+								thousandSeparator="&nbsp;" decimalPlaces="0" inputStyle="text-align:right" />
+								
+								<p:outputLabel value="Jours considerés" />
+								<p:selectOneMenu id="txtNiveau"
+									value="#{parametrageDureeCongeB.joursConge}" autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue="0" />
+									<f:selectItem itemLabel="Jours Ouvrables" itemValue="1" />
+									<f:selectItem itemLabel="Toute la semaine" itemValue="2" />
+								</p:selectOneMenu>
+								
+										
+								<p:outputLabel value="Durée additionnele " />
+								<p:inputNumber value="#{parametrageDureeCongeB.nombreJoursAjoutes}" 
+								thousandSeparator="&nbsp;" decimalPlaces="0" inputStyle="text-align:right"/>
+								
+					
+							</p:panelGrid>
+							
+						
+					</div>
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer" action="#{parametrageDureeCongeB.enregistrer()}"
+									update=":frm" />
+							</div>
+
+							<div class="ui-g-12 ui-md-4">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o"
+									value="Supprimer" action="#{parametrageDureeCongeB.supprimer()}"
+									onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
+									update=":frm" styleClass="orange-btn" />
+							</div>
+
+							<div class="ui-g-4 ui-md-4">
+								<p:commandButton icon="fa fa-refresh" value="Initialiser"
+									action="#{parametrageDureeCongeB.initialiser()}" update=":frm" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+
+	<p:dialog widgetVar="rechercheDialog" header="Recherche " modal="true" appendTo="@(body)" width="980">
+			<h:form id="frmRech">
+				
+				<div class="card">
+						<p:dataTable id="tbl" var="typ"
+							value="#{parametrageDureeCongeB.listParametrage}" rowKey="#{typ.id}"
+							selectionMode="single" selection="#{parametrageDureeCongeB.selected}"
+							reflow="true" rows="10" emptyMessage="Aucun élément enregistré" 
+							paginatorAlwaysVisible="false" paginatorPosition="bottom">
+
+							<p:ajax event="rowSelect"
+								listener="#{parametrageDureeCongeB.onRowSelected}" update=":frm" />
+						
+
+							<p:column headerText="Personnel" width="30%">
+								<h:outputText value="#{typ.personnel.designation}" />
+							</p:column>
+
+						
+							<p:column headerText="Type congé">
+								<h:outputText value="#{typ.type.designation}" />
+							</p:column>
+							
+							<p:column headerText="nbre jours annuel" width="10%">
+								<h:outputText value="#{typ.nombreJoursAnnuel}" />
+							</p:column>
+									
+						</p:dataTable>
+					</div>
+	
+				
+			</h:form>
+	</p:dialog>
+	</ui:define>
+</ui:composition>

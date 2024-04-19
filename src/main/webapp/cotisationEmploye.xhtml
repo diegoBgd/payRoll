@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:define name="content">
+		<h:form id="frm" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.BulletinPaie()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+			<p:blockUI block="frm" trigger="btnVisu" />
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						
+
+						<p:panelGrid id="pnl2" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Cotisations"/>
+							<p:selectOneMenu id="smCot" value="#{cotisationEmployeB.idCotisation}" autoWidth="false"
+								valueChangeListener="#{cotisationEmployeB.changeCotisation}">
+								<f:selectItems value="#{cotisationEmployeB.listCotisation}" />
+								<p:ajax event="change" update="smCot" />
+								
+							</p:selectOneMenu>
+						</p:panelGrid>
+						<p:panelGrid id="pnl3" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Date début"/>
+							<p:inputMask id="txtDateDeb"
+								value="#{cotisationEmployeB.datePrintDeb}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{cotisationEmployeB.changeDateDeb()}"
+									update="txtDateDeb" />
+							</p:inputMask>
+							<p:outputLabel value="Date fin"/>
+							<p:inputMask id="txtDateFin"
+								value="#{cotisationEmployeB.datePrintFin}" mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{cotisationEmployeB.changeDateFin()}"
+									update="txtDateFin" />
+							</p:inputMask>
+							
+							<p:outputLabel value="Ranger par"/>
+							<p:selectOneMenu value="#{cotisationEmployeB.ordre}">
+								<f:selectItem itemLabel="Matricule" itemValue="0" />
+								<f:selectItem itemLabel="Nom " itemValue="1" />
+							</p:selectOneMenu>
+						</p:panelGrid>
+						
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+
+								<div class="ui-g-12 ui-md-2"></div>
+								<div class="ui-g-12 ui-md-2">
+									<p:commandButton id="btnVisu" icon="fa fa-file-o"
+										value="Visualiser" style="border-radius:10px" 
+										action="#{cotisationEmployeB.printData()}" ajax="false" />
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

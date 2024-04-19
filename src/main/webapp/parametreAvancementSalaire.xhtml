@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm"
+			onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<f:metadata>
+				<f:event listener="#{authenticite.parametrage()}"
+					type="preRenderView"/>
+			</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+					<div class="card">
+						<p:panelGrid id="pnl1" columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+
+							<h:outputLabel value="Personnel" />
+							<p:selectOneMenu id="txtPers" autoWidth="false"
+								value="#{parametreAvancementSalaireB.idPrsnl}"
+								valueChangeListener="#{parametreAvancementSalaireB.changePersonnel}">
+
+								<f:selectItems
+									value="#{parametreAvancementSalaireB.listPersonnel}" />
+								<p:ajax event="itemSelect"
+									update=":frm:txtPers,:frm:txtCategorie" />
+							</p:selectOneMenu>
+
+
+
+							<h:outputText value="Notation" />
+							<p:selectOneMenu id="txtNotation"
+								value="#{parametreAvancementSalaireB.idType}"
+								valueChangeListener="#{parametreAvancementSalaireB.changeTypeNotation}">
+								<f:selectItems
+									value="#{parametreAvancementSalaireB.listTypeNotation}" />
+								<p:ajax event="change" update=":frm" />
+							</p:selectOneMenu>
+							<h:outputText value="Catégorie" />
+							<p:selectOneMenu id="txtCategorie"
+								value="#{parametreAvancementSalaireB.idCatgr}"
+								valueChangeListener="#{parametreAvancementSalaireB.changeCategorie}">
+								<f:selectItems
+									value="#{parametreAvancementSalaireB.listCategorie}" />
+								<p:ajax event="change" update=":frm" />
+							</p:selectOneMenu>
+		
+						</p:panelGrid>
+
+
+
+					</div>
+
+					<div class="card">
+						<div class="ui-g">
+							<p:dataTable id="tbl" var="parame"
+								value="#{parametreAvancementSalaireB.listParametreAvancement}"
+								rowKey="#{parame.id}" selectionMode="single"
+								selection="#{parametreAvancementSalaireB.selectedavancement}"
+								emptyMessage="" scrollable="true" scrollHeight="250">
+								<p:ajax event="rowSelect"
+									listener="#{parametreAvancementSalaireB.onRowSelected}"
+									update=":frm" />
+
+								<p:column headerText="Personnel" width="40%">
+									<h:outputText value="#{parame.libellePersonl}" />
+								</p:column>
+								<p:column headerText="Catégorie" width="40%">
+									<h:outputText value="#{parame.libelleCat}" />
+								</p:column>
+								
+							</p:dataTable>
+
+						</div>
+					</div>
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-1" />
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" style="border-radius:10px"
+								action="#{parametreAvancementSalaireB.save()}" update=":frm" />
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+								value="Supprimer" style="border-radius:10px" update=":frm"
+								styleClass="orange-btn">
+								<p:confirm header="Confirmation"
+									disabled="#{parametreAvancementSalaireB.disableMsg}"
+									message="Voulez-vous vraiment supprimer ?" icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser" style="border-radius:10px"
+								action="#{parametreAvancementSalaireB.initialiser()}"
+								update=":frm" />
+						</div>
+
+					</div>
+				</div>
+
+
+			</div>
+
+		</h:form>
+
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				responsive="true">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

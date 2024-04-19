@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<ui:composition template="/masterPage.xhtml"
+ xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"> 
+
+	<ui:define name="content">
+			
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl id="msgs" showDetail="true"/>
+			<f:metadata>
+				<f:event listener="#{authenticite.parametrage()}" type="preRenderView"/>
+			</f:metadata>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">					
+					<div class="card">				
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-6">
+								<p:outputLabel value="Continent"/>
+								<p:selectOneMenu id="smCont" value="#{paysB.continent}" valueChangeListener="#{paysB.changeContinent}" autoWidth="false">
+									<f:selectItem itemLabel=" " itemValue=" "/>
+									<f:selectItem itemLabel="Afrique" itemValue="Afrique"/>
+									<f:selectItem itemLabel="Amérique" itemValue="Amérique"/>
+									<f:selectItem itemLabel="Asie" itemValue="Asie"/>
+									<f:selectItem itemLabel="Europe" itemValue="Europe"/>		
+									<f:selectItem itemLabel="Océanie" itemValue="Océanie"/>
+									<p:ajax event="change" update=":frm:tbl"/>
+								</p:selectOneMenu>	
+							</div>
+							
+							<div class="ui-g-12 ui-md-6">
+								<p:outputLabel value="Libellé"/>
+								<p:inputText id="txtLib" value="#{paysB.designation}" />
+							</div>
+							
+							<div class="ui-g-12 ui-md-12">
+								<p:outputLabel value="Nationalité"/>								
+								<p:inputText id="txtNationalite" value="#{paysB.nationalite}" />	
+							</div>
+							
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnSave" icon="fa fa-save" value="Enregistrer" 
+									action="#{paysB.enregistrer()}" update=":frm" />
+							</div>
+							
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnDelete" icon="fa fa-trash-o" value="Supprimer" action="#{paysB.supprimer()}" 
+									update="frm" onclick="if (!confirm('Voullez-vous vraiment Supprimer ce pays?')) return false"
+									 styleClass="orange-btn"/>
+							</div>
+							
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton id="btnAnnuler" icon="fa fa-refresh" value="Initialiser" 
+									action="#{paysB.initialiser()}" update="frm" />
+							</div>
+							
+						</div>
+					
+					</div>
+				</div>
+			</div>	
+			
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card">
+						<p:dataTable id="tbl" var="p" value="#{paysB.listePays}" rowKey="#{p.id}" selectionMode="single" 
+							selection="#{paysB.pays}" reflow="true" emptyMessage="Aucun enregistrement" paginator="true" paginatorPosition="bottom" 
+								rows="10" paginatorAlwaysVisible="false">
+							
+							<p:ajax event="rowSelect" listener="#{paysB.onRowSelectedPays}" update=":frm:smCont,:frm:txtLib,:frm:txtNationalite"/>
+									
+							<p:column headerText="Libellé">
+								<h:outputText value="#{p.designation}"/>
+							</p:column>
+									
+							<p:column headerText="Nationalité">
+								<h:outputText value="#{p.nationalite}"/>
+							 </p:column>				 															
+						</p:dataTable>
+					</div>
+				</div>				
+			</div>
+						
+		</h:form>		
+			
+	
+	</ui:define>
+</ui:composition>

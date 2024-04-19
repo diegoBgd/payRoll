@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+
+			<f:metadata>
+				<f:event listener="#{authenticite.elementsPaie()}"
+					type="preRenderView" />
+			</f:metadata>
+
+			<p:growl id="msgs" showDetail="true" life="21600" />
+			<div class="ui-g">
+
+				
+				<div class="ui-g-12 ui-md-12 ui-lg-6 ui-fluid contact-form">
+
+					<div class="card">
+						<div class="ui-g">
+						<div class="ui-g-12 ui-md-8">
+									<p:commandButton value="Recherche" icon="fa fa-search"
+										onclick="PF('dlgPrm').show();" style="border-radius:10px"/>
+								</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="ui-g">
+							<p:panelGrid id="pnl1" columns="2" style="width:100%">
+
+							<h:outputLabel value="Personnel" />
+								<p:selectOneMenu id="txtPers" autoWidth="false"
+									value="#{parametragePrimeB.idPersonnel}"
+									valueChangeListener="#{parametragePrimeB.changePersonnel}">
+									<f:selectItems value="#{parametragePrimeB.listPersonnel}" />
+									<p:ajax event="change" update="txtPers,txtCateg" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="Catégorie " />
+								<p:selectOneMenu id="txtCateg"
+									value="#{parametragePrimeB.idCategorie}"
+									valueChangeListener="#{parametragePrimeB.changeCategorie}">
+									<f:selectItems value="#{parametragePrimeB.listCategorie}" />
+									<p:ajax event="change" update="txtCateg,txtGrad" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="Grade personnel"/>
+								<p:selectOneMenu id="txtGrad"
+									value="#{parametragePrimeB.idGrade}"
+									valueChangeListener="#{parametragePrimeB.changeGrade}">
+									<f:selectItems value="#{parametragePrimeB.listGrade}" />
+									<p:ajax event="change" update="txtGrad" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="Fonction" />
+								<p:selectOneMenu id="txtFonct" autoWidth="true" filter="true" 
+								    filterMatchMode="contains"
+									value="#{parametragePrimeB.idFonction}"
+									valueChangeListener="#{parametragePrimeB.changeFonction}">
+									<f:selectItems value="#{parametragePrimeB.listFonction}" />
+									<p:ajax event="change" update="txtFonct" />
+								</p:selectOneMenu>
+
+							</p:panelGrid>
+						</div>
+					</div>
+					
+					<div class="card">
+						<div class="ui-g">
+						<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton value="Enregistrer"  style="border-radius:10px"
+											action="#{parametragePrimeB.enregistrer()}"
+											icon="ui-icon ui-icon-disk" update=":frm,:frmPrmElt" />
+									</div>
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton value="Supprimer"  style="border-radius:10px"
+											action="#{parametragePrimeB.supprimer()}"
+											styleClass="orange-btn" icon="ui-icon ui-icon-trash"
+											update=":frm,:frmPrmElt">
+											
+										<p:confirm header="Confirmation" disabled="#{parametragePrimeB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+											
+										</p:commandButton>
+									</div>
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton value="initialiser"  style="border-radius:10px"
+											action="#{parametragePrimeB.initialiser()}"
+											icon="ui-icon ui-icon-refresh" update=":frm,:frmPrmElt" />
+									</div>
+								
+								</div>
+						</div>
+					</div>
+				
+
+				</div>
+
+				<div class="ui-g-12 ui-md-12 ui-lg-6 ui-fluid contact-form">
+				<div class="card">
+						<div class="ui-g">
+							<p:panelGrid id="pnl2" columns="1" style="width:100%">
+								<p:selectOneMenu id="txtPrm" autoWidth="true" filter="true" filterMatchMode="contains"
+									value="#{parametragePrimeB.idPrm}"
+									valueChangeListener="#{parametragePrimeB.changePrime}">
+									<f:selectItems value="#{parametragePrimeB.listPrime}" />
+									<p:ajax event="change" update="txtPrm,frmPrmElt,frm" />
+								</p:selectOneMenu>
+							</p:panelGrid>
+							<p:panelGrid id="pnl3" columns="2" style="width:100%">
+
+								<p:outputLabel value="Taux (%)" />
+								<p:inputNumber id="txtTx" value="#{parametragePrimeB.taux}" autocomplete="off" inputStyle="text-align:right">
+									<p:ajax event="blur" listener="#{parametragePrimeB.changeTaux()}"
+															update="txtFrf,cmdDetail,txtPlch,txtPlfd" />
+								</p:inputNumber>
+
+								<p:outputLabel value="Forfait" />
+								<p:inputNumber id="txtFrf" value="#{parametragePrimeB.forfait}" autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;">
+								<p:ajax event="blur" listener="#{parametragePrimeB.changeForfait()}"
+															update="txtTx,cmdDetail,txtPlch,txtPlfd" />
+								</p:inputNumber>
+
+								<p:outputLabel value="Plancher" />
+								<p:inputNumber id="txtPlch" value="#{parametragePrimeB.plancher}" autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;"/>
+
+								<p:outputLabel value="Plafond" />
+								<p:inputNumber id="txtPlfd" value="#{parametragePrimeB.plafond}" autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;"/>
+
+								<p:outputLabel value="Base à considérer" />
+								<p:selectOneMenu id="txtBse"
+									value="#{parametragePrimeB.typeBase}">
+									<f:selectItem itemLabel="Base normale" itemValue="0" />
+									<f:selectItem itemLabel="Base sur heures/jours prestés"
+										itemValue="1" />
+								</p:selectOneMenu>
+
+								<p:outputLabel value="Inclus dans calcul Heures-Sup" />
+								<p:selectBooleanCheckbox value="#{parametragePrimeB.calculHeurSup}"/>
+									
+
+							</p:panelGrid>
+							<div class="ui-g-12 ui-md-12">
+										<p:commandButton value="Eléments qui constituent la base" id="cmdDetail" disabled="#{parametragePrimeB.disableDetail}"
+											onclick="PF('dlgPrmElt').show();" 
+											icon="fa-list-ul" style="border-radius:10px"/>
+							</div>
+						</div>
+					</div>
+				</div>					
+			</div>
+
+
+		</h:form>
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+		<p:dialog widgetVar="dlgPrm" modal="true" position="center"
+				responsive="true" width="900" height="400">
+
+				<h:form id="frmPrm">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+
+										<div class="ui-g-12 ui-md-4"></div>
+										<div class="ui-g-12 ui-md-8">
+
+											<p:commandButton value="Chargement"
+												action="#{parametragePrimeB.chargementParametre()}"
+												update="tblPrm" style="border-radius:10px"/>
+
+										</div>
+									</div>
+								</div>
+								<p:dataTable id="tblPrm" value="#{parametragePrimeB.listParametre}"
+									var="prm" rowKey="#{prm.id}" selectionMode="single" emptyMessage=""
+									reflow="true" selection="#{parametragePrimeB.selected}" 
+									scrollHeight="200" scrollable="true">
+									<p:ajax event="rowSelect"
+									 listener="#{parametragePrimeB.onRowSelected}" update=":frm,:frmPrmElt" />
+
+
+									<p:column headerText="Personnel " width="20%">
+										<h:outputText value="#{prm.libellePersonnel}" />
+									</p:column>
+
+									<p:column headerText="Catégorie" width="20%">
+										<h:outputText value="#{prm.libelleCategorie}" />
+									</p:column>
+									<p:column headerText="Grade" width="20%">
+										<h:outputText value="#{prm.libelleGrade}" />
+									</p:column>
+									<p:column headerText="Fonction " width="20%">
+										<h:outputText value="#{prm.libelleFonction}" />
+									</p:column>
+									<p:column headerText="Prime" width="20%">
+										<h:outputText value="#{prm.libellePrime}" />
+									</p:column>
+	 							</p:dataTable>
+							</div>
+
+						</div>
+					</div>
+
+				</h:form>
+
+			</p:dialog>
+
+		<p:dialog widgetVar="dlgPrmElt" modal="true" position="center"
+			responsive="true" width="900" height="400">
+			<h:form id="frmPrmElt">
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+				
+				<p:panelGrid columns="1" layout="grid" style="font-size:100%; font-weight: bold;text-align:center">   
+					<p:outputLabel value="#{parametragePrimeB.prime.designation}"/>
+				</p:panelGrid>
+
+						<p:dataTable id="tblEltPrm"
+							value="#{parametragePrimeB.listElementPrm}" editable="true"
+							scrollHeight="200" scrollable="true" var="det"
+							rowKey="#{det.codeElement}" emptyMessage=""
+							selection="#{parametragePrimeB.detail}">
+
+							<p:column headerText="Code " width="5%">
+								<h:outputText value="#{det.codeElement}" />
+							</p:column>
+
+							<p:column headerText="Libellé" width="45%">
+								<h:outputText value="#{det.libelle}" />
+							</p:column>
+
+							<p:column headerText="" width="4%">
+								<p:selectBooleanCheckbox value="#{det.added}">
+									<p:ajax event="change" listener="#{det.checkDetail()}"
+										update="clnTx,clnPlc,clnPlf" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+
+							<p:column headerText="Taux(%)" width="8%">
+
+								<p:inputNumber id="clnTx" value="#{det.taux}"
+									disabled="#{det.disable}" inputStyle="text-align:right"
+									thousandSeparator="&nbsp;">
+									
+								</p:inputNumber>
+
+							</p:column>
+
+
+							<p:column headerText="Plancher" width="15%">
+
+								<p:inputNumber id="clnPlc" value="#{det.plancher}"
+									disabled="#{det.disable}" inputStyle="text-align:right"
+									thousandSeparator="&nbsp;">
+									<p:ajax event="blur" listener="#{det.changeForfait()}"
+										update="clnTx,clnPlc,clnPlf" />
+								</p:inputNumber>
+							</p:column>
+
+							<p:column headerText="Plafond" width="15%">
+								<p:inputNumber id="clnPlf" value="#{det.plafon}"
+									disabled="#{det.disable}" inputStyle="text-align:right"
+									thousandSeparator="&nbsp;">
+									<p:ajax event="blur" listener="#{det.changeForfait()}"
+										update="clnTx,clnPlc,clnPlf" />
+								</p:inputNumber>
+
+							</p:column>
+
+						</p:dataTable>
+						<div class="ui-g">
+						<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton value="Valider" style="border-radius:10px"
+											action="#{parametragePrimeB.affecterDetail()}"
+											icon="ui-icon ui-icon-disk" update=":frm" />
+									</div>
+									
+
+								</div>
+						</div>
+
+				</div>
+			</div>
+		</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Affectations</title>
+		</h:head>
+		<body>			
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event  type="preRenderView"  listener="#{authenticite.parametrage()}" />
+				</f:metadata>
+				<p:growl id="msg" life="21600" showDetail="true" sticky="false" />
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-g-fluid card no-margin">
+						
+						<div class="ui-g-6 ui-g ui-fluid" >
+							<p:commandButton value="Recherche" icon="fa fa-search" style="font-size:90%" 
+							onclick="PF('dlgRecherche').show();"/>	
+						</div>
+						<div class="ui-g-4"/>
+					</div>
+					
+					<div class="ui-g-12 ui-g-fluid card">
+						
+						<div class="ui-g-12">
+							<h:panelGroup layout="block" id="pg2" styleClass="ui-g ui-fluid">
+								<div class="ui-g-4">
+									<h:outputText value="Matricule"/>
+									<p:inputText id="txtMatricule" value="#{affectationB.matricule}" autocomplete="off">
+										<p:ajax event="blur" listener="#{affectationB.changeFonctionnaire()}" update="frm"/>
+									</p:inputText>
+								</div>
+								 
+								
+								<div class="ui-g-8">
+									<h:outputText value="Nom et prénom"/>
+									<p:inputTextarea id="txtNom" value="#{affectationB.employe.nomPrenom}"  rows="1" readonly="#{affectationB.readOnly}" autocomplete="off"/>
+								</div>
+								<div class="ui-g-6">
+									<h:outputText value="Ancien fonction"/>
+									<p:inputTextarea id="txtAnFct" value="#{affectationB.ancienFonction}"  rows="1" readonly="true" autocomplete="off"/>
+								</div>
+								<div class="ui-g-6">
+									<h:outputLabel value="Nouvelle fonction" />
+									<p:selectOneMenu id="smFonction" value="#{affectationB.idFonction}" valueChangeListener="#{affectationB.changeFonction}" 
+										autoWidth="false" filter="true" filterMatchMode="contains">
+										<f:selectItems value="#{affectationB.listeFonction}" />
+										<p:ajax event="change" update=":frm:smFonction" />
+									</p:selectOneMenu>
+								</div>
+								<div class="ui-g-4">
+									<h:outputLabel value="Référence" />
+									<p:inputTextarea value="#{affectationB.reference}" rows="1" maxlength="500" autocomplete="off"/>
+								</div>
+								<div class="ui-g-8">
+									<h:outputLabel value="Commentaire" />
+									<p:inputTextarea value="#{affectationB.comment}" rows="1" maxlength="500" autocomplete="off"/>
+								</div>
+								<div class="ui-g-6">
+									<h:outputText value="Date Début validité" />
+									<p:inputMask id="txtDateDebut" value="#{affectationB.dateDebutS}" mask="99/99/9999">
+										<p:ajax event="blur" listener="#{affectationB.changeDateDebut()}" update=":frm:txtDateDebut"/>
+									</p:inputMask>
+								</div>
+								<div class="ui-g-6">
+									<h:outputText value="Date Fin validité" />
+									<p:inputMask id="txtDateFin" value="#{affectationB.dateFinS}" mask="99/99/9999">
+										<p:ajax event="blur" listener="#{affectationB.changeDateFin()}" update=":frm:txtDateFin"/>
+									</p:inputMask>
+								</div>
+							</h:panelGroup>
+						</div>
+					</div>
+					<div class="ui-g-12 ui-fluid card">
+						<div class="ui-g-4">
+							<p:commandButton value="Enregistrer" action="#{affectationB.enregistrer()}" icon="ui-icon-disk" update=":frm:pg2,:frm:msg"/>
+						</div>
+						<div class="ui-g-4">
+							<p:commandButton value="Supprimer" onclick="if (!confirm('Voulez-vous vraiment Supprimer?')) return false" icon="ui-icon-trash" 
+							action="#{affectationB.supprimer()}" update=":frm:pg2,:frm:msg" styleClass="orange-btn"/>
+						</div>
+						<div class="ui-g-4">
+							<p:commandButton value="Initialiser" action="#{affectationB.initialiser()}" icon="ui-icon ui-icon-refresh" update=":frm:pg2,:frm:msg"/>
+						</div>											
+					</div>
+				</div>
+			</h:form>
+			<p:dialog header="Recherche Fonctionnaires" widgetVar="dlgRechercheFonctionnaire" modal="true" responsive="true" styleClass="dialogPers dialogPers2 dialogPers3" appendTo="@(body)">
+				<h:form id="frmRechercheF">
+					
+						<div class="ui-g">
+							<div class="ui-g-12 ui-fluid">
+								<div class="ui-g-6">
+									<h:outputText value="Nom"/>
+									<p:inputText value="#{affectationB.nomRecherche}"/>
+								</div>
+								<div class="ui-g-6">
+									<h:outputText value="Prénom"/>
+									<p:inputText value="#{affectationB.prenomRecherche}"/>
+								</div>
+								<div class="ui-g-6">
+									<h:outputText value="Matricule"/>
+									<p:inputText value="#{affectationB.matriculeRecherche}"/>
+								</div>
+								<div class="ui-g-6">
+									<h:outputText value="."/>
+									<p:commandButton value="Rechercher" action="#{affectationB.rechercherFonctionnaire()}" update=":frmRechercheF:tbl,:frm:msg" style="font-size:90%"/>
+								</div>
+							</div>
+						</div>
+					
+					<p:spacer width="100%" height="1"/>			
+					<p:dataTable id="tbl" var="f" value="#{affectationB.listeFonctionnaire}" rowKey="#{f.id}" selectionMode="single" 
+						selection="#{affectationB.employe}" reflow="true" paginator="true" rows="5" paginatorPosition="bottom" 
+							paginatorAlwaysVisible="false">
+						<p:ajax event="rowSelect"  listener="#{affectationB.affecterFonctionnaire()}" update=":frm:pg2"/>
+						
+						<p:column headerText="Matricule" style="width:15%;">
+							<h:outputText value="#{f.matricule}"/>
+						</p:column>	
+						<p:column headerText="Nom" style="width:35%">
+							<h:outputText value="#{f.nom}"/>
+						</p:column>	
+						<p:column headerText="Prénom" style="width:35%">
+							<h:outputText value="#{f.prenom}"/>
+						</p:column>		
+						<p:column headerText="Début Validité" style="width:15%">
+							<h:outputText value="#{f.dateEntreS}"/>
+						</p:column>
+					</p:dataTable>												
+				</h:form>						
+			</p:dialog>
+			
+			<p:dialog header="Recherche Affectations" widgetVar="dlgRecherche" modal="true" responsive="true" appendTo="@(body)"  height="400" width="1000">
+				<h:form id="frmRecherche">
+					<p:panel>
+						<div class="ui-g">
+							<div class="ui-g-12 ui-fluid">
+								<div class="ui-g-6">
+									<h:outputText value="Nom"/>
+									<p:inputText value="#{affectationB.nomRecherche}"/>
+								</div>
+								<div class="ui-g-6">
+									<h:outputText value="Prénom"/>
+									<p:inputText value="#{affectationB.prenomRecherche}"/>
+								</div>
+								<div class="ui-g-6">
+									<h:outputText value="Matricule"/>
+									<p:inputText value="#{affectationB.matriculeRecherche}"/>
+								</div>
+								
+								
+							</div>
+						</div>
+						
+						<p:commandButton value="Rechercher" action="#{affectationB.rechercherAffectation()}" update=":frmRecherche:tbl,:frm:msg" style="font-size:90%"/>
+								
+								
+					</p:panel>
+					<p:spacer width="100%" height="1"/>			
+					<p:dataTable id="tbl" var="affec" value="#{affectationB.listeAffectation}" rowKey="#{affec.id}" selectionMode="single" 
+						selection="#{affectationB.affectation}" reflow="true" paginator="true" rows="5" paginatorPosition="bottom" 
+						paginatorAlwaysVisible="false">
+						<p:ajax event="rowSelect"  listener="#{affectationB.takeAffectation()}" update=":frm:pg2"/>
+						
+						<p:column headerText="Matricule" style="width:10%">
+							<h:outputText value="#{affec.matricule}"/>
+						</p:column>	
+						<p:column headerText="Nom et Prénom" style="width:40%">
+							<h:outputText value="#{affec.nomPrenom}"/>
+						</p:column>	
+						<p:column headerText="Fonction" style="width:30%">
+							<h:outputText value="#{affec.fonction.designation}"/>
+						</p:column>		
+						<p:column headerText="Début Val." style="width:10%">
+							<h:outputText value="#{affec.dateDebutS}"/>
+						</p:column>
+						<p:column headerText="Fin Val." style="width:10%">
+							<h:outputText value="#{affec.dateFinS}"/>
+						</p:column>
+					</p:dataTable>												
+				</h:form>						
+			</p:dialog>	
+		</body>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition template="/masterPage.xhtml"
+	  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+      
+      <ui:define name="content" onkeypress="if (event.keyCode == 13) { return false; }">
+      	      	
+      	<h:form id="frm">
+      		<p:growl id="msg" life="7200" showDetail="true" sticky="false" />
+      		<f:metadata>
+				<f:event listener="#{authenticite.parametrage()}" type="preRenderView"/>
+			</f:metadata>
+      		<div class="ui-g">
+      			<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+      				<div class="card">
+      					<div class="ui-g">
+      						<div class="ui-g-12 ui-md-4">
+      							<p:outputLabel value="Décision N°"/>
+      							<p:inputText value="#{conditionRecrutementB.numeroDecision}" maxlength="45">
+      								<p:ajax event="blur" listener="#{conditionRecrutementB.changeCode()}" update=":frm,:frm:msg"/>	
+      								<p:ajax event="dblclick" listener="#{conditionRecrutementB.initialiserrecherche()}" update=":frmRecherche"/>
+      							</p:inputText>
+      						</div>
+      						
+      						<div class="ui-g-12 ui-md-4">      							
+      							<p:outputLabel value="Date début application"/>
+								<p:inputMask id="txtDatDeb" value="#{conditionRecrutementB.dateDebutS}"  mask="99/99/9999" >
+									<p:ajax event="blur" listener="#{conditionRecrutementB.changeDateDebutApplication()}" update="txtDatDeb" />	
+								</p:inputMask>
+      						</div>
+      						
+      						<div class="ui-g-12 ui-md-4">      							
+      							<p:outputLabel value="Date début application"/>
+								<p:inputMask id="txtDatFin" value="#{conditionRecrutementB.dateFinS}"  mask="99/99/9999" >
+									<p:ajax event="blur" listener="#{conditionRecrutementB.changeDateFinApplication()}" update="txtDatFin" />	
+								</p:inputMask>
+      						</div>
+      						
+      					</div>
+      				</div>
+      			</div>
+      		</div>
+      		
+      		<div class="ui-g">
+      			<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+      				<div class="card">
+      					<div class="ui-g">
+      						<p:dataTable id="tbl" var="COND" value="#{conditionRecrutementB.listDetailCondition}" rowKey="#{COND.id}" selectionMode="single" 
+								selection="#{conditionRecrutementB.detailSelected}" reflow="true" emptyMessage="Aucun enregistrement" paginator="true" 
+									paginatorPosition="bottom" rows="10" paginatorAlwaysVisible="false">
+								
+								<p:ajax event="rowSelect" listener="#{conditionRecrutementB.onRowSelected}" update=":frm:pnlDetail"/>
+										
+								<p:column headerText="Personnel">
+									<h:outputText value="#{COND.personnel.designation}"/>
+								</p:column>
+										
+								<p:column headerText="Critère recrutement">
+									<h:outputText value="#{COND.critereRecrutement.designation}"/>
+								 </p:column>				 															
+							</p:dataTable>      					
+      					
+      					</div>
+      					
+      					<h:panelGroup id="pnlDetail" layout="block" styleClass="ui-g">
+      							
+      						<div class="ui-g-12 ui-md-6">
+	      						<p:outputLabel value="Personnel"/>
+	      						<p:selectOneMenu value="#{conditionRecrutementB.idCorp}" valueChangeListener="#{conditionRecrutementB.changeCorp}" 
+									filter="true" filterMatchMode="contains" autoWidth="false">
+									<f:selectItems value="#{conditionRecrutementB.listCorps}" />
+									<p:ajax event="change" update=":frm:pnlDetail"/>			
+								</p:selectOneMenu>
+	      					</div>
+      						
+      						<div class="ui-g-12 ui-md-6">
+	      						<p:outputLabel value="Critere de recrutement"/>
+	      						<p:selectOneMenu value="#{conditionRecrutementB.idCritere}" 
+	      							valueChangeListener="#{conditionRecrutementB.changeCritereRecrutement}" 
+									filter="true" filterMatchMode="contains" autoWidth="false">
+									<f:selectItems value="#{conditionRecrutementB.listCriteresRecrutement}" />
+									<p:ajax event="change"/>			
+								</p:selectOneMenu>
+	      					</div>      						
+      					</h:panelGroup>
+      					
+      					<div class="ui-g">
+      						<div class="ui-g-12">
+								<div class="ui-g-12 ui-md-2">
+									<p:commandButton value="Ajouter" action="#{conditionRecrutementB.ajouterCondition()}" icon="fa fa-plus" 
+										update="frm:tbl,:frm:pnlDetail,:frm:msg"/>
+								</div>
+								<div class="ui-g-12 ui-md-2">
+									<p:commandButton value="Enlever" action="#{conditionRecrutementB.enlever()}" icon="fa fa-minus" 
+										styleClass="orange-btn" update="frm:tbl,:frm:pnlDetail,:frm:msg"/>
+								</div>
+							</div>
+      					</div>
+      					
+      				</div>
+      			</div>
+      		</div>
+      		
+      		<div class="ui-g">
+      			<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+      				<div class="card">
+      					<div class="ui-g">
+      						<div class="ui-g-12 ui-md-4">
+      							<p:commandButton icon="fa fa-save" value="Enregistrer" action="#{conditionRecrutementB.enregistrer()}" update=":frm"/>
+      						</div>
+      						
+      						<div class="ui-g-12 ui-md-4">
+      							<p:commandButton icon="fa fa-trash-o" value="Supprimer" action="SUP" styleClass="orange-btn"
+      							 onclick="if (!confirm('Voullez-vous vraiment Supprimer ce pays?')) return false"
+								 update=":frm"/>
+      						</div>
+      						
+      						<div class="ui-g-12 ui-md-4">
+      							<p:commandButton icon="fa fa-refresh" value="Initialiser" action="#{conditionRecrutementB.initialiser()}" update=":frm"/>
+      						</div>	
+      					</div>
+      				</div>
+      			</div>
+      		</div>
+      		
+      	</h:form>
+      	
+      	<p:dialog header="Recherche" widgetVar="recherche" modal="true" height="340" width="500" appendTo="@(body)">
+			<h:form id="frmRecherche">
+				<fieldset>
+					<h:panelGrid columns="2">
+						<h:outputText value="Numéro Décision" />
+						<p:inputText value="#{conditionRecrutementB.designationR}" style="width:200px;" />
+						
+						<p:spacer width="1" height="1"/>
+						<p:commandButton value="Rechercher" action="#{conditionRecrutementB.rechercher()}" 
+							update=":frmRecherche:tbl" style="width:208px; height:26px;"/>
+					</h:panelGrid>						
+				</fieldset>	
+				<p:spacer width="100" height="3"/>			
+					
+				<p:dataTable id="tbl" var="r" value="#{conditionRecrutementB.listConditionsRecrutement}"  rowKey="#{r.id}" 
+					selectionMode="single" selection="#{conditionRecrutementB.conditionSelected}" 
+					scrollable="true" scrollHeight="200" >
+					
+					<p:ajax event="rowSelect" listener="#{conditionRecrutementB.takeSelection()}" update=":frm"/>
+						
+					<p:column headerText="Numero Décision" style="width:300px;" >
+					 <h:outputText value="#{r.numeroDecision}"/>
+					</p:column>					
+					 
+				</p:dataTable>
+												
+			</h:form>						
+		</p:dialog>
+      	
+      
+      </ui:define>
+      
+</ui:composition>

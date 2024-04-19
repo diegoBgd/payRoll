@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<ui:composition template="/masterPage.xhtml"
+ xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"> 
+
+<ui:define name="content">
+	<h:head>
+		<link  type="text/css" rel="stylesheet" href="../resources/style.css"/>
+		<title>Eléments journal</title>
+	</h:head>
+	<body> 
+		<h:form id="frmElJrnl" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event  type="preRenderView"  listener="#{authenticite.structureAdministrative()}" />
+			</f:metadata>
+			<p:growl id="msg" life="21600" showDetail="true" sticky="false" />
+			<div>
+				<div class="ui-g-12 ui-fluid card no-margin">
+					
+					<div class="ui-g-4">
+							<h:outputText value="Code" />
+							<p:inputMask id="txtCd" value="#{baseVue.code}"  autocomplete="off"/>
+					</div>	
+					<div class="ui-g-8">
+							<h:outputText value="Libellé"/>
+							<p:inputTextarea id="txtDsn" value="#{baseVue.designation}" maxlength="200" rows="1" autocomplete="off"/>
+					</div>
+					
+					
+					<div class="ui-g-4">
+							<p:commandButton value="Enregistrer" action="#{baseVue.insertUpdate()}" icon="ui-icon-disk"  
+							update="txtCd,txtDsn,frmElJrnl:tbl,:frmElJrnl:msg"/>
+					</div>
+					<div class="ui-g-4">
+							<p:commandButton value="Supprimer" action="#{baseVue.delete()}" icon="ui-icon-trash" 
+							onclick="if (!confirm('Voulez-vous vraiment Supprimer?')) return false" 
+							update="txtCd,txtDsn,frmElJrnl:tbl,:frmElJrnl:msg" styleClass="orange-btn"/>
+					</div>
+					<div class="ui-g-4">
+							<p:commandButton value="Initialiser" action="#{baseVue.initialiserControles()}" icon="ui-icon ui-icon-refresh" 
+							update="txtCd,txtDsn,frmElJrnl:tbl,:frmElJrnl:msg" />
+					</div>
+					
+					
+				</div>
+				
+				<div class="ui-g-12 ui-fluid card" >
+					<p:dataTable var="bs" value="#{baseVue.listBase}" id="tbl" selectionMode="single" selection="#{baseVue.baseSelectionne}" 
+						rowKey="#{bs.id}" reflow="true" paginator="true" rows="9" paginatorPosition="bottom" paginatorAlwaysVisible="false">
+		   
+					    <p:ajax event="rowSelect" listener="#{baseVue.takeSelection()}" update=":frmElJrnl:txtCd,:frmElJrnl:txtDsn"/>
+						
+						<p:column headerText="Code" width="10%">
+						 <h:outputText value="#{bs.code}"/>
+						</p:column>
+								
+						<p:column headerText="Libellé" >
+						<h:outputText value="#{bs.designation}"/>
+						</p:column>
+													
+					</p:dataTable>
+				</div>
+			</div>						
+		</h:form>
+	</body> 
+</ui:define>
+</ui:composition>

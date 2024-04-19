@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Primes</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+				
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="ui-g-12 ui-fluid card">
+							<p:panelGrid id="pnl" columns="2"
+								columnClasses="ui-grid-col-2,ui-grid-col-2"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								<p:outputLabel value="Date début" />
+								<p:inputMask id="txtDateDebutS"
+									value="#{grilleCotisationB.dateDebutS}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{grilleCotisationB.changeDateDebut()}"
+										update=":frm:txtDateDebutS" />
+								</p:inputMask>
+
+								<p:outputLabel value="Date fin" />
+								<p:inputMask id="txtDateFinS"
+									value="#{grilleCotisationB.dateFinS}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{grilleCotisationB.changeDateFin()}"
+										update=":frm:txtDateFinS" />
+								</p:inputMask>
+
+								<p:outputLabel value="Coefficient" />
+								<p:inputNumber value="#{grilleCotisationB.coefficient}"
+									inputStyle="text-align:right" autocomplete="off"/>
+
+							</p:panelGrid>
+
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-12">
+									<p:dataTable id="tbl" var="det"  style="border:solid 1px gray"
+										value="#{grilleCotisationB.listDetail}"
+										rowKey="#{det.categorie}" selectionMode="single"
+										selection="#{grilleCotisationB.detail}" reflow="true" 
+										 emptyMessage="" scrollable="true" scrollHeight="150">
+										<p:ajax event="rowSelect"
+											listener="#{grilleCotisationB.onRowSelected}"
+											update=":frm" />
+
+										<p:column headerText="Catégorie">
+											<h:outputText value="#{det.categorie}" />
+										</p:column>
+
+										<p:column headerText="Tranche min">
+											<h:outputText value="#{det.trancheMin}" />
+										</p:column>
+
+										<p:column headerText="tranche max">
+											<h:outputText value="#{det.trancheMax}" />
+										</p:column>
+
+										<p:column headerText="Point acheté">
+											<h:outputText value="#{det.pointAchete}" />
+										</p:column>
+
+										<p:column headerText="Valeur d'achat">
+											<h:outputText value="#{det.valeurAchat}" />
+										</p:column>
+										<p:column headerText="Cotisation mensuel">
+											<h:outputText value="#{det.totalCotisation}" />
+										</p:column>
+
+									</p:dataTable>
+
+								</div>
+							</div>
+								<p:panelGrid columns="8" id="idpanelCotisation"
+										columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,
+													  ui-grid-col-2,ui-grid-col-1,ui-grid-col-1"
+										layout="grid" styleClass="ui-panelgrid-blank"
+										style="border:0px none; background-color:transparent;">
+
+
+
+									<p:inputText id="txtCat">
+										<p:ajax event="blur"
+											listener="#{grilleCotisationB.searcheElement()}"
+											update=":frm:txtCat,:frm:txtMin,:frm:txtMax,:frm:txtPt,:frm:txtVal" 
+											autocomplete="off"/>
+									   </p:inputText>
+								
+									
+									<p:inputNumber id="txtMin"
+										value="#{grilleCotisationB.trancheDeb}"
+										inputStyle="text-align:right" thousandSeparator="&nbsp;" 
+										autocomplete="off"/>
+								
+									
+									<p:inputNumber id="txtMax"
+										value="#{grilleCotisationB.trancheFin}"
+										inputStyle="text-align:right" thousandSeparator="&nbsp;" 
+										autocomplete="off"/>
+								
+								
+									<p:inputNumber id="txtPt" value="#{grilleCotisationB.unite}"
+										inputStyle="text-align:right" thousandSeparator="&nbsp;" 
+										autocomplete="off"/>
+								
+									
+									<p:inputNumber id="txtVal" value="#{grilleCotisationB.pu}" 
+										inputStyle="text-align:right" thousandSeparator="&nbsp;" 
+										autocomplete="off"/>
+										
+										<p:commandButton id="btnAdd" icon="fa fa-plus" 
+											action="#{grilleCotisationB.addDetail()}" style="border-radius:10px"
+											update=":frm:tbl,:frm:txtCat,:frm:txtMin,:frm:txtMax,:frm:txtPt,:frm:txtVal" />
+											
+										<p:commandButton id="btnRemove" icon="fa fa-remove"
+											action="#{grilleCotisationB.removeDetail()}"
+											styleClass="red-btn" style="border-radius:10px"
+											update=":frm:tbl,:frm:txtCat,:frm:txtMin,:frm:txtMax,:frm:txtPt,:frm:txtVal" />
+							</p:panelGrid>
+								
+					</div>
+						
+						<div class="ui-g-12 ui-fluid card">
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer" action="#{grilleCotisationB.save()}"
+											update=":frm" style="border-radius:10px"/>
+
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-disk"
+											value="Supprimer" styleClass="orange-btn"
+											action="#{grilleCotisationB.delete()}"
+											style="border-radius:10px"
+											update=":frm">
+											<p:confirm header="Confirmation" disabled="#{grilleCotisationB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+											</p:commandButton>
+									</div>
+
+								</div>
+
+							</div>
+
+					
+			</h:form>
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+	
+		</body>
+	</ui:define>
+</ui:composition>

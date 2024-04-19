@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<ui:composition template="/masterPage.xhtml"
+ xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui"> 
+
+	<ui:define name="content">
+		
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				
+				<f:metadata>
+					<f:event type="preRenderView" listener="#{authenticite.fichiersBase()}" />
+				</f:metadata>
+							
+				<p:growl id="msgs" showDetail="true"/>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-2">
+									<p:outputLabel value="Code"/>
+									<p:inputText id="txtCode" value="#{deviseB.code}" maxlength="45" style="text-transform:uppercase">
+										<p:ajax event="blur" listener="#{deviseB.changeCode()}" update=":frm"/>
+									</p:inputText>
+								</div>
+								
+								<div class="ui-g-12 ui-md-5">
+									<p:outputLabel value="Désignation"/>
+									<p:inputText id="txtDes" value="#{deviseB.designation}" />
+								</div>
+								
+								<div class="ui-g-12 ui-md-5">
+									<p:outputLabel value="Symbole"/>
+									<p:inputText id="txtSymbole" value="#{deviseB.symbole}" />
+								</div>
+								
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton id="btnSave" icon="fa fa-save" value="Enregistrer" action="#{deviseB.enregistrer()}" update=":frm" />	
+								</div>
+								
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton id="btnDelete" icon="fa fa-trash-o" value="Supprimer" 
+										onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false" 
+										action="#{deviseB.supprimer()}" update=":frm" styleClass="orange-btn"/>	
+								</div>
+								
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton id="btnAnnuler" icon="fa fa-refresh" value="Initialiser" action="#{deviseB.initialiser()}" update=":frm" />
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+								<p:dataTable id="tbl" var="dev" value="#{deviseB.devises}" rowKey="#{dev.id}" selectionMode="single" 
+									selection="#{deviseB.devise}" rows="10" paginator="true" paginatorAlwaysVisible="false"
+									paginatorPosition="bottom" reflow="true" emptyMessage="Aucun enregitrement">
+									
+									<p:ajax event="rowSelect" listener="#{deviseB.onRowSelected}" update=":frm"/>
+														
+									<p:column headerText="Code" width="150" >
+										<h:outputText value="#{dev.code}"/>
+									 </p:column>
+																
+									<p:column headerText="Désignation" >
+										<h:outputText value="#{dev.designation}"/>
+									</p:column>
+									
+									<p:column headerText="Symbole" >
+										<h:outputText value="#{dev.symbole}" />
+									</p:column>
+																			
+								</p:dataTable>	
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</h:form>
+		
+	</ui:define>
+</ui:composition>

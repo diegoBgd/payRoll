@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.parametrage()}"
+					type="preRenderView" />
+			</f:metadata>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-6 ui-fluid contact-form">
+					
+					<div class="card">
+						<p:panelGrid id="pnl2" columns="2"
+							columnClasses="ui-grid-col-8,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Nombres de chiffres après virgule" />
+							<p:inputNumber value="#{parametrageGeneralB.nbreDecimal}"
+								autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" decimalPlaces="0" />
+							<p:outputLabel value="Maximum logement non imposable" />
+							<p:inputNumber value="#{parametrageGeneralB.tauxMaxLogement}"
+								autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" />
+								
+							<p:outputLabel value="Montant net minimum pour une paie" />
+							<p:inputNumber value="#{parametrageGeneralB.montantNetMin}"
+								autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" />
+							
+							<p:outputLabel value="Nombre d'heure par jour" />
+							<p:inputNumber value="#{parametrageGeneralB.nbreHeureJour}"
+								autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" decimalPlaces="0" />
+							
+							<p:outputLabel value="Nombre de jour par mois" />
+							<p:inputNumber value="#{parametrageGeneralB.nbreJourMois}"
+								autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;" decimalPlaces="0" />
+							<p:outputLabel value="Inclure logement dans le calcul des H.sup" />
+							<p:selectBooleanCheckbox
+								value="#{parametrageGeneralB.logementBaseHsup}" />
+							<p:outputLabel
+								value="Inclure allocation dans le calcul des H.sup" />
+							<p:selectBooleanCheckbox
+								value="#{parametrageGeneralB.allocationBaseHsup}" />
+
+						</p:panelGrid>
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-12 ui-lg-6 ui-fluid contact-form">
+					
+					<div class="card">
+						<p:panelGrid id="pnl3" columns="2"
+							columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-2,ui-grid-col-3"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Taux jour férié"/>
+							<p:inputNumber value="#{parametrageGeneralB.tauxJrFerie}"
+								autocomplete="off" inputStyle="text-align:right"
+								thousandSeparator="&nbsp;"/>
+							
+							
+						</p:panelGrid>
+					</div>
+					<div class="card">
+						<p:panelGrid id="pnl4" columns="2"
+							columnClasses="ui-grid-col-3,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Mail de la société"/>
+							<p:inputText value="#{parametrageGeneralB.mailOrigine}"
+								autocomplete="off"/>
+							<p:outputLabel value="Mot de passe"/>
+							<p:inputText value="#{parametrageGeneralB.pwdOrigine}"
+								autocomplete="off"/>
+							<p:outputLabel value="Serveur smtp"/>
+							<p:inputText value="#{parametrageGeneralB.smtpServer}"
+								autocomplete="off"/>
+							<p:outputLabel value="Port"/>
+							<p:inputText value="#{parametrageGeneralB.port}"
+								autocomplete="off"/>
+							
+							
+						</p:panelGrid>
+					</div>
+				</div>
+				
+				<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+
+
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Enregistrer" style="border-radius:10px"
+									action="#{parametrageGeneralB.save()}"
+									icon="ui-icon ui-icon-disk" update=":frm" />
+							</div>
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Supprimer" style="border-radius:10px"
+									action="#{parametrageGeneralB.delete()}"
+									styleClass="orange-btn" icon="ui-icon ui-icon-trash"
+									update=":frm">
+									<p:confirm header="Confirmation" disabled="#{parametrageGeneralB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+									</p:commandButton>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</h:form>
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form> 
+	</ui:define>
+
+</ui:composition>

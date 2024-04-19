@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<f:metadata>
+					<f:event listener="#{authenticite.parametrageSanction()}"
+						type="preRenderView" />
+				</f:metadata>
+			<div class="ui-g">
+            <div class="ui-g-12  ui-lg-12 ui-fluid contact-form">
+
+					
+					<div class="card">
+						
+						<p:panelGrid id="pnl1" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+									
+							    <h:outputLabel value="Sanction" />
+								<p:inputText value="#{parametrageSanctionB.libelleSanction}"/>
+
+							<h:outputLabel value="Retenu" />
+							<p:selectOneMenu id="txtRet" value="#{parametrageSanctionB.idRetenu}"
+								autoWidth="true" filter="true" filterMatchMode="contains"
+								valueChangeListener="#{parametrageSanctionB.changeReetenu}">
+								<f:selectItems value="#{parametrageSanctionB.listRetenu}" />
+								<p:ajax event="itemSelect" update="txtRet" />
+
+							</p:selectOneMenu>
+
+						</p:panelGrid>
+						
+						<p:panelGrid id="pnl2" columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+								
+								<h:outputLabel value="Durée minimale (jours)" />
+								<p:inputNumber id="txtDureeMin"
+									value="#{parametrageSanctionB.dureeMin}" inputStyle="text-align:right" decimalPlaces="0"/>
+									
+								<h:outputText value="Retenu sur salaire (%)" />
+								<p:inputNumber id="txtTauxRet"
+									value="#{parametrageSanctionB.tauxRetenue}" inputStyle="text-align:right"/>
+							
+								<h:outputLabel value="Durée maximale (jours)" />
+								<p:inputNumber id="txtDureeMax"
+									value="#{parametrageSanctionB.dureeMax}" inputStyle="text-align:right" decimalPlaces="0"/>		
+								
+						</p:panelGrid>
+						
+							
+
+						</div>
+					<div class="card">
+					<p:dataTable id="tbl" var="parame"
+								value="#{parametrageSanctionB.listParametre}"
+								rowKey="#{parame.id}" selectionMode="single"
+								selection="#{parametrageSanctionB.selected}"
+							    emptyMessage="" scrollable="true" scrollHeight="200">
+								<p:ajax event="rowSelect"
+									listener="#{parametrageSanctionB.onRowSelect}"
+									update=":frm" />
+
+								<p:column headerText="Sanction" width="40%">
+									<h:outputText value="#{parame.libelleSanction}"/>
+								</p:column>
+								<p:column headerText="Taux retenue">
+									<h:outputText value="#{parame.tauxRetenue}" style="float:right"/>
+								</p:column>
+								<p:column headerText="Durée Min ">
+									<h:outputText value="#{parame.dureeMin}" style="float:right"/>
+								</p:column>
+								<p:column headerText="Durée Max">
+									<h:outputText value="#{parame.dureeMax}" style="float:right"/>
+								</p:column>
+								
+							
+
+							</p:dataTable>
+					</div>
+
+
+					<div class="ui-g card">
+						<div class="ui-g-12 ui-md-1"/>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" style="border-radius:10px"	
+								action="#{parametrageSanctionB.save()}" update=":frm" />
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+							    value="Supprimer"
+								action="#{parametrageSanctionB.supprimer()}" 
+								style="border-radius:10px"	
+								update=":frm" styleClass="orange-btn">
+								
+								<p:confirm header="Confirmation" disabled="#{parametrageSanctionB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser" style="border-radius:10px"	
+								action="#{parametrageSanctionB.initialiser()}"
+								update=":frm" />
+						</div>
+
+					</div>
+
+
+				</div>
+
+			</div>
+
+		</h:form>
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form> 
+	</ui:define>
+
+</ui:composition>
+
+
+
+

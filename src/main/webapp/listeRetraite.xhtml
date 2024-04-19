@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<p:growl showDetail="true" sticky="false" />
+			<f:metadata>
+					<f:event  type="preRenderView"  listener="#{authenticite.gestionRetraite()}" />
+				</f:metadata>
+				<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-6 ui-fluid contact-form">
+					<div class="card">
+					
+						<p:panelGrid id="pnl1" columns="2"
+							columnClasses="ui-grid-col-3,ui-grid-col-8" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							
+							<p:outputLabel value="Personnel" />
+							<p:selectOneMenu id="txtPrsnl" value="#{listeDesRetraites.idPrsnl}" 
+								valueChangeListener="#{listeDesRetraites.changePersonnel}">							
+								<f:selectItems value="#{listeDesRetraites.listPersonnel}" />
+								<p:ajax event="itemSelect" update="txtPrsnl,txtCatg"/>
+							</p:selectOneMenu>
+							
+						
+							<p:outputLabel value="Catégorie"/>
+							<p:selectOneMenu id="txtCatg" value="#{listeDesRetraites.idCateg}"
+								valueChangeListener="#{listeDesRetraites.changeCategorie}">
+								<f:selectItems value="#{listeDesRetraites.listCateg}" />
+								<p:ajax event="change" update="txtCatg" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Grades"/>
+							<p:selectOneMenu id="txtGrd" value="#{listeDesRetraites.idGrd}"
+								valueChangeListener="#{listeDesRetraites.changeGrade}">
+								<f:selectItems value="#{listeDesRetraites.listGrd}" />
+								<p:ajax event="change" update="txtGrd" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Niveau formation"/>
+							<p:selectOneMenu id="txtNv" value="#{listeDesRetraites.idNivFrm}"
+								valueChangeListener="#{listeDesRetraites.changerNiveauFormation}">
+								<f:selectItems value="#{listeDesRetraites.listNvfrm}" />
+								<p:ajax event="change" update="txtNv" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Lieux de travail" />
+						     <p:selectOneMenu id="txtLTrv" value="#{listeDesRetraites.idLieuxTrv}"
+								valueChangeListener="#{listeDesRetraites.changeLieuTravail}">
+								<f:selectItems value="#{listeDesRetraites.listLieuTravail}" />
+								<p:ajax event="change" update="txtLTrv" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Sexe" />
+							<p:selectOneMenu id="txtSex" value="#{listeDesRetraites.sexe}" 
+								valueChangeListener="#{listeDesRetraites.sexe}">							
+								<f:selectItem itemLabel=" "  itemValue="0" />
+								<f:selectItem itemLabel="Masculin" itemValue="1" />
+								<f:selectItem itemLabel="Féminin" itemValue="2" />								
+								<p:ajax event="itemSelect" update="txtSex"/>
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Etat civil" />
+										<p:selectOneMenu value="#{listeDesRetraites.etatCivil}"
+											autoWidth="false" id="txtEcv">
+											<f:selectItem itemLabel=" "  itemValue="0" />
+											<f:selectItem itemLabel="Célibataire" itemValue="1" />
+											<f:selectItem itemLabel="Marié(e)" itemValue="2" />
+											<f:selectItem itemLabel="Veuf(ve)" itemValue="3" />
+											<f:selectItem itemLabel="Divorcé(e)" itemValue="4" />
+											<p:ajax event="itemSelect" update="txtEcv"/>
+										</p:selectOneMenu>
+										
+						<h:outputLabel value="Date retraite" />
+							<p:inputMask id="txtDateRetr"
+								value="#{listeDesRetraites.printDate}"
+								mask="99/99/9999">
+								<p:ajax event="blur"
+									listener="#{listeDesRetraites.changeDateRetraite()}"
+									update="txtDateRetr" />
+							</p:inputMask>
+							
+							<p:outputLabel value="Ranger par" />
+										<p:selectOneMenu value="#{listeDesRetraites.order}"
+											autoWidth="false" id="txtOrd">
+											<f:selectItem itemLabel="Matricule"  itemValue="0" />
+											<f:selectItem itemLabel="Nom" itemValue="1" />
+											
+											<p:ajax event="itemSelect" update="txtOrd"/>
+										</p:selectOneMenu>
+						</p:panelGrid>
+						<p:panelGrid id="pnl2" columns="3"
+							columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid"
+							styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+						
+							
+								<p:commandButton id="btnShow" icon="fa fa-file-o"
+										value="Afficher"
+										action="#{listeDesRetraites.chargerEmploye()}" update="tbl,grPrs"/>
+										
+								<p:commandButton id="btnVisu" icon="fa fa-file-o"
+										value="Visualiser"
+										action="#{listeDesRetraites.visualiser()}" ajax="false" />
+										
+						</p:panelGrid>
+	
+						
+					</div>
+					</div>
+					
+					
+					<div class="ui-g-12 ui-md-12 ui-lg-6 ui-fluid contact-form">
+					
+					<div class="card" style="height:90%">
+						<p:selectOneRadio layout="responsive" value="#{listeDesRetraites.choise}" columns="3">
+							<f:selectItem itemLabel="Personnel" itemValue="1" />							
+							<f:selectItem itemLabel="Sexe" itemValue="2" />
+							<f:selectItem itemLabel="Catégorie" itemValue="3" />
+							
+							<p:ajax event="change" update="grPrs" listener="#{listeDesRetraites.showModel()}"/>
+							
+						</p:selectOneRadio>
+						<p:chart type="pie" responsive="true" model="#{listeDesRetraites.model}" id="grPrs"/>
+					</div>
+					</div>
+					
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="ui-g card">
+						<p:dataTable id="tbl" value="#{listeDesRetraites.listRetraite}" var="emplo"
+							selectionMode="single" selection="#{employeB.selected}"
+							rowKey="#{emplo.id}" scrollable="true"
+							scrollHeight="300"
+							reflow="true">
+
+				
+
+					<p:column headerText="Code" width="8%">
+						<h:outputText value="#{emplo.matricule}" />
+					</p:column>
+
+					<p:column headerText="Nom et prenom" width="60%">
+						<h:outputText value="#{emplo.nomPrenom}" />
+					</p:column>
+
+					<p:column headerText="Date naissance">
+						<h:outputText value="#{emplo.dateNaissanceS}" />
+					</p:column>
+
+					<p:column headerText="Age">
+						<h:outputText value="#{emplo.age}" />
+					</p:column>
+
+				</p:dataTable>
+
+					</div>
+				</div>
+			
+</div>
+		</h:form>
+		
+		
+
+	</ui:define>
+
+</ui:composition>

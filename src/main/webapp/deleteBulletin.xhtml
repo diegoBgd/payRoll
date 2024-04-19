@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Bulletin de paie</title>
+		</h:head>
+		<body>
+			<h:form id="frm" target="_blank" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event listener="#{authenticite.BulletinPaie()}"
+						type="preRenderView" />
+				</f:metadata>
+				<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+
+						<div class="card">
+
+							<p:panelGrid id="pnl2" columns="2"
+								columnClasses="ui-grid-col-2,ui-grid-col-2" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Date début" />
+								<p:inputMask id="txtDateDeb"
+									value="#{deleteBulletinB.dateDebPrnt}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{deleteBulletinB.changeDateDeb()}"
+										update="txtDateDeb" />
+								</p:inputMask>
+
+								<p:outputLabel value="Date fin" />
+								<p:inputMask id="txtDateFn"
+									value="#{deleteBulletinB.dateFnPrnt}" mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{deleteBulletinB.changeDateFin()}"
+										update="txtDateFn" />
+								</p:inputMask>
+							</p:panelGrid>
+
+						</div>
+						<div class="card">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-8 ui-fluid contact-form">
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton value="Supprimer les bulletins" widgetVar="cmdDelete"
+											action="#{deleteBulletinB.delete()}" style="border-radius:10px" 
+											icon="fa fa-remove"
+											onstart="PF('cmdDelete').disable();PF('pnl').show();PF('pbar').start()"
+											oncomplete="PF('cmdDelete').enable();PF('pnl').close()">
+											<p:confirm header="Confirmation" 
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+										<p:panel widgetVar="pnl" visible="false" style="border:none;"
+											closable="true" toggleable="true" id="pnl">
+											<p:progressBar ajax="true" widgetVar="pbar"
+												value="#{deleteBulletinB.progressValue}" 
+												labelTemplate="{value}%"
+												global="false" />
+										</p:panel>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+		</body>
+	</ui:define>
+</ui:composition>
+

@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Cotisations</title>
+		</h:head>
+		<body>
+			<h:form id="frmCom" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event listener="#{authenticite.parametrage()}"
+						type="preRenderView" />
+				</f:metadata>
+				<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+				<p:blockUI block="frmCom" trigger="btnSave" />
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						
+						<div class="ui-g-12 ui-fluid card">
+								<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-6"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								
+								<p:outputLabel value="Référence" />
+								<p:inputText id="txtCode" value="#{cotisationB.code}"
+									autocomplete="off">
+									<p:ajax event="blur" listener="#{cotisationB.changeCode()}"
+										update="frmCom" />
+								</p:inputText>
+								
+
+								<p:outputLabel value="Libellé" />
+								<p:inputText id="txtdes" value="#{cotisationB.designation}"
+									autocomplete="off" />
+							
+							
+								
+								
+								</p:panelGrid>
+							 <p:panelGrid columns="6"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								
+								<p:outputLabel value="Barème"/>
+								<p:selectOneMenu id="txtBareme"
+									value="#{cotisationB.typeBaremme}"									
+									autoWidth="false">
+									<f:selectItem itemLabel="" itemValue="0" />
+									<f:selectItem itemLabel="Barème I.R.E" itemValue="1" />
+									<f:selectItem itemLabel="Bareme ONPR" itemValue="2" />
+									
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Compte part salarial" />
+								<p:inputText id="txtCptS" value="#{cotisationB.prefixeSalarial}"
+									autocomplete="off" />
+								
+								<p:outputLabel value="Compte part patronal" />
+								<p:inputText id="txtCptP" value="#{cotisationB.prefixePatronal}"
+									autocomplete="off" />
+								<p:spacer/>	<p:spacer/>
+								<p:outputLabel value="Compte charge salarial" />
+								<p:inputText id="txtCptChS" value="#{cotisationB.chargeSalarial}"
+									autocomplete="off" />
+									<p:outputLabel value="Compte charge patronal" />
+								<p:inputText id="txtCptChP" value="#{cotisationB.chargePtronal}"
+									autocomplete="off" />
+									
+							</p:panelGrid>
+						</div>
+						<div class="ui-g-12 ui-fluid card">
+							
+							<p:dataTable id="tblCot" value="#{cotisationB.listCotisation}"
+									var="cot" rowKey="#{cot.id}" selectionMode="single"
+									reflow="true" selection="#{cotisationB.cotisation}"
+									scrollable="true" scrollHeight="200">
+
+									<p:ajax event="rowSelect"
+											listener="#{cotisationB.onCotisationSelected}"
+											update=":frmCom" />
+
+									<p:column headerText="Référence " width="10%">
+										<h:outputText value="#{cot.code}" />
+									</p:column>
+
+									<p:column headerText="Cotisation">
+										<h:outputText value="#{cot.designation}" />
+									</p:column>
+								</p:dataTable>
+						</div>
+						<div class="ui-g-12 ui-fluid card">
+									<div class="ui-g-12 ui-md-1"/>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer" action="#{cotisationB.enregistrer()}"
+											update=":frmCom" style="border-radius:10px"/>
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash" 
+											styleClass="orange-btn" value="Supprimer" action="#{cotisationB.supprimer()}"
+											update=":frmCom" style="border-radius:10px">
+											<p:confirm header="Confirmation" disabled="#{cotisationB.disableMsg}"
+												message="Voulez vous vraiment supprimer cet élément ?"
+												icon="ui-icon-alert"/>
+										</p:commandButton>
+							
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnAnnuler" style="border-radius:10px"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{cotisationB.initialize()}" update=":frmCom" />
+									</div>
+									
+								</div>
+							</div>
+						</div>
+				
+				
+			</h:form>
+		
+			<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" widgetVar="cd" >
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+		
+			
+		
+		</body>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:define name="content">
+		<h:form id="frm"
+			onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.BulletinPaie()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+
+
+
+			<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+				
+					<div class="ui-g-12 ui-fluid card">
+					
+						<p:panelGrid columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-2,ui-grid-col-2"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+
+							<p:outputLabel value="Type Congé" />
+							<p:selectOneMenu id="txtType" value="#{editionConge.idTypeConge}"
+								valueChangeListener="#{editionConge.chargerTypeConge}"
+								autoWidth="false">
+								<p:ajax event="itemSelect" update="txtType" />
+								<f:selectItems value="#{editionConge.listTypeConge}" />
+							</p:selectOneMenu>
+							<p:commandButton value="Recherche" style="border-radius:10px"
+								action="#{editionConge.chargerSoldeConge()}" icon="fa fa-search"
+								update="tblSoldCg" />
+								
+							<p:commandButton icon="fa fa-file-o" value="Visualiser"
+									action="#{editionConge.printListConge()}" ajax="false"
+									update=":frm" style="border-radius:10px" />
+						</p:panelGrid>
+
+				
+					<p:dataTable value="#{editionConge.listConge}" emptyMessage=""
+						var="sold" id="tblSoldCg" scrollable="true" scrollHeight="300">
+
+						<f:facet name="header">Solde des congé</f:facet>
+
+						<p:column headerText="Matricule" width="10%">
+							<h:outputText value="#{sold.matricule}" />
+						</p:column>
+						<p:column headerText="Nom et prénom" width="50%">
+							<h:outputText value="#{sold.nomEploye}" />
+						</p:column>
+						<p:column headerText="Congés annuels" width="15%"
+							style="text-align:right">
+							<h:outputText value="#{sold.congeAnnuel}" />
+						</p:column>
+						<p:column headerText="Congé déjà pris" width="15%"
+							style="text-align:right">
+							<h:outputText value="#{sold.congePris}" />
+						</p:column>
+						<p:column headerText="Solde" width="15%" style="text-align:right">
+							<h:outputText value="#{sold.solde}" />
+						</p:column>
+					</p:dataTable>
+
+				</div>
+
+			</div>
+
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

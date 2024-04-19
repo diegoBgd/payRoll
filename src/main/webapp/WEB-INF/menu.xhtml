@@ -1,0 +1,177 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/apollo">
+
+    <div class="layout-menu-container">
+        <div class="nano">
+            <div class="nano-content menu-scroll-content">
+                <div class="layout-menu-title">MENU</div>
+                <h:form id="menuform">
+                    <pa:menu>
+                       
+						
+						<p:submenu label="Droits des utilisateurs" icon="fa fa-slideshare">	
+							<p:menuitem icon="fa fa-briefcase" value="Fonctions" url="/fonction.xhtml" 
+							styleClass="#{view.viewId == 'fonction.xhtml' ? 'ui-state-active' : ''}" update="contener"/>							
+							<p:menuitem  value="Droits d'accès" outcome="/droitAcces" icon="fa fa-unlock"/>
+							<p:menuitem icon="fa fa-users" value="Utilisateurs" outcome="/utilisateur" />
+						</p:submenu>
+						 <p:submenu label="Structure Administrative" icon="fa fa-sitemap">													
+							<p:menuitem icon="fa fa-star" value="Directions" outcome="/directions" />
+							<p:menuitem icon="fa fa-star" value="Départements" outcome="/departement" />
+							<p:menuitem icon="fa fa-star" value="Services" outcome="/services" />	
+							<p:menuitem icon="fa fa-star" value="Lieux de travail" outcome="/lieuTravail" />
+						</p:submenu>
+						
+						
+						<p:submenu label="Paramétrage" icon="fa fa-gears">	
+							<p:submenu label="Paramètres généraux" icon="fa fa-cog">
+									<p:menuitem icon="fa fa-star " value="Marche programme" outcome="/parametrageGeneral" />
+									<p:menuitem icon="fa fa-star " value="Info. Société" outcome="/coordonneesEntreprises" />
+									
+									<p:menuitem icon="fa fa-star" value="Exercice" outcome="/exercice" />								
+									<p:menuitem icon="fa fa-star" value="Jour Férier " outcome="/jourFerier" rendered="false" />
+									<p:menuitem icon="fa fa-star" value="Allocation Famillial" outcome="parametreAllocation"  />	
+									<p:menuitem icon="fa fa-star" value="Journal de paie" outcome="/journalParametre"  />
+									<p:menuitem icon="fa fa-star" value="Signataires" outcome="/parametrageSignataire"/>
+									<p:menuitem icon="fa fa-star" value="Jours fériés" outcome="/jourFerier"/>	
+							</p:submenu>
+							<p:submenu label="Barèmes" icon="fa fa-outdent">							
+									<p:menuitem icon="fa fa-star" value="I.R.E" outcome="/baremeIRE"  />
+									<p:menuitem icon="fa fa-star" value="ONPR" outcome="/baremeONPR"  />
+							</p:submenu>
+							<p:submenu label="Variables de la paie" icon="fa fa-list-ul">	
+									<p:menuitem icon="fa fa-star" value="Primes"  outcome="/prime"  />
+									<p:menuitem icon="fa fa-star" value="Cotisations"  outcome="/cotisation"  />
+									<p:menuitem icon="fa fa-star" value="Comissions"  outcome="comission"  />
+									<p:menuitem icon="fa fa-star" value="Retenues"  outcome="/retenu"  />							
+									<p:menuitem icon="fa fa-star" value="Calcul des primes"  outcome="/parametragePrime"  />
+									<p:menuitem icon="fa fa-star" value="Calcul des cotisations"  outcome="/parametreCotisation"  />
+							</p:submenu>
+						</p:submenu>
+							
+						
+					
+						<p:submenu label="Profil Employé" icon="fa fa-newspaper-o">	
+						<p:menuitem icon="fa fa-star" value="Types de contrats"  outcome="/typeContrat" />	
+							<p:menuitem icon="fa fa-star" value="Niveau d'étude"  outcome="/niveauFormation"  />		
+							<p:menuitem icon="fa fa-star" value="Personnel" outcome="/personnel" />
+							<p:menuitem icon="fa fa-star" value="Catégories" outcome="/categorie" />
+							<p:menuitem icon="fa fa-star" value="Grades" outcome="/grade" />
+							<p:menuitem icon="fa fa-star" value="Banques"  outcome="/banque"  />							
+							<p:menuitem icon="fa fa-star" value="Fiche employé"  outcome="/employe"  />
+							<p:menuitem icon="fa fa-star" value="Personnes à charge"  outcome="/personnesCharge"  />							
+							<p:menuitem icon="fa fa-star" value="Liste des employés" outcome="/listEmploye" />				
+						</p:submenu>
+						<p:submenu label="Présences et abscenses" icon="fa fa-pencil">	
+							<p:menuitem icon="fa fa-star" value="Grille des heures Sup" outcome="/parametrageHS"  />
+							<p:menuitem icon="fa fa-star" value="Saisie des heures Sup"  outcome="/saisieHS" />
+							<p:menuitem icon="fa fa-star" value="Saisie des absences" outcome="/saisieAbsence" />					
+						</p:submenu>
+						<p:submenu label="Crédits et avances" icon="fa fa-dollar">	
+						   							
+							<p:menuitem icon="fa fa-star" value="Saisie des crédits"  outcome="/saisieCredit"  />									
+							<p:menuitem icon="fa fa-star" value="Saisie des Remboursements"  outcome="/saisieRemboursement" />						
+							<p:menuitem icon="fa fa-star" value="Saisie des Avances " outcome="/saisieAvance" />						
+							
+						</p:submenu>
+						
+						<p:submenu label="Paie" icon="fa fa-file-text">	
+							<p:menuitem icon="fa fa-star" value="Saisie manuelle bulletin" outcome="/bulletinPaie" />
+							<p:menuitem icon="fa fa-star" value="Bulletin automatique " outcome="/bulletinAutomatique" />
+							<p:menuitem icon="fa fa-star" value="Supprimer bulletin " outcome="/deleteBulletin" />							
+							<p:menuitem icon="fa fa-star" value="Edition de la paie" outcome="/editionJournalParametre" />
+							<p:menuitem icon="fa fa-star" value="Edition de bulletin" outcome="/editionBulletin" />
+							<p:menuitem icon="fa fa-star" value="Edition de l'O.V" outcome="/ordreVirement" />
+							<p:menuitem icon="fa fa-star" value="Virement mobile" outcome="/virementMobile" rendered="false"/>
+							<p:menuitem icon="fa fa-star" value="Déclaration IRE" outcome="/declarationIRE" rendered="false"/>
+							<p:menuitem icon="fa fa-star" value="Récaptulatif de la paie" outcome="/recaptulatifPaie" />							
+							<p:menuitem icon="fa fa-star" value="Edition des primes" outcome="/primeEmploye" />
+							<p:menuitem icon="fa fa-star" value="Edition des cotisations" outcome="/cotisationEmploye" />
+							<p:menuitem icon="fa fa-star" value="Edition des retenus" outcome="/retenuEmploye" />							
+							<p:menuitem icon="fa fa-star" value="Justificatif de la paie" outcome="/comparaisonPaie" rendered="false"/>
+						</p:submenu>
+						
+						<p:submenu label="Carrière" icon="fa fa-folder-o" >	
+								<p:submenu label="Cotation et avancement" icon="fa fa-edit">							
+									<p:menuitem icon="fa fa-star" value="Notations"  outcome="/notation" rendered="false"/>
+									<p:menuitem icon="fa fa-star" value="Type appréciation"  outcome="/typeAppreciation"/>
+									<p:menuitem icon="fa fa-star" value="Avancement salaire"  outcome="/parametreAvancementSalaire"  />
+									<p:menuitem icon="fa fa-star" value="Avancement grade"  outcome="/parametreAvancementGrade" />						
+									<p:menuitem icon="fa fa-star" value="Critère d'évaluation"  outcome="/critereEvaluation"  />
+									<p:menuitem icon="fa fa-star" value="Evaluation"  outcome="/evaluationEmploye"  />
+									<p:menuitem icon="fa fa-star" value="2ème évaluation"  outcome="/deuxiemeEvaluationEmploye" rendered="false" />
+									<p:menuitem icon="fa fa-star" value="3ème évaluation"  outcome="/troisiemeEvaluationEmploye" rendered="false" />
+									
+								</p:submenu>
+
+					
+								<p:submenu label="Mésures disciplinaires" icon="fa fa-balance-scale">							
+									<p:menuitem icon="fa fa-star" value="Paramètres sanction "  outcome="/parametrageSanction" />
+									<p:menuitem icon="fa fa-star" value="Saisie sanction"  outcome="/saisieSanction" />
+									<p:menuitem icon="fa fa-star" value="Recours"  outcome="/recoursSanction"/>
+									<p:menuitem icon="fa fa-star" value="Décisions"  outcome="/decisionRecours" />
+									
+								</p:submenu>
+								<p:submenu label="Gestion des Congés" icon="fa fa-bell-slash">
+									<p:menuitem icon="fa fa-star" value="Type congé" outcome="/typeConge" />
+									<p:menuitem icon="fa fa-star" value="Durées congés" outcome="/parametrageDureeConge" rendered="false"/>	
+									<p:menuitem icon="fa fa-star" value="paramétrage plan congé" outcome="/parametragePlanConge" rendered="false"/>	
+									<p:menuitem icon="fa fa-star" value="Plannification des congés" outcome="/saisiePlanConge" rendered="false"/>																
+									<p:menuitem icon="fa fa-star" value="Saisie de congé" outcome="/saisieConge" />	
+									<p:menuitem icon="fa fa-star" value="Autorisation des congés" outcome="/validationDemandeConge"/>
+									<p:menuitem icon="fa fa-star" value="Historique des congés" outcome="/soldeConge"/>		
+								</p:submenu>
+								<p:submenu label="Gestion des sorties" icon="fa fa-subway" rendered="false">
+																								
+									<p:menuitem icon="fa fa-star" value="Demande sortie" outcome="/saisieDemandeSortie" />	
+									<p:menuitem icon="fa fa-star" value="Traitement sortie" outcome="/validationDemandeSortie" />	
+											
+								</p:submenu>
+								<p:submenu label="Gestion des positions" icon="fa fa-tree" rendered="false">	
+									  <p:menuitem icon="fa fa-star" value="Types positions"  outcome="/conditionPosition" /> 
+									  <p:menuitem icon="fa fa-star" value="Paramètres position"  outcome="/parametragePosition" /> 
+									  <p:menuitem icon="fa fa-star" value="Demande "  outcome="/demandePosition"  /> 
+									  <p:menuitem icon="fa fa-star" value="Traitement"  outcome="/saisiePositionEmploye"  /> 
+									  
+
+								</p:submenu> 
+									
+								<p:submenu label="Fin de la carrirère" icon="fa fa-briefcase" rendered="false">							
+									<p:menuitem icon="fa fa-star" value="Paramétrage fin carrirère"  outcome="/parametrageFinCarriere" />
+									<p:menuitem icon="fa fa-star" value="Motifs de retraites"  outcome="/motifRetraite" />
+								<p:submenu	label="Prologation de travail" icon="fa fa-clock-o">	
+									<p:menuitem icon="fa fa-star" value="Demande "  outcome="/demandeProlongationRetraite" />
+									<p:menuitem icon="fa fa-star" value="Traitement "  outcome="/validationDemandeProlongationRetraite"  />
+								</p:submenu>
+								
+								<p:submenu	label="Retraite anticipée" icon="fa fa-sun-o">		
+									<p:menuitem icon="fa fa-star" value="Demande "  outcome="/demandeRetraiteAnticipe"  />
+									<p:menuitem icon="fa fa-star" value="Traitement "  outcome="/validationRetraiteAnticipe"  />
+									
+								</p:submenu>
+									<p:menuitem icon="fa fa-legal" value="Validation des retraites"  outcome="/misEnRetraite"  />
+									<p:menuitem icon="fa fa-file-o" value="Liste des retraités"  outcome="/listeRetraite"  />
+									
+								</p:submenu>
+							</p:submenu>
+							<p:submenu label="Utilitaire" icon="fa fa-wrench">	
+								<p:menuitem icon="fa fa-star" value="Affectation des primes"  outcome="/utilitaire"  rendered="false"/>		
+								<p:menuitem icon="fa fa-database" value="Base de données"  outcome="/parametreConnexion"  />	
+								<p:menuitem icon="fa fa-gg" value="Code service en ligne"  outcome="/nouveauLogin"/>							
+							</p:submenu>
+                    </pa:menu>
+                    
+                </h:form>
+                
+                <div class="nano-scroll-footer" />
+            </div>
+        </div>
+    </div>
+
+
+</ui:composition>

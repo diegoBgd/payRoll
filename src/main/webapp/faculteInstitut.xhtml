@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Directions</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{authenticite.OrganisationAcademique()}" />
+				</f:metadata>
+				<p:growl id="msg" life="21600" showDetail="true" sticky="false" />
+
+				<div class="ui-g">
+					<div class="ui-g-12 ui-fluid">
+						<div class="card no-margin">
+							<div class="ui-g">
+								<div class="ui-g-12">
+									<h:outputLabel value="Campus" />
+									<p:selectOneMenu id="smCampus"
+										value="#{faculteInstitutB.idCampus}"
+										valueChangeListener="#{faculteInstitutB.changeCampus}"
+										autoWidth="false">
+										<f:selectItems value="#{faculteInstitutB.listeCampus}" />
+										<p:ajax event="itemSelect" update=":frm:smCampus,:frm:tbl" />
+									</p:selectOneMenu>
+								</div>
+								<div class="ui-g-2">
+									<h:outputText value="Code" />
+									<p:inputMask id="txtCode" value="#{faculteInstitutB.code}"
+										mask="9999">
+										<p:ajax event="dblclick"
+											listener="#{faculteInstitutB.dbClickCode()}"
+											update=":frmRecherche,:frm:msg" />
+									</p:inputMask>
+								</div>
+								<div class="ui-g-10">
+									<h:outputLabel value="Désignation" />
+									<p:inputText id="txtDes" value="#{faculteInstitutB.designation}"
+										maxlength="100" />
+								</div>								
+							<div class="ui-g-4">
+							<p:commandButton value="Enregistrer"
+								action="#{faculteInstitutB.enregistrer()}" icon="ui-icon-disk"
+								update=":frm:smCampus,:frm:txtCode,:frm:txtDes,:frm:msg,:frm:tbl" />
+						</div>						
+						<div class="ui-g-4">
+							<p:commandButton value="Supprimer"
+								onclick="if (!confirm('Voulez-vous vraiment Supprimer?')) return false"
+								icon="ui-icon-trash" action="#{faculteInstitutB.supprimer()}"
+								update=":frm:smCampus,:frm:txtCode,:frm:txtDes,:frm:msg,:frm:tbl"
+								styleClass="orange-btn" />
+						</div>	
+						<div class="ui-g-4">
+							<p:commandButton value="Initialiser"
+								action="#{faculteInstitutB.initialiser()}"
+								icon="ui-icon ui-icon-refresh"
+								update=":frm:smCampus,:frm:txtCode,:frm:txtDes,:frm:msg,:frm:tbl" />
+						</div>	
+						</div>		
+						</div>
+					</div>
+					<div class="ui-g-12 ui-fluid card">
+						<p:dataTable var="bs" value="#{faculteInstitutB.listeFaculte}" id="tbl" selectionMode="single" selection="#{faculteInstitutB.selected}" 
+						rowKey="#{bs.code}" reflow="true" paginator="true" rows="9" paginatorPosition="bottom" paginatorAlwaysVisible="false" emptyMessage="">
+		   
+					    <p:ajax event="rowSelect" listener="#{faculteInstitutB.onRowSelected}" update="frm"/>
+						
+						<p:column headerText="Code" width="10%">
+						 <h:outputText value="#{bs.code}"/>
+						</p:column>
+								
+						<p:column headerText="Libellé" >
+						<h:outputText value="#{bs.designation}"/>
+						</p:column>
+													
+					</p:dataTable>				
+					</div>
+				</div>
+			</h:form>
+			<p:dialog header="Recherche" widgetVar="recherche" modal="true"
+				responsive="true" styleClass="dialogPers dialogPers2 dialogPers3"
+				appendTo="@(body)">
+				<h:form id="frmRecherche">
+					<div class="ui-g-12 ui-fluid card no-margin">
+						<p:dataTable id="tbl" var="dir"
+							value="#{faculteInstitutB.listeFaculte}" rowKey="#{dir.id}"
+							selectionMode="single" selection="#{faculteInstitutB.selected}"
+							reflow="true" paginator="true" rows="20"
+							paginatorPosition="bottom" paginatorAlwaysVisible="false">
+							<p:ajax event="rowSelect" listener="#{faculteInstitutB.onRowSelected}"
+								update=":frm:smCampus,:frm:txtCode,:frm:txtDes" />
+							
+							<p:column headerText="Campus">
+								<h:outputText value="#{dir.campus.designation}" />
+							</p:column>
+							<p:column headerText="Code" style="width:100px;">
+								<h:outputText value="#{dir.code}" />
+							</p:column>
+							<p:column headerText="Désignation">
+								<h:outputText value="#{dir.designation}" />
+							</p:column>
+
+						</p:dataTable>
+					</div>
+				</h:form>
+			</p:dialog>
+		</body>
+	</ui:define>
+</ui:composition>

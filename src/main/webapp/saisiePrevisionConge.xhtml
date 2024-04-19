@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			<f:metadata>
+				<f:event listener="#{authenticite.gestionConge()}" type="preRenderView"/>
+			</f:metadata>
+		
+			<p:growl id="message" showDetail="true"	sticky="true" life="21600"/>
+			<p:blockUI block="frm" trigger="btnSave"/>
+			
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12">
+								<p:dataTable
+									value="#{saisiePrevisionCongeB.allSaisiePrevisionConge}" var="prev" id="tbl" rowKey="#{prev.id}" rows="10" 
+									reflow="true" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" 
+									emptyMessage="Aucun élément à afficher">
+									
+									<f:facet name="header">Report à nouveau des Congés</f:facet>
+									
+									<p:column headerText="N°" style="width:5%">
+										<p:outputLabel value="#{prev.numero}" />
+									</p:column>
+									
+									<p:column headerText="Code" style="width:10%">
+										<p:outputLabel value="#{prev.employe.code}" />
+									</p:column>
+									<p:column headerText="Nom">
+										<p:outputLabel
+											value="#{prev.employe.nom} #{prev.employe.prenom}" />
+									</p:column>									
+									<p:column headerText="Organe">
+										<p:outputLabel
+											value="#{prev.employe.detailOrgane.libelleDirUb}" />
+									</p:column>
+									<p:column headerText="Exercice">
+										<p:outputLabel value="#{prev.exercice.designation}" />
+									</p:column>
+									<p:column headerText="Jours Dus" style="width:8%">
+										<p:outputLabel value="#{prev.joursDuS}" />
+									</p:column>
+									<p:column headerText="Jours Pris" style="width:8%">
+										<p:inputNumber id="txtJPris" value="#{prev.joursPris}" thousandSeparator="&nbsp;" decimalPlaces="1" />										
+									</p:column>
+									<p:column headerText="Jours Reportés" style="width:8%">
+										<p:inputNumber id="txtJRep" value="#{prev.joursReportes}" thousandSeparator="&nbsp;" decimalPlaces="1"/>										
+									</p:column>
+								</p:dataTable>
+								
+							</div>
+							
+						</div>
+					</div>
+
+				</div>
+
+			</div>	
+			
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-12 ui-lg-12 ui-fluid contact-form">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-2">
+								<p:spacer/>
+							</div>
+							
+							<div class="ui-g-12 ui-md-8">
+								<p:commandButton id="btnSave" icon="fa fa-save"
+									value="Enregistrer" action="#{saisiePrevisionCongeB.save()}"
+									update=":frm" />
+							</div>
+							
+							<div class="ui-g-12 ui-md-2">
+								<p:spacer/>
+							</div>						
+						</div>
+					</div>
+				</div>
+			</div>		
+			
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

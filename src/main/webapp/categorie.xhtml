@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/masterPage.xhtml">
+
+	<ui:define name="content">
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+
+			<f:metadata>
+				<f:event listener="#{authenticite.fichiersBase()}"
+					type="preRenderView" />
+			</f:metadata>
+			<p:blockUI block="frm" trigger="btnSave" />
+			<p:growl showDetail="true" sticky="false" life="21600" />
+		
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+					<div class="ui-g-12 ui-fluid card">
+					
+					<p:panelGrid columns="2"
+								columnClasses="ui-grid-col-1,ui-grid-col-9"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+							<h:outputLabel value="Personnel" />
+							<p:selectOneMenu id="txtPers"
+								value="#{categoriePersonnelB.idPersonnel}"
+								valueChangeListener="#{categoriePersonnelB.changePersonnel}">
+								<f:selectItems value="#{categoriePersonnelB.personnels}" />
+								<p:ajax event="change" update=":frm:txtPers,:frm:tbcat" />
+							</p:selectOneMenu>
+						</p:panelGrid>
+						
+              		<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-6"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+							<p:outputLabel value="Référence"/>
+							<p:inputText id="txtCode" value="#{categoriePersonnelB.code}" autocomplete="off">
+								<p:ajax event="blur" listener="#{categoriePersonnelB.changeCode()}" update=":frm" />
+							</p:inputText>						
+						
+							<p:outputLabel value="Catégorie"/>
+							<p:inputText id="txtDesign" value="#{categoriePersonnelB.designation}" autocomplete="off"/>						
+						</p:panelGrid>
+					
+					</div>
+					
+
+				<div class="ui-g-12 ui-fluid card">
+						<p:dataTable id="tbcat" var="categ"
+							value="#{categoriePersonnelB.categoriePersonnels}"
+							rowKey="#{categ.id}" selectionMode="single"
+							selection="#{categoriePersonnelB.selected}" scrollHeight="250" scrollable="true"
+							emptyMessage= "">
+
+							<p:ajax event="rowSelect" listener="#{categoriePersonnelB.onRowSelected}"
+								update=":frm" />
+
+
+							<p:column headerText="Référence" width="150">
+								<h:outputText value="#{categ.code}" />
+							</p:column>
+							
+							<p:column headerText="Catégorie">
+								<h:outputText value="#{categ.designation}" />
+							</p:column>
+
+						</p:dataTable>
+					</div>
+					<div class="ui-g-12 ui-fluid card">
+						<div class="ui-g-12 ui-md-1"/>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+								value="Enregistrer" style="border-radius:10px"
+								action="#{categoriePersonnelB.enregistrer()}" update=":frm" />
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+								value="Supprimer" style="border-radius:10px"							
+								action="#{categoriePersonnelB.supprimer()}" update=":frm"
+								styleClass="orange-btn">
+								<p:confirm header="Confirmation" disabled="#{categoriePersonnelB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+								</p:commandButton>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+								value="Initialiser" style="border-radius:10px"
+								action="#{categoriePersonnelB.initialiser()}" update=":frm" />
+						</div>
+
+					</div>
+				</div>
+		</h:form>
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form> 
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<title>Coordonnées Sociétés</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{authenticite.parametrage()}" />
+				</f:metadata>
+
+				<p:growl id="msgs" showDetail="true" life="21600" />
+
+				<div class="ui-g">
+					
+					<div class="ui-g-12 ui-md-18 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+						
+							<p:panelGrid id="pnl1" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-2"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							
+							<p:outputLabel value="Code" />
+									<p:inputText value="#{coordonneesSocieteB.code}"
+										autocomplete="off">
+										<p:ajax event="blur"
+											listener="#{coordonneesSocieteB.changeCode()}" update=":frm" />
+									</p:inputText>
+									
+							</p:panelGrid>
+							
+							<p:panelGrid id="pnl2" columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-8"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							
+							<p:outputLabel value="Nom société" />
+							<p:inputText value="#{coordonneesSocieteB.nomSociete}"
+										autocomplete="off" />
+										
+							<p:outputLabel value="Adresse" />
+									<p:inputText value="#{coordonneesSocieteB.adresse}"
+										autocomplete="off" />
+							
+							<p:outputLabel value="Représentant" />
+									<p:inputText value="#{coordonneesSocieteB.representant}"
+										autocomplete="off" />
+							
+							<p:outputLabel value="Téléphone 1" />
+									<p:inputText value="#{coordonneesSocieteB.telephoneMobile}"
+										autocomplete="off" />
+							
+							<p:outputLabel value="Téléphone 2" />
+									<p:inputText value="#{coordonneesSocieteB.telephoneFixe}"
+										autocomplete="off" />
+							
+							<p:outputLabel value="Fax" />
+									<p:inputText value="#{coordonneesSocieteB.fax}"
+										autocomplete="off" />
+										
+							<p:outputLabel value="Email" />
+									<p:inputText value="#{coordonneesSocieteB.email}"
+										autocomplete="off" />
+										
+							<p:outputLabel value="N° Empl-INSS" />
+									<p:inputText value="#{coordonneesSocieteB.noEmployeurInss}"
+										autocomplete="off" />
+							
+									
+							</p:panelGrid>
+						
+						
+							
+						</div>
+						
+					
+					  <div class="card">
+						<div class="ui-g">
+						
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton icon="fa fa-save" value="Enregistrer" style="border-radius:10px"
+										action="#{coordonneesSocieteB.enregistrer()}"
+										update=":frm:msgs" />
+							</div>
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Supprimer" style="border-radius:10px"
+									action="#{coordonneesSocieteB.supprimmer()}"
+									styleClass="orange-btn" icon="ui-icon ui-icon-trash"
+									update=":frm">
+									<p:confirm header="Confirmation" disabled=""
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+									</p:commandButton>
+							</div>
+							
+						</div>
+					</div>
+					</div>
+				</div>
+
+
+			
+
+			</h:form>
+
+			<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form> 
+			
+		</body>
+	</ui:define>
+</ui:composition>

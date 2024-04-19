@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<title>Crédit Employé</title>
+		</h:head>
+		<body>
+			<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+				<p:growl id="msgs" showDetail="true"/>
+				<p:blockUI block="frm" trigger="btnSave"/>
+				<f:metadata>
+					<f:event listener="#{authenticite.CreditEmploye()}"
+						type="preRenderView" />
+				</f:metadata>
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+						<div class="card">
+							<div class="ui-g">
+
+								<div class="ui-g-12 ui-md-4">
+									<p:commandButton value="Recherche" icon="fa fa-search"
+										onclick="PF('dlgCrd').show();" style="border-radius:10px"/>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+
+							<p:panelGrid id="pnl1" columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputText value="Numéro Dossier" />
+								<p:inputText id="txtNumeroDossier" 
+									value="#{creditB.numeroDossier}" readonly="true"/>
+							
+								
+							</p:panelGrid>
+
+							<p:panelGrid id="pnl2" columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputText value="Employé" />
+								<p:inputText id="txtCodeEmploye"
+									value="#{creditB.codeEmploye}"
+									autocomplete="off">
+									<p:ajax event="blur"
+										listener="#{creditB.searchEmploye()}"
+										update="txtEmploye,pnl3" />
+								</p:inputText>
+
+								<p:inputText id="txtEmploye"
+									value="#{creditB.nomEmploye}"
+									readonly="true" />
+								<p:commandButton icon="fa fa-search"
+									onclick="PF('dlgEmploye').show();" style="border-radius:10px"/>
+							</p:panelGrid>
+							<p:panelGrid id="pnl3" columns="2"
+								columnClasses="ui-grid-col-2,ui-grid-col-8"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputText value="Banque" />
+								<p:selectOneMenu id="txtBk" value="#{creditB.idBanque}" valueChangeListener="#{creditB.changeBanque}" 
+									autoWidth="false" filter="true" filterMatchMode="contains">								
+									<f:selectItems value="#{creditB.banques}" />
+									<p:ajax event="itemSelect" update="txtBk" />
+								</p:selectOneMenu>
+
+							</p:panelGrid>
+							<p:panelGrid id="pnl4" columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								
+								<p:outputLabel value="Date crédit"/>
+								<p:inputMask id="txtDateCrd"
+									value="#{creditB.printDate}"
+									mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{creditB.changeDateCred()}"
+										update="txtDateCrd,msgs,btnSave" />
+								</p:inputMask>
+
+								<h:outputText value="Montant Octroyé" />
+								<p:inputNumber id="txtMontantOctroye" autocomplete="off"
+									value="#{creditB.montantCredit}"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;">
+
+								</p:inputNumber>
+
+								<h:outputText value="Durée" />
+								<p:inputNumber id="txtDure"
+									value="#{creditB.duree}"
+									inputStyle="text-align:right" autocomplete="off"
+									thousandSeparator="&nbsp;" decimalPlaces="0">
+										<p:ajax event="blur" update="txtDure" />
+									</p:inputNumber>
+
+								<h:outputText value="Total à rembourser" />
+								<p:inputNumber id="txtMontantCap"
+									value="#{creditB.capital}"
+									inputStyle="text-align:right" thousandSeparator="&nbsp;">
+									<p:ajax event="blur" update="txtMontantCap,txtRemb,txtReste" />
+								</p:inputNumber>
+
+								<h:outputText value="Déjà remboursé" />
+								<p:inputNumber id="txtRemb" autocomplete="off"
+									value="#{creditB.montantRembourse}"
+									inputStyle="text-align:right"
+									thousandSeparator="&nbsp;">
+									<p:ajax event="blur" update="txtRemb,txtReste" listener="#{creditB.calculRemboursement()}" />
+								</p:inputNumber>
+
+								<h:outputText value="Reste à rembourser" />
+								<p:inputNumber id="txtReste" autocomplete="off"
+									value="#{creditB.reste}" 
+									inputStyle="text-align:right" thousandSeparator="&nbsp;" />
+
+
+							</p:panelGrid>
+
+							<p:dataTable id="tblCrd" value="#{creditB.listDetail}" var="det"
+								rowKey="#{det.id}"   style="border:solid 1px gray"
+								selectionMode="single" selection="#{creditB.detail}"
+								scrollable="true" scrollHeight="180" emptyMessage=""
+								reflow="true">
+
+								<p:ajax event="rowSelect"
+									listener="#{creditB.onDetailSelected}"
+									update="frm" />
+
+								<p:column headerText="Date début" width="10%">
+									<h:outputText value="#{det.printDateDeb}" />
+								</p:column>
+
+								<p:column headerText="Date fin" width="10%">
+									<h:outputText value="#{det.printDateFin}" />
+								</p:column>
+
+								
+								<p:column headerText="Mensualités" width="10%">
+										<h:outputText value="#{det.mensualite}" style="float:center"/>
+								</p:column>
+								
+								<p:column headerText="Tranche" width="15%">
+									<h:outputText value="#{det.printTranche}" style="float:right"/>
+								</p:column>
+								
+								<p:column headerText="Total" width="15%">
+									<h:outputText value="#{det.printTotTrch}" style="float:right"/>
+								</p:column>
+								
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column footerText="Totaux" colspan="2"
+											style="text-align:left;color:brown" />
+											
+										<p:column footerText=" "/>
+
+										<p:column footerText="#{creditB.printTotMn}"
+											style="text-align:center;color:brown" />
+											
+									    <p:column footerText=" "/>
+											
+										<p:column footerText="#{creditB.printTotTranch}"
+											style="text-align:right;color:brown" />
+											
+										
+										
+									</p:row>
+								</p:columnGroup>
+
+							</p:dataTable>
+							<p:panelGrid id="pnl5" columns="9"
+								columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								
+								<p:outputLabel value="Date début"/>
+								<p:inputMask id="txtDateDb"
+									value="#{creditB.printDateDb}"
+									mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{creditB.changeDateDeb()}"
+										update="txtDateDb,msgs,btnAdd,txtDateFn" />
+								</p:inputMask>
+
+								<p:outputLabel value="Date fin"/>
+								<p:inputMask id="txtDateFn"
+									value="#{creditB.printDateFn}"
+									mask="99/99/9999">
+									<p:ajax event="blur"
+										listener="#{creditB.changeDateFin()}"
+										update="txtDateFn,msgs,btnAdd" />
+								</p:inputMask>
+								
+								<p:outputLabel value="Tranche"/>
+								<p:inputNumber id="txtMont" autocomplete="off"
+									value="#{creditB.montantTranche}" 
+									inputStyle="text-align:right" thousandSeparator="&nbsp;" />
+
+								<p:commandButton id="btnAdd" icon="fa fa-plus"
+										    disabled="#{creditB.desableAdd}" style="border-radius:10px"
+											action="#{creditB.addDetail()}" update="tblCrd,pnl5,msgs" />
+											
+								<p:commandButton id="btnRemove" icon="fa fa-remove"
+										    action="#{creditB.removeDetail()}" style="border-radius:10px"
+											styleClass="red-btn" update="tblCrd,pnl5,msgs" />
+											
+								<p:commandButton id="btnRefresh" style="border-radius:10px"
+											icon="ui-icon ui-icon-refresh"
+											action="#{creditB.clearDetail()}" update="pnl5" />
+							</p:panelGrid>
+							
+						
+							
+
+						</div>
+
+						<div class="card">
+							<div class="ui-g">
+
+								
+							<div class="ui-g-12 ui-md-1"/>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer" action="#{creditB.enregistrer()}"
+											disabled="#{creditB.desable}"
+											update=":frm" style="border-radius:10px"/>
+
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer" style="border-radius:10px"
+											action="#{creditB.supprimer()}" styleClass="orange-btn"
+											update=":frm">
+											<p:confirm header="Confirmation"
+								disabled="#{creditB.disableMsg}"
+								message="Voulez-vous vraiment supprimer ?" icon="ui-icon-alert" />
+											</p:commandButton>
+									</div>
+									<div class="ui-g-12 ui-md-3">
+										<p:commandButton id="btnAnnuler" style="border-radius:10px"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{creditB.initialiser()}" update=":frm" />
+
+									</div>
+								
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+
+			</h:form>
+		<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+			<p:dialog widgetVar="dlgEmploye" header="Recherche Employé"
+				modal="true" width="70%" height="30%" position="center"
+				responsive="true" resizable="false">
+				<h:form id="frmEmploye">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								<p:panelGrid columns="3"
+									columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2"
+									layout="grid" styleClass="ui-panelgrid-blank"
+									style="border:0px none; background-color:transparent;">
+
+								
+									<h:outputText value="Rcherche par nom" />
+									<p:inputText value="#{creditB.nomRechEmp}"
+										autocomplete="off" />
+											
+									<p:commandButton value="Rechercher" icon="fa fa-search"
+												action="#{creditB.chargementEmploye()}"
+												update=":frmEmploye:tblEmploye" style="border-radius:10px"/>
+
+								
+								</p:panelGrid>
+								
+								<p:dataTable id="tblEmploye" value="#{creditB.employes}"
+									var="empl" rowKey="#{empl.id}" selectionMode="single"
+									selection="#{creditB.employe}" reflow="true" scrollable="true" 
+									scrollHeight="200" emptyMessage="">
+
+									<p:ajax event="rowSelect"
+										listener="#{creditB.onEmployeSelected}" update=":frm:pnl2" />
+
+									<p:column headerText="Code" width="10%">
+										<h:outputText value="#{empl.code}" />
+									</p:column>
+
+									<p:column headerText="Nom" width="40%">
+										<h:outputText value="#{empl.nomPrenom}" />
+									</p:column>
+							</p:dataTable>
+							</div>
+						</div>
+					</div>
+
+				</h:form>
+			</p:dialog>
+
+
+			
+			<p:dialog widgetVar="dlgCrd" header="Liste des crédits" modal="true"
+				width="70%" height="40%" position="center" responsive="true">
+				<h:form id="frmCrd">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+
+										<div class="ui-g-12 ui-md-4"></div>
+										<div class="ui-g-12 ui-md-8">
+
+											<p:commandButton value="Charger les crédits"  style="border-radius:10px"
+												action="#{creditB.chargerCredit()}" update="tblcrd" />
+
+										</div>
+									</div>
+								</div>
+
+								<p:dataTable id="tblcrd" value="#{creditB.listCredit}" var="crd"
+									rowKey="#{crd.id}" selectionMode="single" scrollable="true" 
+									scrollHeight="200" emptyMessage=""
+									selection="#{creditB.selectedCredit}" reflow="true">
+
+									<p:ajax event="rowSelect"
+										listener="#{creditB.onRowSelectedCredit}" update="frm" />
+
+									<p:column headerText="N° dossier" width="10%">
+										<h:outputText value="#{crd.numeroDossier}" />
+									</p:column>
+									<p:column headerText="Emplyé" width="40%">
+										<h:outputText value="#{crd.employe.nomPrenom}" />
+									</p:column>
+									<p:column headerText="Date crédit" width="10%">
+										<h:outputText value="#{crd.printDateCrd}" />
+									</p:column>
+									
+								</p:dataTable>
+							</div>
+
+						</div>
+					</div>
+
+				</h:form>
+			</p:dialog>
+
+			
+
+		</body>
+	</ui:define>
+</ui:composition>

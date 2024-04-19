@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/masterPage.xhtml">   
+
+    <ui:define name="content">
+    <h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+    	
+    	<f:metadata>
+    		<f:event listener="#{authenticite.gestionPosition()}" type="preRenderView"/>
+    	</f:metadata>
+    
+    	<p:growl showDetail="true" sticky="false" life="21600"/>
+        <div class="ui-g">
+            <div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+             
+              	<div class="card">
+              		<p:panelGrid columns="2"
+							columnClasses="ui-grid-col-2,ui-grid-col-6"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="background-color:transparent;">
+							
+              			<h:outputLabel value="Position" />
+						<p:selectOneMenu id="txtPosition" value="#{conditionPositionB.idPosition}"  
+							valueChangeListener="#{conditionPositionB.changePosition}" >
+							<f:selectItem itemLabel="" itemValue="0"/>
+							<f:selectItem itemLabel="L'activité de service" itemValue="1"/>
+							<f:selectItem itemLabel="Le détachement" itemValue="2"/>
+							<f:selectItem itemLabel="La suspension d'activités de service" itemValue="3"/>
+							<f:selectItem itemLabel="La disponibilité" itemValue="4"/>
+							<f:selectItem itemLabel="La suspension de fonction par mesure d'ordre" itemValue="5"/>
+							<p:ajax event="change" update=":frm:txtPosition" />	
+						</p:selectOneMenu>
+              		
+              			<h:outputText value="Condition/cause " />
+              			<p:inputTextarea value="#{conditionPositionB.condition}" id="txtcond"/>
+              	</p:panelGrid>
+              	</div>	
+              	<div class="ui-g card">
+              		<div class="ui-g-12 ui-md-4">
+              			<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" value="Enregistrer" action="#{conditionPositionB.save()}" update="frm"/>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+              			<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash" value="Supprimer" onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false" 
+							action="#{conditionPositionB.supprimer()}" update=":frm" styleClass="orange-btn"/>
+					</div>
+              		<div class="ui-g-12 ui-md-4">
+              			<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh" value="Initialiser" action="#{conditionPositionB.initialiser()}" update=":frm"/>
+					</div>
+						
+              	</div>
+              
+         
+            </div>
+            
+           
+            	<div class="ui-g card">
+	            	<p:dataTable id="tbcat" var="condi" value="#{conditionPositionB.listConditionsPostition}" rowKey="#{condi.id}" selectionMode="single" 
+						selection="#{conditionPositionB.selected}" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" rows="10" emptyMessage="Aucun élément enregistré">
+					
+						<p:ajax event="rowSelect" listener="#{conditionPositionB.onRowSelected}" update=":frm:txtPosition,:frm:txtcond"/>
+							
+											
+						<p:column headerText="Position" >
+							<h:outputText value="#{condi.libellePosition}"/>
+						 </p:column>
+										
+						<p:column headerText="Condition" >
+							<h:outputText value="#{condi.condition}"/>
+						 </p:column>
+																				
+					</p:dataTable>
+            	</div>
+            
+          
+        </div>
+        
+      </h:form>  
+    </ui:define>
+
+</ui:composition>
