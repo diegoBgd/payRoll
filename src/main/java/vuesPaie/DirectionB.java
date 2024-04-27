@@ -166,7 +166,7 @@
 /* 162 */           affecter();
 /*     */         }
 /*     */       } else {
-/* 165 */         HelperC.afficherAttention("ATTENTION", "Il faut d'abord prï¿½ciser la direction ");
+/* 165 */         HelperC.afficherAttention("ATTENTION", "Il faut d'abord préciser la direction ");
 /*     */       }  } 
 /*     */   }
 /*     */   
@@ -206,7 +206,7 @@
 /*     */   public void enregistrer() {
 /* 202 */     if (getId() == 0 && !this.droit.isCreer()) {
 /*     */       
-/* 204 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crï¿½er");
+/* 204 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer");
 /*     */     }
 /* 206 */     else if (getId() != 0 && !this.droit.isModifier()) {
 /*     */       
@@ -234,13 +234,13 @@
 /*     */         
 /* 246 */         chargerDirection();
 /* 247 */         clear();
-/* 248 */         HelperC.afficherInformation("FELICITATION", "Succï¿½s de l'Opï¿½ration");
+/* 248 */         HelperC.afficherInformation("FELICITATION", "Succès de l'Opération");
 /*     */       } else {
 /*     */         
-/* 251 */         HelperC.afficherErreur("DESOLE!", "Echec de l'Opï¿½ration");
+/* 251 */         HelperC.afficherErreur("DESOLE!", "Echec de l'Opération");
 /*     */       } 
 /*     */     }
-				else HelperC.afficherAttention("ATTENTION", "Il faut prï¿½ciser la direction");
+				else HelperC.afficherAttention("ATTENTION", "Il faut préciser la direction");
 			}
 			
 /*     */   }
@@ -254,7 +254,7 @@
 /*     */     }
 /* 262 */     else if (direction ==null) {
 /*     */       
-/* 264 */       HelperC.afficherInformation("Information", "Prï¿½cisez l'ï¿½lï¿½ment ï¿½ supprimer");
+/* 264 */       HelperC.afficherInformation("Information", "Prècisez l'élément à supprimer");
 /*     */     } else {
 /*     */       
 /* 267 */       Historique hist = new Historique();
@@ -268,10 +268,10 @@
 /*     */         
 /* 276 */         clear();
 /* 277 */         chargerDirection();
-/* 278 */         HelperC.afficherInformation("FELICITATION", "Succï¿½s de l'Opï¿½ration");
+/* 278 */         HelperC.afficherInformation("FELICITATION", "Succès de l'Opération");
 /*     */       } else {
 /*     */         
-/* 281 */         HelperC.afficherErreur("DESOLE!", "Echec de l'Opï¿½ration");
+/* 281 */         HelperC.afficherErreur("DESOLE!", "Echec de l'Opération");
 /*     */       } 
 /*     */     } 
 /*     */   }

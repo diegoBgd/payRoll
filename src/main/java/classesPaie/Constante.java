@@ -67,13 +67,13 @@
          libelle = "Saisie manuelle";
          break;
        case 2:
-         libelle = "Salaire base normal sans absence ni heure suppl√©mentaire";
+         libelle = "Salaire base normal sans absence ni heure supplÈmentaire";
          break;
        case 3:
-         libelle = "Salaire base normal moin absence sans heure suppl√©mentaire";
+         libelle = "Salaire base normal moin absence sans heure supplÈmentaire";
          break;
        case 4:
-         libelle = "Salaire base normal moin absence plus heure suppl√©mentaire";
+         libelle = "Salaire base normal moin absence plus heure supplÈmentaire";
          break;
      } 
  
@@ -90,13 +90,13 @@
          libelle = "Saisie manuelle";
          break;
        case SalaireBaseNormalSansAbsenceNiHeureSuppl:
-         libelle = "Salaire base normal sans absence ni heure suppl√©mentaire";
+         libelle = "Salaire base normal sans absence ni heure supplÈmentaire";
          break;
        case SalaireBaseNormalMoinsAbsenceSansHeureSuppl:
-         libelle = "Salaire base normal moin absence sans heure suppl√©mentaire";
+         libelle = "Salaire base normal moin absence sans heure supplÈmentaire";
          break;
        case SalaireBaseNormalMoinsAbsencePlusHeureSuppl:
-         libelle = "Salaire base normal moin absence plus heure suppl√©mentaire";
+         libelle = "Salaire base normal moin absence plus heure supplÈmentaire";
          break;
      } 
  
@@ -202,7 +202,7 @@
      
      switch (cha) {
        case 1:
-         libelle = "impot sur employ√©";
+         libelle = "impot sur employÈ";
          break;
        case 2:
          libelle = "charge patronale";
@@ -341,46 +341,46 @@
          break;
       
        case parametrage:
-         lib = "Param√©tres g√©n√©raux";
+         lib = "ParamÈtres gÈnÈraux";
          break;
        case fichierBase:
          lib = "Fichiers de base";
          break;
        case elementPaie:
-         lib = "El√©ments de paie";
+         lib = "ElÈments de paie";
          break;
        case profilEmploye:
-         lib = "Fiche employ√©";
+         lib = "Fiche employÈ";
          break;
        case creditAvance:
-         lib = "Cr√©dits/Avance";
+         lib = "CrÈdits/Avance";
          break;
        case bulletinPaie:
          lib = "Bulletins de paie";
          break;
        case gestionConge:
-         lib = "Gestion des cong√©s";
+         lib = "Gestion des congÈs";
          break;
        case gestionPosition:
          lib = "Gestion des positions";
          break;
        case gestionAbsencePresence:
-         lib = "Gestion des pr√©sences et absences";
+         lib = "Gestion des prÈsences et absences";
          break;
        case mesuresDisciplinaires:
          lib = "Mesures Disciplinaires";
          break;
        case organisationAcademique:
-         lib = "Organisation Acad√©mique";
+         lib = "Organisation AcadÈmique";
          break;
        case premiereEvaluation:
-         lib = "Premi√©revaluation";
+         lib = "PremiÈrevaluation";
          break;
        case deuxiemeEvaluation:
-         lib = "Deuxi√©mevaluation";
+         lib = "DeuxiÈmevaluation";
          break;
        case troisiemeEvaluation:
-         lib = "Troisi√©mevaluation";
+         lib = "TroisiÈmevaluation";
          break;
        case saisieSanction:
          lib = "Saisir les sanctions";
@@ -392,40 +392,40 @@
          lib = "Traitement des recours";
          break;
        case parametrageConge:
-         lib = "Param√©trage cong√©";
+         lib = "ParamÈtrage congÈ";
          break;
        case validationPlanConge:
-         lib = "Validation plan cong√©";
+         lib = "Validation plan congÈ";
          break;
        case saisieDemandeConge:
-         lib = "Saisie demande cong√©";
+         lib = "Saisie demande congÈ";
          break;
        case validationDemandeConge:
-         lib = "Validation demande cong√©";
+         lib = "Validation demande congÈ";
          break;
        case saisiePlanConge:
-         lib = "Saisie du plan de cong√©";
+         lib = "Saisie du plan de congÈ";
          break;
        case clotureConge:
-         lib = "Cl√©ture de cong√©";
+         lib = "ClÈture de congÈ";
          break;
        case demandeProlongationRetraite:
          lib = "Demande prolongation retraite";
          break;
        case finCarriere:
-         lib = "Fin de carri√©re";
+         lib = "Fin de carriÈre";
          break;
        case demandeRetraiteAnticipe:
-         lib = "Demande retraite anticip√©e";
+         lib = "Demande retraite anticipÈe";
          break;
        case parametrageFinCarriere:
-         lib = "Param√©trage fin carri√©re";
+         lib = "ParamÈtrage fin carriÈre";
          break;
        case validationProlongation:
          lib = "Validation prolongation retraite";
          break;
        case validationRetraiteAnticipe:
-         lib = "Validation retraite anticip√©e";
+         lib = "Validation retraite anticipÈe";
          break;
      } 
      
@@ -566,7 +566,7 @@
          lib = "est Une prime";
          break;
        case uneIndemnite:
-         lib = "est une indemnit√©";
+         lib = "est une indemnitÈ";
          break;
      } 
  
@@ -632,7 +632,7 @@
      String type = "";
      switch (typeJourFerie) {
        case 1:
-         type = "Jour F√©ri√©";
+         type = "Jour FÈriÈ";
          break;
        case 2:
          type = "Week End";
@@ -791,7 +791,7 @@
      
      switch (type) {
        case impot:
-         lib = "Imp√©t sur salaire";
+         lib = "ImpÈt sur salaire";
          break;
        case cotisation:
          lib = "Cotisation sociale";
@@ -871,10 +871,10 @@
      
      switch (type) {
        case deplacement:
-         lib = "Prime/indemnit√© de d√©placement";
+         lib = "Prime/indemnitÈ de dÈplacement";
          break;
        case logement:
-         lib = "Prime/indemnit√© de logement";
+         lib = "Prime/indemnitÈ de logement";
          break;
        case autre:
          lib = "Autres primes";
@@ -890,7 +890,7 @@
      
      switch (ba) {
        case 1:
-         libelle = "Prime de d√©placement";
+         libelle = "Prime de dÈplacement";
          break;
        case 2:
          libelle = "Prime de logement";
@@ -910,13 +910,13 @@
      
      switch (ba) {
        case 1:
-         libelle = "Indemnit√© de d√©placement";
+         libelle = "IndemnitÈ de dÈplacement";
          break;
        case 2:
-         libelle = "Indemnit√© de logement";
+         libelle = "IndemnitÈ de logement";
          break;
        case 3:
-         libelle = "Autre indemnit√©";
+         libelle = "Autre indemnitÈ";
          break;
      } 
  
@@ -1049,7 +1049,7 @@
          lib = "Conjoint";
          break;
        case 2:
-         lib = "Enfant L√©gitime";
+         lib = "Enfant LÈgitime";
          break;
        case 3:
          lib = "Enfant Naturel Reconnu";
@@ -1155,10 +1155,10 @@
          lib = "sanction disciplinaire";
          break;
        case finCarriereAv:
-         lib = "Fin carri√©re";
+         lib = "Fin carriÈre";
          break;
        case salaireEntree:
-         lib = "Salaire l'entr√©e";
+         lib = "Salaire l'entrÈe";
          break;
      } 
      
@@ -1171,7 +1171,7 @@
      
      switch (ba) {
        case 0:
-         libelle = "Salaire l'entr√©e";
+         libelle = "Salaire l'entrÈe";
          break;
        case 1:
          libelle = "avancement de traitement";
@@ -1186,7 +1186,7 @@
          libelle = "sanction disciplinaire";
          break;
        case 5:
-         libelle = "Fin carri√©re";
+         libelle = "Fin carriÈre";
          break;
      } 
  
@@ -1253,13 +1253,13 @@
      
      switch (type) {
        case demandeEnAttenete:
-         lib = "Demande non encore trait√©e";
+         lib = "Demande non encore traitÈe";
          break;
        case demandeValide:
-         lib = "Demande valid√©e";
+         lib = "Demande validÈe";
          break;
        case demandeRefuse:
-         lib = "Demande refus√©e";
+         lib = "Demande refusÈe";
          break;
      } 
  
@@ -1273,10 +1273,10 @@
      
      switch (ba) {
        case 1:
-         libelle = "demande non encore trait√©";
+         libelle = "demande non encore traitÈ";
          break;
        case 2:
-         libelle = "demande trait√©";
+         libelle = "demande traitÈ";
          break;
      } 
  
@@ -1332,10 +1332,10 @@
          lib = "demande position";
          break;
        case decide:
-         lib = "D√©cid√©";
+         lib = "DÈcidÈ";
          break;
 				case reintegre:
-         lib = "R√©int√©gr√©";
+         lib = "RÈintÈgrÈ";
          break;
 				 default:
 				   break;
@@ -1353,10 +1353,10 @@
          libelle = "Demande position";
          break;
        case 2:
-         libelle = "acc√®s dans une position";
+         libelle = "acc‡®s dans une position";
          break;
        case 3:
-         libelle = "demande position refus√©e";
+         libelle = "demande position refusÈe";
          break;
      } 
  
@@ -1414,16 +1414,16 @@
      
      switch (posi) {
        case activiteDeService:
-         lib = "L'activit√© de service";
+         lib = "L'activitÈ de service";
          break;
        case detachement:
-         lib = "Le d√©tachement";
+         lib = "Le dÈtachement";
          break;
        case suspensionActiviteDeService:
-         lib = "La suspension d'activit√©s de service";
+         lib = "La suspension d'activitÈs de service";
          break;
        case disponibilite:
-         lib = "La disponibilit√©";
+         lib = "La disponibilitÈ";
          break;
        case suspensionFonctionParMesureDOrdre:
          lib = "La suspension de fonction par mesure d'ordre";
@@ -1439,16 +1439,16 @@
      
      switch (ba) {
        case 1:
-         libelle = "L'activit√© de service";
+         libelle = "L'activitÈ de service";
          break;
        case 2:
-         libelle = "Le d√©tachement";
+         libelle = "Le dÈtachement";
          break;
        case 3:
-         libelle = "La suspension d'activit√©s de service";
+         libelle = "La suspension d'activitÈs de service";
          break;
        case 4:
-         libelle = "La disponibilit√©";
+         libelle = "La disponibilitÈ";
          break;
        case 5:
          libelle = "La suspension de fonction par mesure d'ordre";
@@ -1525,16 +1525,16 @@
          lib = "Le blame";
          break;
        case retenueMoitieTraitementCinqJoursMin:
-         lib = "La retenue de la moiti√© de traitement pendant cinq jours au minimum et quinze jours au maximum";
+         lib = "La retenue de la moitiÈ de traitement pendant cinq jours au minimum et quinze jours au maximum";
          break;
        case retenueMoitieTraitementUnMois:
-         lib = "La retenue de la moiti√© de traitement pendant un mois";
+         lib = "La retenue de la moitiÈ de traitement pendant un mois";
          break;
        case disponibiliteDisciplinaire:
-         lib = "La disponibit√© disciplinaire pour une dur√©e de 1 2 mois";
+         lib = "La disponibitÈ disciplinaire pour une durÈe de 1 2 mois";
          break;
        case revocation:
-         lib = "La r√©vocation";
+         lib = "La rÈvocation";
          break;
      } 
      
@@ -1553,16 +1553,16 @@
          libelle = "Le blame";
          break;
        case 3:
-         libelle = "La retenue de la moiti√© de traitement pendant cinq jours au minimum et quinze jours au maximum";
+         libelle = "La retenue de la moitiÈ de traitement pendant cinq jours au minimum et quinze jours au maximum";
          break;
        case 4:
-         libelle = "La retenue de la moiti√© de traitement pendant un mois";
+         libelle = "La retenue de la moitiÈ de traitement pendant un mois";
          break;
        case 5:
-         libelle = "La disponibit√© disciplinaire pour une dur√©e de 1 2 mois";
+         libelle = "La disponibitÈ disciplinaire pour une durÈe de 1 2 mois";
          break;
        case 6:
-         libelle = "La r√©vocation";
+         libelle = "La rÈvocation";
          break;
      } 
  
@@ -1631,7 +1631,7 @@
          lib = "Recours sur sanction";
          break;
        case decision:
-         lib = "D√©cision";
+         lib = "DÈcision";
          break;
       
      } 
@@ -1646,16 +1646,16 @@
      
      switch (ba) {
        case 1:
-         libelle = "Sanction accord√©e";
+         libelle = "Sanction accordÈe";
          break;
        case 2:
          libelle = "Recours sur sanction";
          break;
        case 3:
-         libelle = "Recours accept√©";
+         libelle = "Recours acceptÈ";
          break;
        case 4:
-         libelle = "Recours rejet√©";
+         libelle = "Recours rejetÈ";
          break;
      } 
  
@@ -1711,7 +1711,7 @@
          lib = "Demande prolongation age retraite";
          break;
        case decide:
-         lib = "Prolongation age retraite accord√©e";
+         lib = "Prolongation age retraite accordÈe";
          break;
       
      } 
@@ -1728,10 +1728,10 @@
          libelle = "Demande prolongation age retraite";
          break;
        case 1:
-         libelle = "Prolongation age retraite accord√©e";
+         libelle = "Prolongation age retraite accordÈe";
          break;
        case 2:
-         libelle = "Prolongation age retraite refus√©e";
+         libelle = "Prolongation age retraite refusÈe";
          break;
      } 
  
@@ -1780,10 +1780,10 @@
      
      switch (dema) {
        case demandeRetraiteAnticipe:
-         lib = "Demande retraite anricip√©e";
+         lib = "Demande retraite anricipÈe";
          break;
        case traitementRetraite:
-         lib = "Traitement retraite anricip√©e ";
+         lib = "Traitement retraite anricipÈe ";
          break;
      } 
  
@@ -1797,13 +1797,13 @@
      
      switch (ba) {
        case 1:
-         libelle = "Demande retraite anticip√©e";
+         libelle = "Demande retraite anticipÈe";
          break;
        case 2:
-         libelle = "Retraite anticip√©e accord√©e";
+         libelle = "Retraite anticipÈe accordÈe";
          break;
        case 3:
-         libelle = "Retraite anticip√©e refus√©e";
+         libelle = "Retraite anticipÈe refusÈe";
          break;
      } 
  
@@ -1857,16 +1857,16 @@
      
      switch (dema) {
        case demandeConge:
-         lib = "Demande Cong√©";
+         lib = "Demande CongÈ";
          break;
        case accord:
-         lib = "Accord Cong√©";
+         lib = "Accord CongÈ";
          break;
        case refusConge:
-         lib = "Refus Cong√©";
+         lib = "Refus CongÈ";
          break;
        case finConge:
-         lib = "Fin Cong√©";
+         lib = "Fin CongÈ";
          break;
      } 
      
@@ -1879,16 +1879,16 @@
      
      switch (ba) {
        case 1:
-         libelle = "Demande Cong√©";
+         libelle = "Demande CongÈ";
          break;
        case 2:
-         libelle = "Accord Cong√©";
+         libelle = "Accord CongÈ";
          break;
        case 3:
-         libelle = "Refus Cong√©";
+         libelle = "Refus CongÈ";
          break;
        case 4:
-         libelle = "Fin Cong√©";
+         libelle = "Fin CongÈ";
          break;
      } 
  
@@ -1945,13 +1945,13 @@
      
      switch (dema) {
        case demandePlanningConge:
-         lib = "Demande Planning Cong√©";
+         lib = "Demande Planning CongÈ";
          break;
        case accordPlanningConge:
-         lib = "Accord Planning Cong√©";
+         lib = "Accord Planning CongÈ";
          break;
        case refusPlanningConge:
-         lib = "Refus Planning Cong√©";
+         lib = "Refus Planning CongÈ";
          break;
      } 
      
@@ -1964,13 +1964,13 @@
      
      switch (ba) {
        case 1:
-         libelle = "Demande Planning Cong√©";
+         libelle = "Demande Planning CongÈ";
          break;
        case 2:
-         libelle = "Accord Planning Cong√©";
+         libelle = "Accord Planning CongÈ";
          break;
        case 3:
-         libelle = "Refus Planning Cong√©";
+         libelle = "Refus Planning CongÈ";
          break;
      } 
  
@@ -2026,10 +2026,10 @@
      
      switch (mode) {
        case 0:
-         lib = "Esp√©ce";
+         lib = "EspÈce";
          break;
        case 1:
-         lib = "ch√©que";
+         lib = "chÈque";
          break;
        case 2:
          lib = "Virement";
@@ -2115,13 +2115,13 @@
          libelle = "Journal de paie";
          break;
        case demandeConge:
-         libelle = "Demande de cong√©";
+         libelle = "Demande de congÈ";
          break;
        case ficheCotation:
          libelle = "Fiche de cotation";
          break;
        case declarationIRE:
-         libelle = "D√©claration IRE";
+         libelle = "DÈclaration IRE";
          break;
      } 
  
@@ -2157,7 +2157,7 @@
          lib = "Demande Sortie";
          break;
        case traite:
-         lib = "Trait√©";
+         lib = "TraitÈ";
          break;
       
      } 
@@ -2174,7 +2174,7 @@
          libelle = "Demande Sortie";
          break;
        case 2:
-         libelle = "Trait√©";
+         libelle = "TraitÈ";
          break;
       
      } 
@@ -2296,13 +2296,13 @@
          lib = "Validation changement de position";
          break;
        case premiereEvaluation:
-         lib = "Premi√©revaluation";
+         lib = "PremiÈrevaluation";
          break;
        case deuxiemeEvaluation:
-         lib = "Deuxi√©mevaluation";
+         lib = "DeuxiÈmevaluation";
          break;
        case troisiemeEvaluation:
-         lib = "Troisi√©mevaluation";
+         lib = "TroisiÈmevaluation";
          break;
        case demandeAvancement:
          lib = "Demande avancement Grade";
@@ -2317,19 +2317,19 @@
          lib = "Recours sur sanction";
          break;
        case decisionSanction:
-         lib = "D√©cision sur les recours des sanctions";
+         lib = "DÈcision sur les recours des sanctions";
          break;
        case saisieDemandePlanning:
-         lib = "Saisie de la planification des cong√©s";
+         lib = "Saisie de la planification des congÈs";
          break;
        case planningConge:
-         lib = "Validation de la planification des Cong√©s";
+         lib = "Validation de la planification des CongÈs";
          break;
        case saisieDemandeConge:
-         lib = "Saisie de la demande de cong√©";
+         lib = "Saisie de la demande de congÈ";
          break;
        case validationConge:
-         lib = "Validation de la demande de Cong√©";
+         lib = "Validation de la demande de CongÈ";
          break;
        case saisieSortie:
          lib = "Saisie des Sorties";
@@ -2341,10 +2341,10 @@
          lib = "Saisie des Absences";
          break;
        case demandeRetraiteAnticipe:
-         lib = "Demande de la Retraite Anticip√©e";
+         lib = "Demande de la Retraite AnticipÈe";
          break;
        case validationRetraiteAnticipe:
-         lib = "Validation de la Retraite Anticip√©e";
+         lib = "Validation de la Retraite AnticipÈe";
          break;
        case demandeProlongationRetraite:
          lib = "Demande de la Prolongation de la Retraite";
@@ -2353,7 +2353,7 @@
          lib = "Validation de la Prolongation de la Retraite";
          break;
        case finCarriere:
-         lib = "Gestion de fin de la carri√©re";
+         lib = "Gestion de fin de la carriÈre";
          break;
        case validationRecours:
          lib = "Validation recours";
@@ -2375,13 +2375,13 @@
          libelle = "Validation changement position";
          break;
        case 3:
-         libelle = "Premi√©re Evaluation";
+         libelle = "PremiÈre Evaluation";
          break;
        case 4:
-         libelle = "Deuxi√©me Evaluation";
+         libelle = "DeuxiÈme Evaluation";
          break;
        case 5:
-         libelle = "Troisi√©me Evaluation";
+         libelle = "TroisiÈme Evaluation";
          break;
        case 6:
          libelle = "Demande Avancement Grade";
@@ -2399,16 +2399,16 @@
          libelle = "Decision Recours sur Sanction";
          break;
        case 11:
-         libelle = "Saisie de la planification des cong√©s";
+         libelle = "Saisie de la planification des congÈs";
          break;
        case 12:
-         libelle = "Validation de la planification des Cong√©s";
+         libelle = "Validation de la planification des CongÈs";
          break;
        case 13:
-         libelle = "Saisie de la demande de cong√©";
+         libelle = "Saisie de la demande de congÈ";
          break;
        case 14:
-         libelle = "Validation de la demande de Cong√©";
+         libelle = "Validation de la demande de CongÈ";
          break;
        case 15:
          libelle = "Saisie des Sorties";
@@ -2420,10 +2420,10 @@
          libelle = "Saisie des Absences";
          break;
        case 18:
-         libelle = "Demande de la Retraite Anticip√©e";
+         libelle = "Demande de la Retraite AnticipÈe";
          break;
        case 19:
-         libelle = "Validation de la Retraite Anticip√©e";
+         libelle = "Validation de la Retraite AnticipÈe";
          break;
        case 20:
          libelle = "Demande de la Prolongation de la Retraite";
@@ -2432,7 +2432,7 @@
          libelle = "Validation de la Prolongation de la Retraite";
          break;
        case 22:
-         libelle = "Gestion de fin de la carri√©re";
+         libelle = "Gestion de fin de la carriÈre";
          break;
      } 
      
@@ -2569,19 +2569,19 @@
          lib = "Licenciement pourchec de stage";
          break;
        case demissionDOfficePourNonRepriseFonctionApresSuspension:
-         lib = "D√©mission d'office pour la non reprise de fonction apr√©s suspension d'activit√© de service";
+         lib = "DÈmission d'office pour la non reprise de fonction aprÈs suspension d'activitÈ de service";
          break;
        case demissionDOfficePourNonRepriseFonctionApresMiseEnDisponibilite:
-         lib = "D√©mission d'office pour la non reprise de fonction apr√©s mise en disponibilit√©";
+         lib = "DÈmission d'office pour la non reprise de fonction aprÈs mise en disponibilitÈ";
          break;
        case demissionDOfficePourFausseDeclarationOuManoeuvresFrauduleuse:
-         lib = "D√©mission d'office pour fausses d√©clarations ou manoeuvres frauduleuses lors de l'engagement";
+         lib = "DÈmission d'office pour fausses dÈclarations ou manoeuvres frauduleuses lors de l'engagement";
          break;
        case demissionEcrite:
-         lib = "D√©missioncrite";
+         lib = "DÈmissioncrite";
          break;
        case revocation:
-         lib = "R√©vocation";
+         lib = "RÈvocation";
          break;
        case inaptitudePhysique:
          lib = "Inaptitude physique ";
@@ -2593,7 +2593,7 @@
          lib = "Mise en retraite";
          break;
        case deces:
-         lib = "D√©c√®s";
+         lib = "DÈc‡®s";
          break;
      } 
      
@@ -2609,19 +2609,19 @@
          libelle = "Licenciement pourchec de stage";
          break;
        case 2:
-         libelle = "D√©mission d'office pour la non reprise de fonction apr√©s suspension d'activit√© de service";
+         libelle = "DÈmission d'office pour la non reprise de fonction aprÈs suspension d'activitÈ de service";
          break;
        case 3:
-         libelle = "D√©mission d'office pour la non reprise de fonction apr√©s mise en disponibilit√©";
+         libelle = "DÈmission d'office pour la non reprise de fonction aprÈs mise en disponibilitÈ";
          break;
        case 4:
-         libelle = "D√©mission d'office pour fausses d√©clarations ou manoeuvres frauduleuses lors de l'engagement";
+         libelle = "DÈmission d'office pour fausses dÈclarations ou manoeuvres frauduleuses lors de l'engagement";
          break;
        case 5:
-         libelle = "D√©missioncrite";
+         libelle = "DÈmissioncrite";
          break;
        case 6:
-         libelle = "R√©vocation";
+         libelle = "RÈvocation";
          break;
        case 7:
          libelle = "Inaptitude physique";
@@ -2633,7 +2633,7 @@
          libelle = "Mise en retraite";
          break;
        case 10:
-         libelle = "D√©c√®s";
+         libelle = "DÈc‡®s";
          break;
      } 
  
@@ -2782,19 +2782,19 @@
      
      switch (type) {
        case congeReposAnnuel:
-         lib = "Cong√© de repos annuel";
+         lib = "CongÈ de repos annuel";
          break;
        case congeCirconstance:
-         lib = "Cong√© de circonstance";
+         lib = "CongÈ de circonstance";
          break;
        case congeMaternite:
-         lib = "Cong√© de maternit√©";
+         lib = "CongÈ de maternitÈ";
          break;
        case congeMedical:
-         lib = "Cong√© m√©dical";
+         lib = "CongÈ mÈdical";
          break;
        case congeSabbatique:
-         lib = "Cong√© sabbatique";
+         lib = "CongÈ sabbatique";
          break;
      } 
      
@@ -2807,19 +2807,19 @@
      
      switch (ba) {
        case 1:
-         libelle = "Cong√© de repos annuel";
+         libelle = "CongÈ de repos annuel";
          break;
        case 2:
-         libelle = "Cong√© de circonstance";
+         libelle = "CongÈ de circonstance";
          break;
        case 3:
-         libelle = "Cong√© de maternit√©";
+         libelle = "CongÈ de maternitÈ";
          break;
        case 4:
-         libelle = "Cong√© m√©dical";
+         libelle = "CongÈ mÈdical";
          break;
        case 5:
-         libelle = "Cong√© sabbatique";
+         libelle = "CongÈ sabbatique";
          break;
      } 
  
@@ -2910,13 +2910,13 @@
          lib = "Contrat d'Essai";
          break;
        case contratDureeIndeterminee:
-         lib = "Contrat √† dur√©e ind√©termin√©e";
+         lib = "Contrat ‡† durÈe indÈterminÈe";
          break;
        case contratDureeDeterminee:
-         lib = "contrat √† dur√©e d√©termin√©e";
+         lib = "contrat ‡† durÈe dÈterminÈe";
          break;
        case contratTempsPartiel:
-         lib = "Contrat √† temps partiel";
+         lib = "Contrat ‡† temps partiel";
          break;
        case contratTravailIntermittent:
          lib = "Contrat de travail intermittent";
@@ -2925,10 +2925,10 @@
          lib = "Contrat de travail temporaire";
          break;
        case contratDureeDetermineeSenior:
-         lib = "Contrat √† dur√©e d√©termin√©e senior";
+         lib = "Contrat ‡† durÈe dÈterminÈe senior";
          break;
        case contratDureeDetermineeObjetDefini:
-         lib = "Contrat √† dur√©e d√©termin√©e objet d√©fini";
+         lib = "Contrat ‡† durÈe dÈterminÈe objet dÈfini";
          break;
        case contratApprentissage:
          lib = "Contrat d'apprentissage";
@@ -2956,13 +2956,13 @@
          libelle = "Contrat d'Essai";
          break;
        case 2:
-         libelle = "Contrat √† dur√©e ind√©termin√©e";
+         libelle = "Contrat ‡† durÈe indÈterminÈe";
          break;
        case 3:
-         libelle = "contrat √† dur√©e d√©termin√©e";
+         libelle = "contrat ‡† durÈe dÈterminÈe";
          break;
        case 4:
-         libelle = "Contrat √† temps partiel";
+         libelle = "Contrat ‡† temps partiel";
          break;
        case 5:
          libelle = "Contrat de travail intermittent";
@@ -2971,10 +2971,10 @@
          libelle = "Contrat de travail temporaire";
          break;
        case 7:
-         libelle = "Contrat √† dur√©e d√©termin√©e senior";
+         libelle = "Contrat ‡† durÈe dÈterminÈe senior";
          break;
        case 8:
-         libelle = "Contrat √† dur√©e d√©termin√©e objet d√©fini";
+         libelle = "Contrat ‡† durÈe dÈterminÈe objet dÈfini";
          break;
        case 9:
          libelle = "Contrat d'apprentissage";
