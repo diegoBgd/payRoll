@@ -1,161 +1,161 @@
-/*     */ package vuesPaie;
-/*     */ 
-/*     */ import classesPaie.Base;
+ package vuesPaie;
+ 
+ import classesPaie.Base;
 import classesPaie.Constante;
-/*     */ import classesPaie.DemandeProlongationRetraiteC;
-/*     */ import classesPaie.EmployeC;
-/*     */ import classesPaie.ExerciceC;
-/*     */ import classesPaie.HelperC;
-/*     */ import classesPaie.Historique;
-/*     */ import classesPaie.OperateurC;
+ import classesPaie.DemandeProlongationRetraiteC;
+ import classesPaie.EmployeC;
+ import classesPaie.ExerciceC;
+ import classesPaie.HelperC;
+ import classesPaie.Historique;
+ import classesPaie.OperateurC;
 import classesPaie.ParametrageFinCarriereC;
 import classesPaie.ParametrageGeneralC;
-/*     */ import classesPaie.Tables;
+ import classesPaie.Tables;
 
-/*     */ import java.io.IOException;
-/*     */ import java.util.ArrayList;
-/*     */ import java.util.Calendar;
-/*     */ import java.util.Date;
-/*     */ import java.util.List;
+ import java.io.IOException;
+ import java.util.ArrayList;
+ import java.util.Calendar;
+ import java.util.Date;
+ import java.util.List;
 
-/*     */ import javax.annotation.PostConstruct;
-/*     */ import javax.faces.bean.ManagedBean;
-/*     */ import javax.faces.bean.ViewScoped;
-/*     */ import javax.faces.component.UIComponent;
-/*     */ import javax.faces.context.FacesContext;
-/*     */ import javax.servlet.http.HttpSession;
+ import javax.annotation.PostConstruct;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.component.UIComponent;
+ import javax.faces.context.FacesContext;
+ import javax.servlet.http.HttpSession;
 
-/*     */ import org.primefaces.PrimeFaces;
-/*     */ import org.primefaces.event.SelectEvent;
+ import org.primefaces.PrimeFaces;
+ import org.primefaces.event.SelectEvent;
 
-/*     */ import persistencePaie.FactoryDAO;
-/*     */ import persistencePaie.FichierBaseDAO;
+ import persistencePaie.FactoryDAO;
+ import persistencePaie.FichierBaseDAO;
 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class DemandeProlongationRetraiteB
-/*     */   extends DemandeProlongationRetraiteC
-/*     */ {
-/*     */   private static final long serialVersionUID = 7234059774225821051L;
-/*     */   private DemandeProlongationRetraiteC selected;
-/*     */   private EmployeC selection;
-/*  42 */   private List<DemandeProlongationRetraiteC> listDemande = new ArrayList<DemandeProlongationRetraiteC>();
-/*  43 */   private List<DemandeProlongationRetraiteC> listDecisionDemande = new ArrayList<DemandeProlongationRetraiteC>();
-/*  44 */   private List<EmployeC> listEmploye = new ArrayList<EmployeC>();
-/*     */   private OperateurC operateur;
-/*     */   private ExerciceC exercice;
-/*  47 */   private HttpSession session = HelperC.getSession();
-/*     */   private String personel,categorie,grade,niveauFrm,fonction;
-/*     */   private String code,msgInfo;
-/*     */   private String codeEmployeRecherche;
-/*     */   private String nomEmployeRecherche;
-/*     */   private String prenomEmployeRecherche;
-/*     */   private boolean disableSave;
+ @ManagedBean
+ @ViewScoped
+ public class DemandeProlongationRetraiteB
+   extends DemandeProlongationRetraiteC
+ {
+   private static final long serialVersionUID = 7234059774225821051L;
+   private DemandeProlongationRetraiteC selected;
+   private EmployeC selection;
+   private List<DemandeProlongationRetraiteC> listDemande = new ArrayList<DemandeProlongationRetraiteC>();
+   private List<DemandeProlongationRetraiteC> listDecisionDemande = new ArrayList<DemandeProlongationRetraiteC>();
+   private List<EmployeC> listEmploye = new ArrayList<EmployeC>();
+   private OperateurC operateur;
+   private ExerciceC exercice;
+   private HttpSession session = HelperC.getSession();
+   private String personel,categorie,grade,niveauFrm,fonction;
+   private String code,msgInfo;
+   private String codeEmployeRecherche;
+   private String nomEmployeRecherche;
+   private String prenomEmployeRecherche;
+   private boolean disableSave;
 			private int typeDec;
 			ParametrageFinCarriereC parm;
 			ParametrageGeneralC parmGn;
 			
-/*     */   public DemandeProlongationRetraiteC getSelected() {
-/*  55 */     return this.selected;
-/*     */   }
-/*     */   
-/*     */   public void setSelected(DemandeProlongationRetraiteC selected) {
-/*  59 */     this.selected = selected;
-/*     */   }
-/*     */   
-/*     */   public EmployeC getSelection() {
-/*  63 */     return this.selection;
-/*     */   }
-/*     */   
-/*     */   public void setSelection(EmployeC selection) {
-/*  67 */     this.selection = selection;
-/*     */   }
-/*     */   
-/*     */   public List<DemandeProlongationRetraiteC> getListDemande() {
-/*  71 */     return this.listDemande;
-/*     */   }
-/*     */   
-/*     */   public void setListDemande(List<DemandeProlongationRetraiteC> listDemande) {
-/*  75 */     this.listDemande = listDemande;
-/*     */   }
-/*     */   
-/*     */   public List<EmployeC> getListEmploye() {
-/*  79 */     return this.listEmploye;
-/*     */   }
-/*     */   
-/*     */   public void setListEmploye(List<EmployeC> listEmploye) {
-/*  83 */     this.listEmploye = listEmploye;
-/*     */   }
-/*     */   
-/*     */   public OperateurC getOperateur() {
-/*  87 */     return this.operateur;
-/*     */   }
-/*     */   
-/*     */   public void setOperateur(OperateurC operateur) {
-/*  91 */     this.operateur = operateur;
-/*     */   }
-/*     */   
-/*     */   public ExerciceC getExercice() {
-/*  95 */     return this.exercice;
-/*     */   }
-/*     */   
-/*     */   public void setExercice(ExerciceC exercice) {
-/*  99 */     this.exercice = exercice;
-/*     */   }
-/*     */   
-/*     */   public HttpSession getSession() {
-/* 103 */     return this.session;
-/*     */   }
-/*     */   
-/*     */   public void setSession(HttpSession session) {
-/* 107 */     this.session = session;
-/*     */   }
-/*     */   
-/*     */   public String getCode() {
-/* 111 */     return this.code;
-/*     */   }
-/*     */   
-/*     */   public void setCode(String code) {
-/* 115 */     this.code = code;
-/*     */   }
-/*     */   
-/*     */   public String getCodeEmployeRecherche() {
-/* 119 */     return this.codeEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public void setCodeEmployeRecherche(String codeEmployeRecherche) {
-/* 123 */     this.codeEmployeRecherche = codeEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public String getNomEmployeRecherche() {
-/* 127 */     return this.nomEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public void setNomEmployeRecherche(String nomEmployeRecherche) {
-/* 131 */     this.nomEmployeRecherche = nomEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public String getPrenomEmployeRecherche() {
-/* 135 */     return this.prenomEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public void setPrenomEmployeRecherche(String prenomEmployeRecherche) {
-/* 139 */     this.prenomEmployeRecherche = prenomEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public List<DemandeProlongationRetraiteC> getListDecisionDemande() {
-/* 143 */     return this.listDecisionDemande;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setListDecisionDemande(List<DemandeProlongationRetraiteC> listDecisionDemande) {
-/* 148 */     this.listDecisionDemande = listDecisionDemande;
-/*     */   }
-/*     */   
-/*     */   public static long getSerialversionuid() {
-/* 152 */     return 7234059774225821051L;
-/*     */   }
-/*     */   public String getPersonel() {
+   public DemandeProlongationRetraiteC getSelected() {
+     return this.selected;
+   }
+   
+   public void setSelected(DemandeProlongationRetraiteC selected) {
+     this.selected = selected;
+   }
+   
+   public EmployeC getSelection() {
+     return this.selection;
+   }
+   
+   public void setSelection(EmployeC selection) {
+     this.selection = selection;
+   }
+   
+   public List<DemandeProlongationRetraiteC> getListDemande() {
+     return this.listDemande;
+   }
+   
+   public void setListDemande(List<DemandeProlongationRetraiteC> listDemande) {
+     this.listDemande = listDemande;
+   }
+   
+   public List<EmployeC> getListEmploye() {
+     return this.listEmploye;
+   }
+   
+   public void setListEmploye(List<EmployeC> listEmploye) {
+     this.listEmploye = listEmploye;
+   }
+   
+   public OperateurC getOperateur() {
+     return this.operateur;
+   }
+   
+   public void setOperateur(OperateurC operateur) {
+     this.operateur = operateur;
+   }
+   
+   public ExerciceC getExercice() {
+     return this.exercice;
+   }
+   
+   public void setExercice(ExerciceC exercice) {
+     this.exercice = exercice;
+   }
+   
+   public HttpSession getSession() {
+     return this.session;
+   }
+   
+   public void setSession(HttpSession session) {
+     this.session = session;
+   }
+   
+   public String getCode() {
+     return this.code;
+   }
+   
+   public void setCode(String code) {
+     this.code = code;
+   }
+   
+   public String getCodeEmployeRecherche() {
+     return this.codeEmployeRecherche;
+   }
+   
+   public void setCodeEmployeRecherche(String codeEmployeRecherche) {
+     this.codeEmployeRecherche = codeEmployeRecherche;
+   }
+   
+   public String getNomEmployeRecherche() {
+     return this.nomEmployeRecherche;
+   }
+   
+   public void setNomEmployeRecherche(String nomEmployeRecherche) {
+     this.nomEmployeRecherche = nomEmployeRecherche;
+   }
+   
+   public String getPrenomEmployeRecherche() {
+     return this.prenomEmployeRecherche;
+   }
+   
+   public void setPrenomEmployeRecherche(String prenomEmployeRecherche) {
+     this.prenomEmployeRecherche = prenomEmployeRecherche;
+   }
+   
+   public List<DemandeProlongationRetraiteC> getListDecisionDemande() {
+     return this.listDecisionDemande;
+   }
+ 
+   
+   public void setListDecisionDemande(List<DemandeProlongationRetraiteC> listDecisionDemande) {
+     this.listDecisionDemande = listDecisionDemande;
+   }
+   
+   public static long getSerialversionuid() {
+     return 7234059774225821051L;
+   }
+   public String getPersonel() {
 			return personel;
 			}
 
@@ -207,57 +207,57 @@ import classesPaie.ParametrageGeneralC;
 			public void setMsgInfo(String msgInfo) {
 				this.msgInfo = msgInfo;
 			}
-/*     */   @PostConstruct
-/*     */   private void charger() {
-/* 157 */     this.operateur = new OperateurC();
-/* 158 */     this.exercice = new ExerciceC();
-/*     */     
-/* 160 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/* 161 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/* 162 */     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/* 163 */     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
-/* 164 */     if (this.operateur == null || this.exercice == null) {
-/*     */       
-/*     */       try {
-/* 167 */         FacesContext context = FacesContext.getCurrentInstance();
-/* 168 */         context.getExternalContext().redirect("/payRoll/login.xhtml");
-/* 169 */       } catch (IOException e) {
-/*     */         
-/* 171 */         e.printStackTrace();
-/*     */       } 
-/*     */     } else {
-/*     */       parmGn=FichierBaseDAO.getInstance().getParametrageGeneral();
-/* 175 */       UIComponent frm = null;
-/* 176 */       FacesContext context = FacesContext.getCurrentInstance();
-/* 177 */       frm = context.getViewRoot().findComponent("frmPrl");
-/* 178 */       if (frm != null) {
-/*     */         
-/* 180 */        setEtatProlongation(Constante.EtatDemandeProlongationRetraite.demandeProlongation);
-/* 181 */        setDateDemande(new Date());
+   @PostConstruct
+   private void charger() {
+     this.operateur = new OperateurC();
+     this.exercice = new ExerciceC();
+     
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
+     if (this.operateur == null || this.exercice == null) {
+       
+       try {
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/login.xhtml");
+       } catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     } else {
+       parmGn=FichierBaseDAO.getInstance().getParametrageGeneral();
+       UIComponent frm = null;
+       FacesContext context = FacesContext.getCurrentInstance();
+       frm = context.getViewRoot().findComponent("frmPrl");
+       if (frm != null) {
+         
+        setEtatProlongation(Constante.EtatDemandeProlongationRetraite.demandeProlongation);
+        setDateDemande(new Date());
 				 setDateDemandeS(HelperC.changeDateFormate(getDateDemande()));
-/*     */       } 
+       } 
 
 				frm = context.getViewRoot().findComponent("frmVldPrl");
 				if (frm != null) {
-/*     */         
-/* 180 */        setEtatProlongation(Constante.EtatDemandeProlongationRetraite.decide);
-/* 181 */        setDateDecision(new Date());
+         
+        setEtatProlongation(Constante.EtatDemandeProlongationRetraite.decide);
+        setDateDecision(new Date());
 				 setDateDecisionS(HelperC.changeDateFormate(getDateDecision()));
-/*     */       } 
+       } 
 
 				frm = context.getViewRoot().findComponent("frmPrLine");
 				if (frm != null) {
-/*     */         setDateDemande(new Date());
+         setDateDemande(new Date());
 				  setDateDemandeS(HelperC.changeDateFormate(getDateDemande()));
-/* 180 */         setEtatProlongation(Constante.EtatDemandeProlongationRetraite.demandeProlongation);
-/* 181 */         employeInLine();
+         setEtatProlongation(Constante.EtatDemandeProlongationRetraite.demandeProlongation);
+         employeInLine();
 				  completeEmploye();
-/*     */       } 
-/*     */       
-/* 184 */       
+       } 
+       
+       
 				
-/*     */     } 
-/*     */   }
+     } 
+   }
 
 
 			private void employeInLine(){
@@ -272,61 +272,61 @@ import classesPaie.ParametrageGeneralC;
 			    this.listDemande = FactoryDAO.getInstance().getListeDemandeProlongationRetraiteLine(selection.getId());
 			 }
 			
-/*     */   public void chargementDemande() {
-/* 193 */     this.listDemande = FactoryDAO.getInstance().getListeDemandeProlongationRetraite(1);
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void chargementTraitement() {
+   public void chargementDemande() {
+     this.listDemande = FactoryDAO.getInstance().getListeDemandeProlongationRetraite(1);
+   }
+ 
+   
+   public void chargementTraitement() {
 	
-/* 198 */    listDecisionDemande = FactoryDAO.getInstance().getListeDemandeProlongationRetraiteTraite(2,typeDec);
-/* 199 */     
-/*     */   }
-/*     */   
-/*     */   public void findByCode() {
-/* 205 */     this.selection = FactoryDAO.getInstance().getEmploye(this.code, false);
-/* 206 */     if (this.selection != null) {
-/* 207 */       setCode(this.selection.getCode());
-/* 208 */       setEmploye(this.selection);				
+    listDecisionDemande = FactoryDAO.getInstance().getListeDemandeProlongationRetraiteTraite(2,typeDec);
+     
+   }
+   
+   public void findByCode() {
+     this.selection = FactoryDAO.getInstance().getEmploye(this.code, false);
+     if (this.selection != null) {
+       setCode(this.selection.getCode());
+       setEmploye(this.selection);				
 				completeEmploye();
-/*     */     } else {
-/*     */       
-/* 211 */       clear1(true);
-/*     */     } 
-/*     */   }
-/*     */   
-/*     */   private void clear1(boolean b) {
-/* 216 */     if (b) {
-/* 217 */       this.selection = null;
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void setObject() {
-/* 223 */     if (this.selected != null) {
-/* 224 */       setId(this.selected.getId());
-/* 225 */       setEmploye(this.selected.getEmploye());
+     } else {
+       
+       clear1(true);
+     } 
+   }
+   
+   private void clear1(boolean b) {
+     if (b) {
+       this.selection = null;
+     }
+   }
+ 
+   
+   private void setObject() {
+     if (this.selected != null) {
+       setId(this.selected.getId());
+       setEmploye(this.selected.getEmploye());
 				selection=this.selected.getEmploye();
-/* 226 */       if (getEmploye() != null)
-/* 227 */         setCode(getEmploye().getCode()); 
+       if (getEmploye() != null)
+         setCode(getEmploye().getCode()); 
 				completeEmploye();
-/* 228 */       setDateDemande(this.selected.getDateDemande());
-/* 229 */       setDateDemandeS(this.selected.getDateDemandeS());
-/* 230 */       setEtat(this.selected.getEtat());
-/* 231 */       setEtatProlongation(this.selected.getEtatProlongation());
-/* 232 */       setMotifDemande(this.selected.getMotifDemande());
-/* 233 */       setAge(this.selected.getAge());
-/* 234 */       setAgeRetraiteDemande(this.selected.getAgeRetraiteDemande());
-/* 235 */       setInLine(selected.isInLine());
-/* 236 */       setDecision(this.selected.getDecision());
-/* 237 */       setDateDecision(this.selected.getDateDecision());
-/* 238 */       setDateDecisionS(this.selected.getDateDecisionS());
-/* 239 */       setEtat(this.selected.getEtat());
-/* 240 */       setEtatProlongation(this.selected.getEtatProlongation());
-/* 241 */       setLibelleProlongation(this.selected.getLibelleProlongation());
+       setDateDemande(this.selected.getDateDemande());
+       setDateDemandeS(this.selected.getDateDemandeS());
+       setEtat(this.selected.getEtat());
+       setEtatProlongation(this.selected.getEtatProlongation());
+       setMotifDemande(this.selected.getMotifDemande());
+       setAge(this.selected.getAge());
+       setAgeRetraiteDemande(this.selected.getAgeRetraiteDemande());
+       setInLine(selected.isInLine());
+       setDecision(this.selected.getDecision());
+       setDateDecision(this.selected.getDateDecision());
+       setDateDecisionS(this.selected.getDateDecisionS());
+       setEtat(this.selected.getEtat());
+       setEtatProlongation(this.selected.getEtatProlongation());
+       setLibelleProlongation(this.selected.getLibelleProlongation());
                 
-/*     */     } 
-/*     */   }
+     } 
+   }
 	private void completeEmploye(){
 	if(getEmploye()!=null)
 	{
@@ -372,7 +372,7 @@ import classesPaie.ParametrageGeneralC;
 			setAgeMax(parm.getAgeMaxRetraite());
 			if(getAge()<getAgeMin())
 			{
-				msgInfo="Il faut avoir atteint l'ï¿½ge de retaraite ("+parm.getAgeRetraite()+" ans) pour demander la prolongation !";
+				msgInfo="Il faut avoir atteint l'ége de retaraite ("+parm.getAgeRetraite()+" ans) pour demander la prolongation !";
 				disableSave=true;
 			}
 		}
@@ -393,297 +393,297 @@ import classesPaie.ParametrageGeneralC;
 		
 	}
 	
-/*     */   private void clear() {
-/* 247 */     setId(0);
-/* 248 */     setEmploye(null);
-/* 249 */     setDateDemande(null);
-/* 250 */     setDateDemandeS("");
-/* 251 */     setEtat(0);
-/* 252 */     setEtatProlongation(null);
-/* 253 */     setMotifDemande("");
-/* 254 */     setAge(0);
-/* 255 */     setAgeRetraiteDemande(0);
-/* 256 */     setAvisConseilAdministration(0);
-/* 257 */     setDecision(0);
-/* 258 */     setDateDecision(null);
-/* 259 */     setDateDecisionS("");
-/* 260 */     setEtat(0);
-/* 261 */     setEtatProlongation(null);
-/* 262 */     setLibelleProlongation("");
-/* 263 */     this.nomEmployeRecherche = "";
-/* 264 */     this.code = "";
-/* 265 */     this.prenomEmployeRecherche = "";
-/* 266 */     this.selected = null;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeDateDemande() {
-/* 271 */     if (getDateDemandeS().replace("/", "").replace("_", "").trim().equals("")) {
-/* 272 */       setDateDemande(null);
-/*     */     } else {
-/*     */       
-/* 275 */       setDateDemande(HelperC.validerDate(getDateDemandeS()));
-/* 276 */       if (getDateDemande() == null) {
-/* 277 */         setDateDemandeS("");
-/* 278 */         HelperC.afficherMessage("Information", "Date invalide");
-/*     */       } else {
-/*     */         
-/* 281 */         setDateDemandeS(HelperC.convertDate(getDateDemande()));
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void changeDateDecision() {
-/* 289 */     if (getDateDecisionS().replace("/", "").replace("_", "").trim().equals("")) {
-/* 290 */       setDateDecision(null);
-/*     */     } else {
-/*     */       
-/* 293 */       setDateDecision(HelperC.validerDate(getDateDecisionS()));
-/* 294 */       if (getDateDecision() == null) {
-/* 295 */         setDateDecisionS("");
-/* 296 */         HelperC.afficherMessage("Information", "Date invalide");
-/*     */       } else {
-/*     */         
-/* 299 */         setDateDecisionS(HelperC.convertDate(getDateDecision()));
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void onRowSelected(SelectEvent event) {
-/* 308 */     this.selected = (DemandeProlongationRetraiteC)event.getObject();
-/* 309 */     if (this.selected != null)
-/* 310 */       setObject(); 
-/* 311 */     PrimeFaces.current().executeScript("PF('dlgDmd').hide();");
-/*     */   }
+   private void clear() {
+     setId(0);
+     setEmploye(null);
+     setDateDemande(null);
+     setDateDemandeS("");
+     setEtat(0);
+     setEtatProlongation(null);
+     setMotifDemande("");
+     setAge(0);
+     setAgeRetraiteDemande(0);
+     setAvisConseilAdministration(0);
+     setDecision(0);
+     setDateDecision(null);
+     setDateDecisionS("");
+     setEtat(0);
+     setEtatProlongation(null);
+     setLibelleProlongation("");
+     this.nomEmployeRecherche = "";
+     this.code = "";
+     this.prenomEmployeRecherche = "";
+     this.selected = null;
+   }
+ 
+   
+   public void changeDateDemande() {
+     if (getDateDemandeS().replace("/", "").replace("_", "").trim().equals("")) {
+       setDateDemande(null);
+     } else {
+       
+       setDateDemande(HelperC.validerDate(getDateDemandeS()));
+       if (getDateDemande() == null) {
+         setDateDemandeS("");
+         HelperC.afficherMessage("Information", "Date invalide");
+       } else {
+         
+         setDateDemandeS(HelperC.convertDate(getDateDemande()));
+       } 
+     } 
+   }
+ 
+ 
+   
+   public void changeDateDecision() {
+     if (getDateDecisionS().replace("/", "").replace("_", "").trim().equals("")) {
+       setDateDecision(null);
+     } else {
+       
+       setDateDecision(HelperC.validerDate(getDateDecisionS()));
+       if (getDateDecision() == null) {
+         setDateDecisionS("");
+         HelperC.afficherMessage("Information", "Date invalide");
+       } else {
+         
+         setDateDecisionS(HelperC.convertDate(getDateDecision()));
+       } 
+     } 
+   }
+ 
+ 
+ 
+   
+   public void onRowSelected(SelectEvent event) {
+     this.selected = (DemandeProlongationRetraiteC)event.getObject();
+     if (this.selected != null)
+       setObject(); 
+     PrimeFaces.current().executeScript("PF('dlgDmd').hide();");
+   }
 
 
-/*     */   public void onRowDecisionSelected(SelectEvent event) {
-/* 308 */     this.selected = (DemandeProlongationRetraiteC)event.getObject();
-/* 309 */     if (this.selected != null)
-/* 310 */       setObject(); 
-/* 311 */     PrimeFaces.current().executeScript("PF('dlgTrt').hide();");
-/*     */   }
+   public void onRowDecisionSelected(SelectEvent event) {
+     this.selected = (DemandeProlongationRetraiteC)event.getObject();
+     if (this.selected != null)
+       setObject(); 
+     PrimeFaces.current().executeScript("PF('dlgTrt').hide();");
+   }
 
-/*     */   private void setObject1() {
-/* 316 */     if (this.selection != null) {
-/* 317 */       setEmploye(this.selection);
-/*     */       
-/* 319 */       if (getEmploye() != null) {
-/* 320 */         setCode(getEmploye().getCode());
-/*     */       } else {
-/* 322 */         setCode("");
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void onRowselected1(SelectEvent event) {
-/* 329 */     this.selection = (EmployeC)event.getObject();
-/* 330 */     setObject1();
-/* 331 */     PrimeFaces.current().executeScript("PF('dlg').hide();");
-/*     */   }
-/*     */    
+   private void setObject1() {
+     if (this.selection != null) {
+       setEmploye(this.selection);
+       
+       if (getEmploye() != null) {
+         setCode(getEmploye().getCode());
+       } else {
+         setCode("");
+       } 
+     } 
+   }
+ 
+   
+   public void onRowselected1(SelectEvent event) {
+     this.selection = (EmployeC)event.getObject();
+     setObject1();
+     PrimeFaces.current().executeScript("PF('dlg').hide();");
+   }
+    
             public void checkPeriod(){
             	disableSave=false;
             	if(parm!=null){
             	if(getAge()<parm.getAgeRetraite())
             	{
             		disableSave=true;
-            		HelperC.afficherAttention("Information", " L'Employï¿½ n'a pas encore l'ï¿½ge  de retraite ");
+            		HelperC.afficherAttention("Information", " L'Employé n'a pas encore l'ége  de retraite ");
             		return;
             	}
             	if(getAgeRetraiteDemande()>parm.getPeriodeProlongation())
             	{
             		disableSave=true;
-            		HelperC.afficherAttention("Information", "On ne peut pas dï¿½passer une prolongation de "+parm.getPeriodeProlongation()+" ans");
+            		HelperC.afficherAttention("Information", "On ne peut pas dépasser une prolongation de "+parm.getPeriodeProlongation()+" ans");
             		return;
             	}
             	if(getAge()+getAgeRetraiteDemande()>parm.getAgeMaxRetraite())
             	{
             		disableSave=true;
-            		HelperC.afficherAttention("Information", "On ne peut pas dï¿½passer  "+parm.getAgeMaxRetraite()+" ans ");
+            		HelperC.afficherAttention("Information", "On ne peut pas dépasser  "+parm.getAgeMaxRetraite()+" ans ");
             		return;
             	}
             	}
             	else
             	{
             		disableSave=true;
-            		HelperC.afficherAttention("Information", "Il faut paramï¿½trer tous ï¿½lï¿½ments en rapport la prologantion du travail et le personnel");
+            		HelperC.afficherAttention("Information", "Il faut paramétrer tous éléments en rapport la prologantion du travail et le personnel");
             		return;
             	}
             }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void chargerEmploye() {
-/* 338 */     this.listEmploye = FactoryDAO.getInstance().getListEmploye(this.codeEmployeRecherche, 
-/* 339 */         this.nomEmployeRecherche,true);
-/*     */   }
-/*     */   
-/*     */   public void enregistrerDemande() {
-/* 343 */     if (getEmploye() == null) {
-/* 344 */       HelperC.afficherMessage("Information", "Veillez saisir l'employï¿½");
-/* 345 */     } else if (getDateDemande() == null) {
-/* 346 */       HelperC.afficherMessage("Information", "Veillez d'abord saisir la date de demande");
-/* 347 */     } else if (getMotifDemande().equalsIgnoreCase("")) {
-/* 348 */       HelperC.afficherAttention("Information", "Veillez dï¿½crire le motif de votre demande");
-/* 349 */     } else if (getAgeRetraiteDemande() == 0) {
-/* 350 */       HelperC.afficherAttention("Information", "Veillez indiquer l'age de la retraite souhaitï¿½");
-/*     */     } else {
-/* 352 */       
-/* 353 */       setEtat(Constante.getEtatDemandeProlongationRetraite(Constante.EtatDemandeProlongationRetraite.demandeProlongation));
-/*     */       setInLine(true);
-/* 355 */       Historique hist = new Historique();
-/* 356 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 357 */       hist.setOperateur(this.operateur);
-/* 358 */       if (getId() == 0) {
-/* 359 */         hist.setOperation("Crï¿½ation de la demande de prolongation de l'age de la retraite de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
-/*     */       } else {
-/* 361 */         hist.setOperation("Modification de la demande de prolongation de l'age de la retraite de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
-/* 362 */       }  hist.setTable(Tables.getTableName(Tables.TableName.demandeProlongationRetraite));
-/* 363 */       setHistorique(hist);
+ 
+ 
+   
+   public void chargerEmploye() {
+     this.listEmploye = FactoryDAO.getInstance().getListEmploye(this.codeEmployeRecherche, 
+         this.nomEmployeRecherche,true);
+   }
+   
+   public void enregistrerDemande() {
+     if (getEmploye() == null) {
+       HelperC.afficherMessage("Information", "Veillez saisir l'employé");
+     } else if (getDateDemande() == null) {
+       HelperC.afficherMessage("Information", "Veillez d'abord saisir la date de demande");
+     } else if (getMotifDemande().equalsIgnoreCase("")) {
+       HelperC.afficherAttention("Information", "Veillez décrire le motif de votre demande");
+     } else if (getAgeRetraiteDemande() == 0) {
+       HelperC.afficherAttention("Information", "Veillez indiquer l'age de la retraite souhaité");
+     } else {
+       
+       setEtat(Constante.getEtatDemandeProlongationRetraite(Constante.EtatDemandeProlongationRetraite.demandeProlongation));
+       setInLine(true);
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         hist.setOperation("Création de la demande de prolongation de l'age de la retraite de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+       } else {
+         hist.setOperation("Modification de la demande de prolongation de l'age de la retraite de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+       }  hist.setTable(Tables.getTableName(Tables.TableName.demandeProlongationRetraite));
+       setHistorique(hist);
 
-/* 364 */       if (FactoryDAO.getInstance().insertUpdateDemandeProlongationRetraite(this)) {
-/*     */         
-/* 366 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
-/*     */         chargementDemande();
-/* 368 */         clear();
-/*     */       } else {
-/*     */         
-/* 371 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */       } 
-/*     */     } 
-/*     */   }
+       if (FactoryDAO.getInstance().insertUpdateDemandeProlongationRetraite(this)) {
+         
+         HelperC.afficherMessage("Information", "Succès de l'opération");
+         chargementDemande();
+         clear();
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+       } 
+     } 
+   }
 
-/*     */   public void enregistrerDemandeLine() {
+   public void enregistrerDemandeLine() {
 	         if(getDecision()==0 && getDateDecision()==null)
 	         {
-/* 343 */     if (getEmploye() == null) {
-/* 344 */       HelperC.afficherMessage("Information", "Veillez saisir l'employï¿½");
-/* 345 */     } else if (getDateDemande() == null) {
-/* 346 */       HelperC.afficherMessage("Information", "Veillez d'abord saisir la date de demande");
-/* 347 */     } else if (getMotifDemande().equalsIgnoreCase("")) {
-/* 348 */       HelperC.afficherAttention("Information", "Veillez dï¿½crire le motif de votre demande");
-/* 349 */     } else if (getAgeRetraiteDemande() == 0) {
-/* 350 */       HelperC.afficherAttention("Information", "Veillez indiquer l'age de la retraite souhaitï¿½");
-/*     */     } else {
-/* 352 */       setEtatProlongation(Constante.EtatDemandeProlongationRetraite.demandeProlongation);
-/* 353 */       setEtat(Constante.getEtatDemandeProlongationRetraite(Constante.EtatDemandeProlongationRetraite.demandeProlongation));
-/*     */       
-/* 355 */       Historique hist = new Historique();
-/* 356 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 357 */       hist.setOperateur(this.operateur);
-/* 358 */       if (getId() == 0) {
-/* 359 */         hist.setOperation("Crï¿½ation de la demande de prolongation de l'age de la retraite de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
-/*     */       } else {
-/* 361 */         hist.setOperation("Modification de la demande de prolongation de l'age de la retraite de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
-/* 362 */       }  hist.setTable(Tables.getTableName(Tables.TableName.demandeProlongationRetraite));
-/* 363 */        setHistorique(hist);
+     if (getEmploye() == null) {
+       HelperC.afficherMessage("Information", "Veillez saisir l'employé");
+     } else if (getDateDemande() == null) {
+       HelperC.afficherMessage("Information", "Veillez d'abord saisir la date de demande");
+     } else if (getMotifDemande().equalsIgnoreCase("")) {
+       HelperC.afficherAttention("Information", "Veillez décrire le motif de votre demande");
+     } else if (getAgeRetraiteDemande() == 0) {
+       HelperC.afficherAttention("Information", "Veillez indiquer l'age de la retraite souhaité");
+     } else {
+       setEtatProlongation(Constante.EtatDemandeProlongationRetraite.demandeProlongation);
+       setEtat(Constante.getEtatDemandeProlongationRetraite(Constante.EtatDemandeProlongationRetraite.demandeProlongation));
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         hist.setOperation("Création de la demande de prolongation de l'age de la retraite de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+       } else {
+         hist.setOperation("Modification de la demande de prolongation de l'age de la retraite de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+       }  hist.setTable(Tables.getTableName(Tables.TableName.demandeProlongationRetraite));
+        setHistorique(hist);
 
-/* 364 */       if (FactoryDAO.getInstance().insertUpdateDemandeProlongationRetraite(this)) {
-/*     */         
-/* 366 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
-/*     */         chargementDemande();
-/* 368 */         clearLine();
-/*     */       } else {
-/*     */         
-/* 371 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */       } 
-/*     */     } 
+       if (FactoryDAO.getInstance().insertUpdateDemandeProlongationRetraite(this)) {
+         
+         HelperC.afficherMessage("Information", "Succès de l'opération");
+         chargementDemande();
+         clearLine();
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+       } 
+     } 
 	         }
 	         else{
-	        	 HelperC.afficherAttention("Information", "Impossible de modifier car votre demande ï¿½st dï¿½jï¿½ traitï¿½e ");
+	        	 HelperC.afficherAttention("Information", "Impossible de modifier car votre demande ést déjé traitée ");
 	         }
 	         
-/*     */   }
+   }
 
-/*     */   public void enregistrerDecision() {
-/* 376 */     if (getEmploye() == null) {
-/* 377 */       HelperC.afficherMessage("Information", "Veillez saisir l'employï¿½");
-/* 378 */     } else if (getDateDemande() == null) {
-/* 379 */       HelperC.afficherMessage("Information", "Veillez d'abord saisir la date de demande");
-/* 380 */     } else if (getMotifDemande().equalsIgnoreCase("")) {
-/* 381 */       HelperC.afficherAttention("Information", "Veillez decrire le motif de votre demande");
-/* 382 */     } else if (getAgeRetraiteDemande() == 0) {
-/* 383 */       HelperC.afficherAttention("Information", "Veillez indiquer l'age de la retraite souhaitï¿½");
-/* 384 */     } else if (getDateDecision() == null) {
-/* 385 */       HelperC.afficherMessage("Information", "Veillez d'abord saisir la date de dï¿½cision");
-/*     */     
-/*     */     }
-/*     */     else {
-/*     */ 
-/*     */       
-/* 391 */       Historique hist = new Historique();
-/* 392 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 393 */       hist.setOperateur(this.operateur);
-/* 394 */       if (getId() == 0) {
-/* 395 */         hist.setOperation("Crï¿½ation de la demande de prolongation de l'age de la retraite de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
-/*     */       } else {
-/* 397 */         hist.setOperation("Modification de la demande de prolongation de l'age de la retraite de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
-/* 398 */       }  hist.setTable(Tables.getTableName(Tables.TableName.demandeProlongationRetraite));
-/*     */       
-/* 400 */       setHistorique(hist);
+   public void enregistrerDecision() {
+     if (getEmploye() == null) {
+       HelperC.afficherMessage("Information", "Veillez saisir l'employé");
+     } else if (getDateDemande() == null) {
+       HelperC.afficherMessage("Information", "Veillez d'abord saisir la date de demande");
+     } else if (getMotifDemande().equalsIgnoreCase("")) {
+       HelperC.afficherAttention("Information", "Veillez decrire le motif de votre demande");
+     } else if (getAgeRetraiteDemande() == 0) {
+       HelperC.afficherAttention("Information", "Veillez indiquer l'age de la retraite souhaité");
+     } else if (getDateDecision() == null) {
+       HelperC.afficherMessage("Information", "Veillez d'abord saisir la date de décision");
+     
+     }
+     else {
+ 
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         hist.setOperation("Création de la demande de prolongation de l'age de la retraite de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+       } else {
+         hist.setOperation("Modification de la demande de prolongation de l'age de la retraite de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+       }  hist.setTable(Tables.getTableName(Tables.TableName.demandeProlongationRetraite));
+       
+       setHistorique(hist);
 				setEtat(Constante.getEtatDemandeProlongationRetraite(Constante.EtatDemandeProlongationRetraite.decide));
-/*     */     
-/* 401 */       if (FactoryDAO.getInstance().insertUpdateDemandeProlongationRetraite(this)) {
-/*     */         
-/* 403 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
+     
+       if (FactoryDAO.getInstance().insertUpdateDemandeProlongationRetraite(this)) {
+         
+         HelperC.afficherMessage("Information", "Succès de l'opération");
 				if(parmGn!=null) 
 				{
 				if(getDecision()==1)
-				    HelperC.sendEmail(parmGn.getSmtpServer(), parmGn.getMailOrigine(), parmGn.getMailOrigine(), parmGn.getPwdOrigine(), getEmploye().getEmail(), "Votre demande de prolongation de travail a ï¿½tï¿½ acceptï¿½e ", "Demande prolongation de travail");
+				    HelperC.sendEmail(parmGn.getSmtpServer(), parmGn.getMailOrigine(), parmGn.getMailOrigine(), parmGn.getPwdOrigine(), getEmploye().getEmail(), "Votre demande de prolongation de travail a été acceptée ", "Demande prolongation de travail");
 				if(getDecision()==2)
-				     HelperC.sendEmail(parmGn.getSmtpServer(), parmGn.getMailOrigine(), parmGn.getMailOrigine(), parmGn.getPwdOrigine(), getEmploye().getEmail(), "Votre demande de prolongation de travail a ï¿½tï¿½ refusï¿½e ", "Demande prolongation de travail.");
+				     HelperC.sendEmail(parmGn.getSmtpServer(), parmGn.getMailOrigine(), parmGn.getMailOrigine(), parmGn.getPwdOrigine(), getEmploye().getEmail(), "Votre demande de prolongation de travail a été refusée ", "Demande prolongation de travail.");
 				}
-/* 404 */         chargementDemande();
-/* 405 */         clear();
-/*     */       } else {
-/*     */         
-/* 408 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   public void annulerDecision()
+         chargementDemande();
+         clear();
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+       } 
+     } 
+   }
+ 
+   public void annulerDecision()
 			{
 				if(selected!=null)
 				if(FactoryDAO.getInstance().annulerProlongagtionRetraite(selected))
-					 HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
+					 HelperC.afficherMessage("Information", "Succès de l'opération");
 				else
-					  HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
+					  HelperC.afficherMessage("Désolé", "Echec de l'opération ");
 			}
-/*     */   public void supprimer() {
-/* 415 */     if (getId() == 0) {
-/* 416 */       HelperC.afficherDeleteMessage();
-/*     */     } else {
-/*     */       
-/* 419 */       Historique hist = new Historique();
-/* 420 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 421 */       hist.setOperateur(this.operateur);
-/* 422 */       if (getId() == 0) {
-/* 423 */         hist.setOperation("Crï¿½ation de la demande de prolongation de l'age de la retraite de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
-/*     */       } else {
-/* 425 */         hist.setOperation("Modification de la demande de prolongation de l'age de la retraite de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
-/* 426 */       }  hist.setTable(Tables.getTableName(Tables.TableName.demandeProlongationRetraite));
-/* 427 */       setHistorique(hist);
-/* 428 */       if (FactoryDAO.getInstance().deleteDemandeProlongationRetraite(selected)) {
-/*     */           chargementDemande();
-/* 430 */         clear();
-/* 431 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
-/*     */       } else {
-/*     */         
-/* 434 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */   
-/*     */   public void initialiser() {
-/* 440 */     clear();
-/*     */   }
-/*     */ }
+   public void supprimer() {
+     if (getId() == 0) {
+       HelperC.afficherDeleteMessage();
+     } else {
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         hist.setOperation("Création de la demande de prolongation de l'âge de la retraite de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+       } else {
+         hist.setOperation("Modification de la demande de prolongation de l'age de la retraite de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+       }  hist.setTable(Tables.getTableName(Tables.TableName.demandeProlongationRetraite));
+       setHistorique(hist);
+       if (FactoryDAO.getInstance().deleteDemandeProlongationRetraite(selected)) {
+           chargementDemande();
+         clear();
+         HelperC.afficherMessage("Information", "Succès de l'opération ");
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de suppression");
+       } 
+     } 
+   }
+   
+   public void initialiser() {
+     clear();
+   }
+ }
 

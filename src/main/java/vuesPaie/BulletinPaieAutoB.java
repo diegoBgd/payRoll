@@ -250,7 +250,7 @@ import javax.servlet.http.HttpSession;
 					disableSave=false;
        if (getDatePaie().before(this.exercice.getDateDebut()) || getDatePaie().after(this.exercice.getDateFin())) {
          
-         HelperC.afficherAttention("ATTENTION", "La date de la paie ne doit pasï¿½tre en dï¿½hors de la pï¿½riode de l'exercice !");
+         HelperC.afficherAttention("ATTENTION", "La date de la paie ne doit pasétre en déhors de la période de l'exercice !");
  		   disableSave=true;
         
        }
@@ -269,7 +269,7 @@ import javax.servlet.http.HttpSession;
              i++;
              this.progressValue = i * 100 / this.listEmploye.size();
              
-             this.nomPrenom = String.valueOf(i) + " sur " + this.listEmploye.size() + " employï¿½s";
+             this.nomPrenom = String.valueOf(i) + " sur " + this.listEmploye.size() + " employés";
              this.typeEmploye = employe.getTypeEmploye();
  
              
@@ -413,18 +413,18 @@ import javax.servlet.http.HttpSession;
            } 
  
            
-           HelperC.afficherMessage("Information", "Opï¿½ration terminï¿½e !");
+           HelperC.afficherMessage("Information", "Opération terminée !");
          }
        
        } else {
          
-         HelperC.afficherMessage("Information", "Il faut prï¿½ciser le mois et la date!");
+         HelperC.afficherMessage("Information", "Il faut préciser le mois et la date!");
          this.progressValue = 0;
        }
      
      } catch (Exception e) {
        
-       HelperC.afficherMessage("ERREUR", "Echec de l'opï¿½ration ! :" + e.getMessage(), FacesMessage.SEVERITY_ERROR);
+       HelperC.afficherMessage("ERREUR", "Echec de l'opération ! :" + e.getMessage(), FacesMessage.SEVERITY_ERROR);
      } 
    }
  
@@ -1768,7 +1768,7 @@ private void calculValeurComission(BulletinComissionC com,BulletinPaieC bulltinP
 					detailCredit=new BulletinCreditC();
 					detailCredit.setMontant(crd.getTranche());
 					detailCredit.setNoDossier(crdi.getNumeroDossier());
-					detailCredit.setLibelle("Crï¿½dit : "+crdi.getBanque().getCode());
+					detailCredit.setLibelle("Crédit : "+crdi.getBanque().getCode());
 					bulltinPaie.getListCredit().add(detailCredit);
 					
 					detailCredRembourse=new CreditRembourseC();
@@ -1924,7 +1924,7 @@ private void calculValeurComission(BulletinComissionC com,BulletinPaieC bulltinP
  
    
    public void onComplete() {
-     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Opï¿½ration terminï¿½e !"));
+     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Opération terminée !"));
    }
  
    

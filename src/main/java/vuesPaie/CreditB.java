@@ -421,13 +421,13 @@ public class CreditB extends CreditC implements Serializable {
 			detail.setTranche(montantTranche);
 
 			if ((detail.getTotalTranch() + totalMensul) > getCapital()) {
-				HelperC.afficherAttention("ATTENTION", "On ne peut pas Ã©passer le montant Ã© rembourser !");
+				HelperC.afficherAttention("ATTENTION", "On ne peut pas dépasser le montant à rembourser !");
 				return;
 
 			}
 
 			if (months > getDuree()) {
-				HelperC.afficherAttention("ATTENTION", "On ne peut pas dÃ©passer la durÃ©e de rembourssement !");
+				HelperC.afficherAttention("ATTENTION", "On ne peut pas dépasser la durée de rembourssement !");
 				return;
 
 			}
@@ -440,7 +440,7 @@ public class CreditB extends CreditC implements Serializable {
 			clearDetail();
 
 		} else {
-			HelperC.afficherAttention("ATTENTION", "La date dÃ©but, la date fin et le montant doivent Ã©tre corrects");
+			HelperC.afficherAttention("ATTENTION", "La date début, la date fin et le montant doivent être corrects");
 		}
 		calculTotal(this.getListDetail());
 	}
@@ -482,7 +482,7 @@ public class CreditB extends CreditC implements Serializable {
 	private void checkDate() {
 		if (getDateDb() != null && getDateFn() != null) {
 			if (dateFn.before(dateDb)) {
-				HelperC.afficherAttention("ATTENTION", "La date dÃ©but doit Ã©tre infÃ©rieure Ã© la date fin ");
+				HelperC.afficherAttention("ATTENTION", "La date début doit être inférieure à la date fin ");
 				desableAdd = true;
 			} else {
 				months = (int) HelperC.daysBetween(dateDb, dateFn) / 30;
@@ -590,12 +590,12 @@ public class CreditB extends CreditC implements Serializable {
 		hist.setOperateur(this.operateur);
 		if (getId() == 0) {
 
-			hist.setOperation("Enregistrement CrÃ©dit :Employe=" + codeEmploye + " " + nomEmploye);
+			hist.setOperation("Enregistrement Crédit :Employe=" + codeEmploye + " " + nomEmploye);
 		} else {
 			if (delete)
-				hist.setOperation("Suppression CrÃ©dit :Employe=" + codeEmploye + " " + nomEmploye);
+				hist.setOperation("Suppression Crédit :Employe=" + codeEmploye + " " + nomEmploye);
 			else
-				hist.setOperation("Modification CrÃ©dit :Employe=" + codeEmploye + " " + nomEmploye);
+				hist.setOperation("Modification Crédit :Employe=" + codeEmploye + " " + nomEmploye);
 		}
 		hist.setTable(Tables.getTableName(Tables.TableName.credit));
 		setHistorique(hist);
@@ -605,32 +605,32 @@ public class CreditB extends CreditC implements Serializable {
 		this.setExercice(exercice);
 		if (getId() == 0 && !this.droit.isCreer()) {
 
-			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit d'enregistrer les crÃ©dits ");
+			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit d'enregistrer les crédits ");
 			return;
 		}
 		if (getId() > 0 && !this.droit.isModifier()) {
 
-			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier les crÃ©dits ");
+			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier les crédits ");
 			return;
 		}
 		if (getDatePret() == null) {
 
-			HelperC.afficherAttention("ATTENTION", "Il faut prÃ©ciser la date de prÃ©t ! ");
+			HelperC.afficherAttention("ATTENTION", "Il faut préciser la date de prêt ! ");
 			return;
 		}
 		if (selectedEmploye == null) {
-			HelperC.afficherAttention("ATTENTION", "Il faut prÃ©ciser l'employÃ© ! ");
+			HelperC.afficherAttention("ATTENTION", "Il faut préciser l'employé ! ");
 			return;
 		}
 
 		createHistoric(false);
 
 		if (FactoryDAO.getInstance().insertUpdateCredit(this)) {
-			HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration ");
+			HelperC.afficherMessage("Information", "Succès de l'opération ");
 			initialiser();
 		} else {
 
-			HelperC.afficherAttention("DÃ©solÃ©", "Echec de l'opÃ©ration ");
+			HelperC.afficherAttention("Désolé", "Echec de l'opération ");
 		}
 
 	}
@@ -639,10 +639,10 @@ public class CreditB extends CreditC implements Serializable {
 		if (selectedCredit != null) {
 			createHistoric(true);
 			if (FactoryDAO.getInstance().deleteCreditEmploye(this)) {
-				HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration ");
+				HelperC.afficherMessage("Information", "Succès de l'opération ");
 				initialiser();
 			} else
-				HelperC.afficherAttention("DÃ©solÃ©", "Echec de l'opÃ©ration ");
+				HelperC.afficherAttention("Désolé", "Echec de l'opération ");
 		} else
 			HelperC.afficherDeleteMessage();
 	}

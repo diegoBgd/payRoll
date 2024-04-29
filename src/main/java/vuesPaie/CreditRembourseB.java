@@ -521,7 +521,7 @@ public class CreditRembourseB extends CreditRembourseC {
 		desable = false;
 		if (getMontantRembourse() > resteRembourse) {
 			HelperC.afficherAttention("ATTENTION",
-					"On ne peut pas remboursï¿½ le montant supï¿½rieur au montant restant ! ");
+					"On ne peut pas remboursé le montant supérieur au montant restant ! ");
 			desable = true;
 		}
 	}
@@ -594,7 +594,7 @@ public class CreditRembourseB extends CreditRembourseC {
 
 		if (getId() == 0 && !this.droit.isCreer()) {
 
-			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crï¿½er ");
+			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer ");
 			return;
 		}
 		if (getId() > 0 && !this.droit.isModifier()) {
@@ -605,11 +605,11 @@ public class CreditRembourseB extends CreditRembourseC {
 		createHistoric(false);
 		if (FactoryDAO.getInstance().insertUpdateRembourssementCredit(this)) {
 
-			HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
+			HelperC.afficherMessage("Information", "Succès de l'opération ");
 			initialiser();
 		} else {
 
-			HelperC.afficherAttention("Dï¿½solï¿½", "Echec d'enregistrement");
+			HelperC.afficherAttention("Désolé", "Echec d'enregistrement");
 		}
 	}
 
@@ -623,10 +623,10 @@ public class CreditRembourseB extends CreditRembourseC {
 		if (this.getId() > 0) {
 			if (FactoryDAO.getInstance().deleteRemboursement(this)) {
 
-				HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
+				HelperC.afficherMessage("Information", "Succès de l'opération ");
 				initialiser();
 			} else
-				HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
+				HelperC.afficherMessage("Désolé", "Echec de suppression");
 		} else {
 			HelperC.afficherDeleteMessage();
 

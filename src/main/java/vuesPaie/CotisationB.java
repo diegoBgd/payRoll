@@ -269,7 +269,7 @@ public class CotisationB extends CotisationC {
 
 	public void enregistrer() {
 		if (getCode().trim().equals("") || getDesignation().trim().equals("")) {
-			HelperC.afficherMessage("Information", "Completez tous les champs nÃ©cessaires");
+			HelperC.afficherMessage("Information", "Completez tous les champs nécessaires");
 
 		} else {
 
@@ -279,23 +279,23 @@ public class CotisationB extends CotisationC {
 						initialize();
 						chargementCotisation();
 
-						HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration");
+						HelperC.afficherMessage("Information", "Succès de l'opération");
 						charger();
 					} else {
-						HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration");
+						HelperC.afficherMessage("Désolé", "Echec de l'opération");
 					}
 				} else {
-					HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de crÃ©er ");
+					HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de créer ");
 				}
 			if (getId() > 0) {
 				if (this.droit.isModifier()) {
 					if (FichierBaseDAO.getInstance().insertUpdateCotisation(this)) {
 						initialize();
-						HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration");
+						HelperC.afficherMessage("Information", "Succès de l'opération");
 						charger();
 						chargementCotisation();
 					} else {
-						HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration");
+						HelperC.afficherMessage("Désolé", "Echec de l'opération");
 					}
 				} else {
 					HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de modifier ");
@@ -313,9 +313,9 @@ public class CotisationB extends CotisationC {
 				initialize();
 				chargementCotisation();
 
-				HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration ");
+				HelperC.afficherMessage("Information", "Succès de l'opération ");
 			} else {
-				HelperC.afficherMessage("DÃ©solÃ©", "Echec de suppression");
+				HelperC.afficherMessage("Désolé", "Echec de suppression");
 			}
 		} else {
 			HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de supprimer ");

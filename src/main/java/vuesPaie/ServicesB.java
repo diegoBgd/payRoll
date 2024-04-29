@@ -251,7 +251,7 @@
 /*     */   public void enregistrer() {
 /* 279 */     if (getId() == 0 && !this.droit.isCreer()) {
 /*     */       
-/* 281 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crï¿½er");
+/* 281 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer");
 /*     */     }
 /* 283 */     else if (getId() != 0 && !this.droit.isModifier()) {
 /*     */       
@@ -260,16 +260,16 @@
 /* 287 */    
 /* 291 */     else if (getCode().trim().equals("")) {
 /*     */       
-/* 293 */       HelperC.afficherAttention("Information", "Prï¿½cisez la rï¿½ference");
+/* 293 */       HelperC.afficherAttention("Information", "Précisez la réference");
 /*     */     
 /*     */     }
 /* 296 */     else if (getDesignation().trim().equals("")) {
 /*     */       
-/* 298 */       HelperC.afficherAttention("Information", "Prï¿½cisez la Dï¿½signation");
+/* 298 */       HelperC.afficherAttention("Information", "Précisez la Désignation");
 /*     */     
 /*     */     }
 				if(idDirection==0)
-					 HelperC.afficherAttention("Information", "Prï¿½cisez la direction");
+					 HelperC.afficherAttention("Information", "Précisez la direction");
 /* 301 */     else {
 /*     */       
 /* 306 */       Historique hist = new Historique();
@@ -287,11 +287,11 @@
 /* 318 */       if (FichierBaseDAO.getInstance().insertUpdateServices(this)) {
 /*     */         
 /* 320 */         clear(false);
-/* 321 */         HelperC.afficherInformation("FELICITATION", "Succï¿½s de l'Opï¿½ration");
+/* 321 */         HelperC.afficherInformation("FELICITATION", "Succès de l'Opération");
 /* 322 */         chargement();
 /*     */       } else {
 /*     */         
-/* 325 */         HelperC.afficherErreur("DESOLE!", "Echec de l'Opï¿½ration");
+/* 325 */         HelperC.afficherErreur("DESOLE!", "Echec de l'Opération");
 /*     */       } 
 /*     */     } 
 /*     */   }
@@ -304,7 +304,7 @@
 /*     */     }
 /* 336 */     else if (getId() == 0) {
 /*     */       
-/* 338 */       HelperC.afficherInformation("Information", "Prï¿½cisez l'ï¿½lï¿½ment ï¿½ supprimer");
+/* 338 */       HelperC.afficherInformation("Information", "Précisez l'élément à supprimer");
 /*     */     } else {
 /*     */       
 /* 341 */       Historique hist = new Historique();
@@ -317,11 +317,11 @@
 /* 348 */       if (FichierBaseDAO.getInstance().deleteServices(this)) {
 /*     */         
 /* 350 */         clear(false);
-/* 351 */         HelperC.afficherInformation("FELICITATION", "Succï¿½s de l'Opï¿½ration");
+/* 351 */         HelperC.afficherInformation("FELICITATION", "Succès de l'Opération");
 /* 352 */         chargement();
 /*     */       } else {
 /*     */         
-/* 355 */         HelperC.afficherErreur("DESOLE!", "Echec de l'Opï¿½ration");
+/* 355 */         HelperC.afficherErreur("DESOLE!", "Echec de l'Opération");
 /*     */       } 
 /*     */     } 
 /*     */   }
@@ -330,7 +330,7 @@
 /*     */   public void dbClickCode() {
 /* 362 */     if (getDirection() == null) {
 /*     */       
-/* 364 */       HelperC.afficherInformation("Information", "Prï¿½cisez la Direction d'abord");
+/* 364 */       HelperC.afficherInformation("Information", "Précisez la Direction d'abord");
 /*     */     } else {
 /*     */       
 /* 367 */       this.listeService = FichierBaseDAO.getInstance().getListeServices(0);

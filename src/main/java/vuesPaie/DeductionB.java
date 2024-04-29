@@ -199,7 +199,7 @@ public class DeductionB extends DeductionC {
 		disableSave = false;
 		if (isTypeSanction()) {
 			if (FichierBaseDAO.getInstance().getDeductionSanction() != null) {
-				HelperC.afficherAttention("Attention", "Une retÃ©nu liÃ© aux sanction est dÃ©jÃ  paramÃ©trÃ© !");
+				HelperC.afficherAttention("Attention", "Une reténu lié aux sanction est déjÃ  paramétré !");
 				disableSave = true;
 			}
 		}
@@ -216,7 +216,7 @@ public class DeductionB extends DeductionC {
 	public void enregistrer() {
 		if (getCode().trim().equals("") || getDesignation().trim().equals("")) {
 
-			HelperC.afficherMessage("Information", "Completez tous les champs nÃ©cessaires");
+			HelperC.afficherMessage("Information", "Completez tous les champs nécessaires");
 		} else {
 
 			Historique hist = new Historique();
@@ -224,10 +224,10 @@ public class DeductionB extends DeductionC {
 			hist.setOperateur(this.operateur);
 			if (getId() == 0) {
 
-				hist.setOperation("CrÃ©ation de la dÃ©duction " + getCode());
+				hist.setOperation("Création de la déduction " + getCode());
 			} else {
 
-				hist.setOperation("Modification de la dÃ©duction " + getCode());
+				hist.setOperation("Modification de la déduction " + getCode());
 			}
 			hist.setTable(Tables.getTableName(Tables.TableName.deduction));
 			setHistorique(hist);
@@ -237,15 +237,15 @@ public class DeductionB extends DeductionC {
 					if (FichierBaseDAO.getInstance().insertUpdateDeduction(this)) {
 
 						clear(true);
-						HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration");
+						HelperC.afficherMessage("Information", "Succès de l'opération");
 						charger();
 					} else {
 
-						HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration");
+						HelperC.afficherMessage("Désolé", "Echec de l'opération");
 					}
 				} else {
 
-					HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de crÃ©er ");
+					HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de créer ");
 				}
 			}
 			if (getId() > 0) {
@@ -254,11 +254,11 @@ public class DeductionB extends DeductionC {
 					if (FichierBaseDAO.getInstance().insertUpdateDeduction(this)) {
 
 						clear(true);
-						HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration");
+						HelperC.afficherMessage("Information", "Succès de l'opération");
 						charger();
 					} else {
 
-						HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration");
+						HelperC.afficherMessage("Désolé", "Echec de l'opération");
 					}
 				} else {
 
@@ -278,11 +278,11 @@ public class DeductionB extends DeductionC {
 			if (FichierBaseDAO.getInstance().delete(Tables.getTableName(Tables.TableName.deduction), getId())) {
 
 				clear(true);
-				HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration ");
+				HelperC.afficherMessage("Information", "Succès de l'opération ");
 				init();
 			} else {
 
-				HelperC.afficherMessage("DÃ©solÃ©", "Echec de suppression");
+				HelperC.afficherMessage("Désolé", "Echec de suppression");
 			}
 		} else {
 

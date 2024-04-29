@@ -735,17 +735,17 @@ public class EvaluationEmployeB extends EvaluationEmployeC {
 	public void enregistrer() {
 		if (getEmploye() == null) {
 
-			HelperC.afficherMessage("Information", "Veillez saisir l'employï¿½");
+			HelperC.afficherMessage("Information", "Veillez saisir l'employé");
 		} else if (getNoteEvaluation() == 0.0D || getPourcentage() == 0.0D) {
 
-			HelperC.afficherMessage("Information", "Veillez d'abord evaluer l'employï¿½");
+			HelperC.afficherMessage("Information", "Veillez d'abord evaluer l'employé");
 		} else if (getTypeAppreciation() == null) {
 
-			HelperC.afficherMessage("Information", "Veillez sï¿½lï¿½ctionner l'apprï¿½ciation");
+			HelperC.afficherMessage("Information", "Veillez séléctionner l'appréciation");
 			idAppreciation=0;
 		} else 
 			if(getDateApplication()==null)
-				HelperC.afficherMessage("Information", "Il faut prï¿½iser la date ï¿½ la quelle le nouveau salaire sera considï¿½rï¿½");
+				HelperC.afficherMessage("Information", "Il faut préiser la date é la quelle le nouveau salaire sera considéré");
 			
 			else {
 			createTraiement();
@@ -754,21 +754,21 @@ public class EvaluationEmployeB extends EvaluationEmployeC {
 			hist.setOperateur(this.operateur);
 			if (getId() == 0) {
 
-				hist.setOperation("Crï¿½ation de l'ï¿½valuation de l'employï¿½ " + getEmploye().getNom() + " "
+				hist.setOperation("Création de l'évaluation de l'employé " + getEmploye().getNom() + " "
 						+ getEmploye().getPrenom());
 			} else {
 
-				hist.setOperation("Modificationde l'ï¿½valuation de l'employï¿½ " + getEmploye().getNom() + " "
+				hist.setOperation("Modificationde l'évaluation de l'employé " + getEmploye().getNom() + " "
 						+ getEmploye().getPrenom());
 			}
 			hist.setTable(Tables.getTableName(Tables.TableName.evaluationEmploye));
 			setHistorique(hist);
 			if (FactoryDAO.getInstance().insertUpdateEvaluationEmploye(this)) {
-				HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
+				HelperC.afficherMessage("Information", "Succès de l'opération");
 				clear(true);
 			} else {
 
-				HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
+				HelperC.afficherMessage("Désolé", "Echec de l'opération ");
 			}
 		}
 		}
@@ -783,20 +783,20 @@ public class EvaluationEmployeB extends EvaluationEmployeC {
 			Historique hist = new Historique();
 			hist.setDateOperation(Calendar.getInstance().getTime());
 			hist.setOperateur(this.operateur);
-			hist.setOperation("Suppression de l' ï¿½valuation de l'employï¿½ " + getEmploye().getNom() + " "
+			hist.setOperation("Suppression de l' évaluation de l'employé " + getEmploye().getNom() + " "
 						+ getEmploye().getPrenom());
 				hist.setTable(Tables.getTableName(Tables.TableName.evaluationEmploye));
 			setHistorique(hist);
 			if (FactoryDAO.getInstance().deleteEvaluationEmploye(this)) {
 
 			clear(true);
-			HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
+			HelperC.afficherMessage("Information", "Succès de l'opération ");
 			
 		
 		}
 			else {
 
-			HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
+			HelperC.afficherMessage("Désolé", "Echec de suppression");
 		}
 		}
 	}

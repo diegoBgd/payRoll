@@ -1,198 +1,194 @@
-/*     */ package vuesPaie;
-/*     */ 
-/*     */ import classesPaie.Base;
-/*     */ import classesPaie.BulletinPaieC;
-/*     */ import classesPaie.Constante;
-/*     */ import classesPaie.DroitC;
-/*     */ import classesPaie.ExerciceC;
-/*     */ import classesPaie.HelperC;
-/*     */ import classesPaie.OperateurC;
-/*     */ import java.io.IOException;
-/*     */ import java.io.Serializable;
-/*     */ import java.util.Date;
-/*     */ import java.util.List;
-/*     */ import javax.annotation.PostConstruct;
-/*     */ import javax.faces.bean.ManagedBean;
-/*     */ import javax.faces.bean.ViewScoped;
-/*     */ import javax.faces.context.FacesContext;
-/*     */ import javax.servlet.http.HttpSession;
-/*     */ import persistencePaie.FactoryDAO;
-/*     */ import persistencePaie.FichierBaseDAO;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class DeleteBulletinB
-/*     */   implements Serializable
-/*     */ {
-/*     */   private static final long serialVersionUID = -2835657924633121011L;
-/*     */   private Date dateDebut;
-/*     */   private Date dateFin;
-/*     */   private String dateDebPrnt;
-/*     */   private String dateFnPrnt;
-/*     */   private OperateurC operateur;
-/*     */   private ExerciceC exercice;
-/*  39 */   private HttpSession session = HelperC.getSession();
-/*     */   
-/*     */   private DroitC droit;
-/*     */   
-/*     */   public int getProgressValue() {
-/*  44 */     return this.progressValue;
-/*     */   }
-/*     */   private List<BulletinPaieC> listeBulletin; private int progressValue;
-/*     */   
-/*     */   public void setProgressValue(int progressValue) {
-/*  49 */     this.progressValue = progressValue;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public Date getDateDebut() {
-/*  54 */     return this.dateDebut;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setDateDebut(Date dateDebut) {
-/*  59 */     this.dateDebut = dateDebut;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public Date getDateFin() {
-/*  64 */     return this.dateFin;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setDateFin(Date dateFin) {
-/*  69 */     this.dateFin = dateFin;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public String getDateDebPrnt() {
-/*  74 */     return this.dateDebPrnt;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setDateDebPrnt(String dateDebPrnt) {
-/*  79 */     this.dateDebPrnt = dateDebPrnt;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public String getDateFnPrnt() {
-/*  84 */     return this.dateFnPrnt;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setDateFnPrnt(String dateFnPrnt) {
-/*  89 */     this.dateFnPrnt = dateFnPrnt;
-/*     */   }
-/*     */   
-/*     */   public List<BulletinPaieC> getListeBulletin() {
-/*  93 */     return this.listeBulletin;
-/*     */   }
-/*     */   
-/*     */   public void setListeBulletin(List<BulletinPaieC> listeBulletin) {
-/*  97 */     this.listeBulletin = listeBulletin;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   @PostConstruct
-/*     */   private void init() {
-/* 103 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/* 104 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/* 105 */     if (codeOperateur == null || codeExercice == null) {
-/*     */ 
-/*     */       
-/*     */       try {
-/* 109 */         FacesContext context = FacesContext.getCurrentInstance();
-/* 110 */         context.getExternalContext().redirect("/payRoll/login.xhtml");
-/*     */       }
-/* 112 */       catch (IOException e) {
-/*     */         
-/* 114 */         e.printStackTrace();
-/*     */       } 
-/*     */     } else {
-/*     */       
-/* 118 */       this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/* 119 */       this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
-/* 120 */       Base userFonction = FichierBaseDAO.getInstance().getFonctionActive(this.operateur.getIdEmploye());
-/* 121 */       if (userFonction != null)
-/*     */       {
-/* 123 */         this.droit = FichierBaseDAO.getInstance().getDroit(userFonction.getId(), Constante.Role.bulletinPaie);
-/*     */       }
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeDateDeb() {
-/* 130 */     if (getDateDebPrnt().replace("/", "").replace("_", "").trim().equals("")) {
-/*     */       
-/* 132 */       setDateDebut(null);
-/*     */     } else {
-/*     */       
-/* 135 */       setDateDebut(HelperC.validerDate(getDateDebPrnt()));
-/* 136 */       if (getDateDebut() == null) {
-/*     */         
-/* 138 */         setDateDebPrnt("");
-/*     */       } else {
-/*     */         
-/* 141 */         setDateDebPrnt(HelperC.convertDate(getDateDebut()));
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeDateFin() {
-/* 148 */     if (getDateFnPrnt().replace("/", "").replace("_", "").trim().equals("")) {
-/*     */       
-/* 150 */       setDateFin(null);
-/*     */     } else {
-/*     */       
-/* 153 */       setDateFin(HelperC.validerDate(getDateFnPrnt()));
-/* 154 */       if (getDateFnPrnt() == null) {
-/*     */         
-/* 156 */         setDateFnPrnt("");
-/*     */       } else {
-/*     */         
-/* 159 */         setDateFnPrnt(HelperC.convertDate(getDateFin()));
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void chargementBulletin() {
-/* 166 */     this.listeBulletin = FactoryDAO.getInstance().getListBulletinPaie(0, this.dateDebut, this.dateFin, this.exercice.getId());
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void delete() throws InterruptedException {
-/* 172 */     if (this.droit != null && this.droit.isSupprimer()) {
-/*     */       
-/* 174 */       chargementBulletin();
-/* 175 */       if (this.listeBulletin.size() > 0) {
-/*     */         
-/* 177 */         int i = 0;
-/* 178 */         this.progressValue = 0;
-/*     */         
-/* 180 */         for (BulletinPaieC bulletin : this.listeBulletin) {
-/*     */           
-/* 182 */           FactoryDAO.getInstance().deleteBulletinPaie(bulletin);
-/* 183 */           i++;
-/* 184 */           this.progressValue = i * 100 / this.listeBulletin.size();
-/* 185 */           Thread.sleep(60L);
-/*     */         } 
-/*     */       } 
-/*     */       
-/* 189 */       HelperC.afficherMessage("Information", "Opï¿½ration terminï¿½e !");
-/*     */     } 
-/*     */   }
-/*     */ }
+ package vuesPaie;
+ 
+ import classesPaie.Base;
+ import classesPaie.BulletinPaieC;
+ import classesPaie.Constante;
+ import classesPaie.DroitC;
+ import classesPaie.ExerciceC;
+ import classesPaie.HelperC;
+ import classesPaie.OperateurC;
+ import java.io.IOException;
+ import java.io.Serializable;
+ import java.util.Date;
+ import java.util.List;
+ import javax.annotation.PostConstruct;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.context.FacesContext;
+ import javax.servlet.http.HttpSession;
+ import persistencePaie.FactoryDAO;
+ import persistencePaie.FichierBaseDAO;
+ 
+ 
+ 
+ 
+ 
+ 
+ @ManagedBean
+ @ViewScoped
+ public class DeleteBulletinB
+   implements Serializable
+ {
+   private static final long serialVersionUID = -2835657924633121011L;
+   private Date dateDebut;
+   private Date dateFin;
+   private String dateDebPrnt;
+   private String dateFnPrnt;
+   private OperateurC operateur;
+   private ExerciceC exercice;
+   private HttpSession session = HelperC.getSession();
+   
+   private DroitC droit;
+   
+   public int getProgressValue() {
+     return this.progressValue;
+   }
+   private List<BulletinPaieC> listeBulletin; private int progressValue;
+   
+   public void setProgressValue(int progressValue) {
+     this.progressValue = progressValue;
+   }
+ 
+   
+   public Date getDateDebut() {
+     return this.dateDebut;
+   }
+ 
+   
+   public void setDateDebut(Date dateDebut) {
+     this.dateDebut = dateDebut;
+   }
+ 
+   
+   public Date getDateFin() {
+     return this.dateFin;
+   }
+ 
+   
+   public void setDateFin(Date dateFin) {
+     this.dateFin = dateFin;
+   }
+ 
+   
+   public String getDateDebPrnt() {
+     return this.dateDebPrnt;
+   }
+ 
+   
+   public void setDateDebPrnt(String dateDebPrnt) {
+     this.dateDebPrnt = dateDebPrnt;
+   }
+ 
+   
+   public String getDateFnPrnt() {
+     return this.dateFnPrnt;
+   }
+ 
+   
+   public void setDateFnPrnt(String dateFnPrnt) {
+     this.dateFnPrnt = dateFnPrnt;
+   }
+   
+   public List<BulletinPaieC> getListeBulletin() {
+     return this.listeBulletin;
+   }
+   
+   public void setListeBulletin(List<BulletinPaieC> listeBulletin) {
+     this.listeBulletin = listeBulletin;
+   }
+ 
+   
+   @PostConstruct
+   private void init() {
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     if (codeOperateur == null || codeExercice == null) {
+ 
+       
+       try {
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/login.xhtml");
+       }
+       catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     } else {
+       
+       this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+       this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
+       Base userFonction = FichierBaseDAO.getInstance().getFonctionActive(this.operateur.getIdEmploye());
+       if (userFonction != null)
+       {
+         this.droit = FichierBaseDAO.getInstance().getDroit(userFonction.getId(), Constante.Role.bulletinPaie);
+       }
+     } 
+   }
+ 
+   
+   public void changeDateDeb() {
+     if (getDateDebPrnt().replace("/", "").replace("_", "").trim().equals("")) {
+       
+       setDateDebut(null);
+     } else {
+       
+       setDateDebut(HelperC.validerDate(getDateDebPrnt()));
+       if (getDateDebut() == null) {
+         
+         setDateDebPrnt("");
+       } else {
+         
+         setDateDebPrnt(HelperC.convertDate(getDateDebut()));
+       } 
+     } 
+   }
+ 
+   
+   public void changeDateFin() {
+     if (getDateFnPrnt().replace("/", "").replace("_", "").trim().equals("")) {
+       
+       setDateFin(null);
+     } else {
+       
+       setDateFin(HelperC.validerDate(getDateFnPrnt()));
+       if (getDateFnPrnt() == null) {
+         
+         setDateFnPrnt("");
+       } else {
+         
+         setDateFnPrnt(HelperC.convertDate(getDateFin()));
+       } 
+     } 
+   }
+ 
+   
+   private void chargementBulletin() {
+     this.listeBulletin = FactoryDAO.getInstance().getListBulletinPaie(0, this.dateDebut, this.dateFin, this.exercice.getId());
+   }
+ 
+ 
+   
+   public void delete() throws InterruptedException {
+     if (this.droit != null && this.droit.isSupprimer()) {
+       
+       chargementBulletin();
+       if (this.listeBulletin.size() > 0) {
+         
+         int i = 0;
+         this.progressValue = 0;
+         
+         for (BulletinPaieC bulletin : this.listeBulletin) {
+           
+           FactoryDAO.getInstance().deleteBulletinPaie(bulletin);
+           i++;
+           this.progressValue = i * 100 / this.listeBulletin.size();
+           Thread.sleep(60L);
+         } 
+       } 
+       
+       HelperC.afficherMessage("Information", "Opération terminée !");
+     } 
+   }
+ }
 
 
-/* Location:              G:\PAIE\!\vuesPaie\DeleteBulletinB.class
- * Java compiler version: 7 (51.0)
- * JD-Core Version:       1.1.3
- */

@@ -748,7 +748,7 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 					getListeCotisation().add(this.detailCotisation);
 				} else {
 
-					HelperC.afficherAttention("ATTENTION", "Cette cotisation est dÃ©jÃ  ajoutÃ©e!");
+					HelperC.afficherAttention("ATTENTION", "Cette cotisation est déjÃ  ajoutée!");
 				}
 			} else {
 
@@ -786,7 +786,7 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 					getListComission().add(this.detailComission);
 				} else {
 
-					HelperC.afficherAttention("ATTENTION", "Cette commission est dÃ©jÃ  ajoutÃ©e!");
+					HelperC.afficherAttention("ATTENTION", "Cette commission est déjÃ  ajoutée!");
 				}
 			} else {
 
@@ -1909,7 +1909,7 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 					getListePrime().add(this.detailPrime);
 				} else {
 
-					HelperC.afficherAttention("ATTENTION", "Cette prime est dÃ©jÃ  ajoutÃ©e!");
+					HelperC.afficherAttention("ATTENTION", "Cette prime est déjÃ  ajoutée!");
 				}
 			} else {
 
@@ -2275,7 +2275,7 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 					getListDeduction().add(this.detailDeduction);
 				} else {
 
-					HelperC.afficherAttention("ATTENTION", "Cette retenu est dÃ©jÃ  ajoutÃ©e!");
+					HelperC.afficherAttention("ATTENTION", "Cette retenu est déjÃ  ajoutée!");
 				}
 			} else {
 
@@ -2386,15 +2386,15 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 		{
 			HelperC.afficherAttention("ATTENTION",
 					"Paie impossible!");
-			this.infoMsg = "Cet employÃ© ne travaille plus depuis "+employe.getDateSortieS();
+			this.infoMsg = "Cet employé ne travaille plus depuis "+employe.getDateSortieS();
 			this.disableSave = true;
 			return;
 		}
 		if (getDatePaie().before(this.exercice.getDateDebut()) || getDatePaie().after(this.exercice.getDateFin())) {
 
 			HelperC.afficherAttention("ATTENTION",
-					"La date de la paie ne doit pas Ã©tre en dÃ©hors de la pÃ©riode de l'exercice !");
-			this.infoMsg = "La date de paie ne doit pas Ã©tre en dÃ©hors de la pÃ©riode de l'exercice !";
+					"La date de la paie ne doit pas étre en déhors de la période de l'exercice !");
+			this.infoMsg = "La date de paie ne doit pas étre en déhors de la période de l'exercice !";
 			this.disableSave = true;
 
 		} else if (this.employe.getDateEntre() != null) {
@@ -2443,16 +2443,16 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 			} else {
 
 				HelperC.afficherAttention("ATTENTION",
-						"La date dÃ©but du contrat de cet employÃ© est supÃ©rieur Ã© la date du paiement !");
+						"La date début du contrat de cet employé est supérieur à la date du paiement !");
 
-				this.infoMsg = "La date dÃ©but du contrat de cet employÃ© est supÃ©1rieur Ã© la date du paiement !";
+				this.infoMsg = "La date début du contrat de cet employé est supérieur à la date du paiement !";
 
 				this.disableSave = true;
 			}
 		} else {
 
-			HelperC.afficherAttention("ATTENTION", "Il faut prÃ©ciser la date d'entrÃ©e en fonction pour cet employÃ© !");
-			this.infoMsg = "Il faut prÃ©ciser la date d'entrÃ©e en fonction pour cet employÃ©  !";
+			HelperC.afficherAttention("ATTENTION", "Il faut préciser la date d'entrée en fonction pour cet employé !");
+			this.infoMsg = "Il faut préciser la date d'entrée en fonction pour cet employé  !";
 			this.disableSave = true;
 		}
 	}
@@ -2565,7 +2565,7 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 					montantCredit = crd.getTranche();
 					detailCredit.setMontantTranche(montantCredit);
 					detailCredit.setNoDossier(crdi.getNumeroDossier());
-					detailCredit.setLibelle("CrÃ©dit : " + crdi.getBanque().getCode());
+					detailCredit.setLibelle("Crédit : " + crdi.getBanque().getCode());
 					getListCredit().add(detailCredit);
 
 					detailCredRembourse = new CreditRembourseC();
@@ -2769,7 +2769,7 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 			edit.printBulletin();
 		} else {
 
-			HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit d'Ã©diter le bulletin ");
+			HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit d'éditer le bulletin ");
 		}
 	}
 
@@ -2777,7 +2777,7 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 		setIdExercice(this.exercice.getId());
 		if (getId() == 0 && !this.droit.isCreer()) {
 
-			HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de crÃ©er le bulletin ");
+			HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de créer le bulletin ");
 			return;
 		}
 		if (getId() > 0 && !this.droit.isModifier()) {
@@ -2787,12 +2787,12 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 		}
 		if (getDatePaie() == null) {
 
-			HelperC.afficherMessage("ATTENTION", "Il faut prÃ©ciser la date de paie ! ");
+			HelperC.afficherMessage("ATTENTION", "Il faut préciser la date de paie ! ");
 			return;
 		}
 		if (this.employe == null) {
 
-			HelperC.afficherMessage("ATTENTION", "Il faut prÃ©ciser l'employÃ© ! ");
+			HelperC.afficherMessage("ATTENTION", "Il faut préciser l'employé ! ");
 			return;
 		}
 		if (getTotalNetPay() >= this.montantNetMin) {
@@ -2811,15 +2811,15 @@ public class BulletinPaieB extends BulletinPaieC implements Serializable {
 			
 			if (FactoryDAO.getInstance().insertUpdateBulletinPaie(this)) {
 
-				HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration ");
+				HelperC.afficherMessage("Information", "Succè de l'opération ");
 				initialize();
 			} else {
 
-				HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration ");
+				HelperC.afficherMessage("Désolé", "Echec de l'opération ");
 			}
 		} else {
 
-			HelperC.afficherAttention("ATTENTION", "La paie ne peut pas Ã©tre infÃ©rieure Ã© "
+			HelperC.afficherAttention("ATTENTION", "La paie ne peut pas étre inférieure à "
 					+ HelperC.decimalNumber(this.parametre.getMontantNetMin(), 0, true));
 		}
 	}

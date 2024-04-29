@@ -300,25 +300,25 @@ public class ExerciceB extends ExerciceC {
 	public void enregistrer() {
 		if (getId() == 0 && !this.droit.isCreer()) {
 
-			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crÃ©er");
+			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer");
 		} else if (getId() > 0 && !this.droit.isModifier()) {
 
 			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
 		} else if (getCode().trim().equals("")) {
 
-			HelperC.afficherMessage("Information", "PrÃ©cisez le code");
+			HelperC.afficherMessage("Information", "Précisez le code");
 		} else if (getDesignation().trim().equals("")) {
 
-			HelperC.afficherMessage("Information", "PrÃ©cisez le libellÃ©");
+			HelperC.afficherMessage("Information", "Précisez le libellé");
 		} else if (getDateDebut() == null || getDateFin() == null) {
 
-			HelperC.afficherMessage("Information", "PrÃ©cisez le dÃ©but et la fin de l'exercice");
+			HelperC.afficherMessage("Information", "Précisez le début et la fin de l'exercice");
 		} else if (getDateDebut().after(getDateFin())) {
 
-			HelperC.afficherMessage("Information", "La date de DÃ©but doit prÃ©cÃ©der celle de la fin de l'Exercice");
+			HelperC.afficherMessage("Information", "La date de Début doit précéder celle de la fin de l'Exercice");
 		} else if (FichierBaseDAO.getInstance().getExerciceNotCurrent(getDateDebut(), getId()) != null) {
 
-			HelperC.afficherMessage("Information", "La date DÃ©but se trouve dans un autre Exercice");
+			HelperC.afficherMessage("Information", "La date Début se trouve dans un autre Exercice");
 		} else if (FichierBaseDAO.getInstance().getExerciceNotCurrent(getDateFin(), getId()) != null) {
 
 			HelperC.afficherMessage("Information", "La date Fin se trouve dans un autre Exercice");
@@ -327,7 +327,7 @@ public class ExerciceB extends ExerciceC {
 			boolean passe = true;
 			if (this.exercisePrcd != null && this.exercisePrcd.getId() == getId()) {
 
-				HelperC.afficherMessage("Attention", "Exercice prÃ©cÃ©dent");
+				HelperC.afficherMessage("Attention", "Exercice précédent");
 				passe = false;
 			}
 			if (passe) {
@@ -339,7 +339,7 @@ public class ExerciceB extends ExerciceC {
 				hist.setOperateur(this.operateur);
 				if (getId() == 0) {
 
-					hist.setOperation("CrÃ©ation de l'exercice " + getCode());
+					hist.setOperation("Création de l'exercice " + getCode());
 				} else {
 
 					hist.setOperation("Modification de l'exercice " + getCode());
@@ -348,11 +348,11 @@ public class ExerciceB extends ExerciceC {
 				setHistorique(hist);
 				if (FichierBaseDAO.getInstance().insertUpdateExercice(this)) {
 
-					HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration ");
+					HelperC.afficherMessage("Information", "Succès de l'opération ");
 					clear(true);
 				} else {
 
-					HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration");
+					HelperC.afficherMessage("Désolé", "Echec de l'opération");
 				}
 			}
 		}
@@ -364,11 +364,11 @@ public class ExerciceB extends ExerciceC {
 			HelperC.afficherDeleteMessage();
 		} else if (FichierBaseDAO.getInstance().delete(Tables.getTableName(Tables.TableName.exercice), getId())) {
 
-			HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration");
+			HelperC.afficherMessage("Information", "Succès de l'opération");
 			clear(true);
 		} else {
 
-			HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration ");
+			HelperC.afficherMessage("Désolé", "Echec de l'opération ");
 		}
 	}
 

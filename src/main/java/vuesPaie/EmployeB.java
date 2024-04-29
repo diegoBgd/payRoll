@@ -1846,7 +1846,7 @@ public class EmployeB extends EmployeC implements Serializable {
 
 		if (this.selected != null) {
 			HelperC.afficherMessage("information",
-					"Ce nom et prénom de l'employéest déja enregistrépar quelqu'un d'autre");
+					"Ce nom et prénom de l'employéest déja enregistré par quelqu'un d'autre");
 			return;
 		}
 
@@ -1867,7 +1867,7 @@ public class EmployeB extends EmployeC implements Serializable {
 		setHistorique(hist);
 
 		if (FactoryDAO.getInstance().insertUpdateEmploye(this)) {
-			HelperC.afficherMessage("information", "L'employéest enregistréavec succé");
+			HelperC.afficherMessage("information", "L'employéest enregistréavec succès");
 			clear(true);
 		} else {
 
@@ -2162,7 +2162,7 @@ public class EmployeB extends EmployeC implements Serializable {
 			hist.setTable(Tables.getTableName(Tables.TableName.employe));
 			setHistorique(hist);
 			if (FactoryDAO.getInstance().deleteEmploye(this)) {
-				HelperC.afficherMessage("information", "La suppression a reussie!");
+				HelperC.afficherMessage("information", "La suppression a réussie!");
 				clear(true);
 			} else {
 				HelperC.afficherMessage("Désolé", "Echec de suppression");
