@@ -102,13 +102,13 @@ public class ModifPasseWordB {
 			
 			  if(user==null)
 			  {
-				  HelperC.afficherAttention("ATTENTION", "L' employï¿½ de matricule "+matricule +" n'est pas utlisateur du logiciel!");
+				  HelperC.afficherAttention("ATTENTION", "L' employé de matricule "+matricule +" n'est pas utlisateur du logiciel!");
 			  }
 			 // getCodeServiceLigne();
 		  }
 		  else
 		  {
-			  HelperC.afficherAttention("ATTENTION", "L' employï¿½ de matricule "+matricule +" n'existe pas !");
+			  HelperC.afficherAttention("ATTENTION", "L' employé de matricule "+matricule +" n'existe pas !");
 		  }
 		  
 	  }
@@ -139,15 +139,15 @@ public class ModifPasseWordB {
 					 HelperC.sendEmail(parm.getSmtpServer(), parm.getMailOrigine(), parm.getMailOrigine(), parm.getPwdOrigine(), mail, user.getCodeSecret(), "Votre code secret");
 				 }
 				 else
-					  HelperC.afficherAttention("ATTENTION", "Il faut d'abord ï¿½tre utilisateur !");
+					  HelperC.afficherAttention("ATTENTION", "Il faut d'abord étre utilisateur !");
 			 }
-			 HelperC.afficherAttention("ATTENTION", "Il faut avoir une adresse e-mail sur la fiche employï¿½ !");
+			 HelperC.afficherAttention("ATTENTION", "Il faut avoir une adresse e-mail sur la fiche employé !");
 		  }
 		  else
-			   HelperC.afficherAttention("ATTENTION", "Il faut prï¿½ciser l'employï¿½!");
+			   HelperC.afficherAttention("ATTENTION", "Il faut préciser l'employé!");
 		  }
 		  else
-			  HelperC.afficherAttention("ATTENTION", "Il faut vï¿½rifier le parametrage des mails !");
+			  HelperC.afficherAttention("ATTENTION", "Il faut vérifier le parametrage des mails !");
 	  }
 	  public void generateCode() {
 		  if(selectedEmploye!=null)
@@ -169,10 +169,10 @@ public class ModifPasseWordB {
 			 }
 			  }
 			  else
-				  HelperC.afficherAttention("ATTENTION", "Il faut d'abord ï¿½tre utilisateur !");
+				  HelperC.afficherAttention("ATTENTION", "Il faut d'abord étre utilisateur !");
 		  }
 		  else
-			   HelperC.afficherAttention("ATTENTION", "Il faut prï¿½ciser l'employï¿½!");
+			   HelperC.afficherAttention("ATTENTION", "Il faut préciser l'employé!");
 	  }
 	  private  String generateRandomChars(String candidateChars, int length) {
 		    StringBuilder sb = new StringBuilder();

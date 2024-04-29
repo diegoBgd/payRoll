@@ -1,86 +1,86 @@
-/*     */ package vuesPaie;
-/*     */ 
-/*     */ import classesPaie.Base;
-/*     */ import classesPaie.ExerciceC;
-/*     */ import classesPaie.HelperC;
-/*     */ import classesPaie.Historique;
-/*     */ import classesPaie.OperateurC;
-/*     */ import classesPaie.Tables;
-/*     */ import java.io.IOException;
-/*     */ import java.util.Calendar;
-/*     */ import java.util.List;
-/*     */ import javax.annotation.PostConstruct;
-/*     */ import javax.faces.bean.ManagedBean;
-/*     */ import javax.faces.bean.ViewScoped;
-/*     */ import javax.faces.context.FacesContext;
-/*     */ import javax.servlet.http.HttpSession;
-/*     */ import org.primefaces.event.SelectEvent;
-/*     */ import persistencePaie.FichierBaseDAO;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class NiveauFormationB
-/*     */   extends Base
-/*     */ {
-/*     */   private static final long serialVersionUID = -1864592058311941323L;
-/*     */   private Base selected;
-/*     */   private List<Base> niveauxFormations;
-/*     */   private OperateurC operateur;
-/*     */   private ExerciceC exercice;
-/*  34 */   private HttpSession session = HelperC.getSession();
-/*     */ 	private boolean disableMsg;
-/*     */ 
-/*     */   
-/*     */   public OperateurC getOperateur() {
-/*  39 */     return this.operateur;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setOperateur(OperateurC operateur) {
-/*  44 */     this.operateur = operateur;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public ExerciceC getExercice() {
-/*  49 */     return this.exercice;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setExercice(ExerciceC exercice) {
-/*  54 */     this.exercice = exercice;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public HttpSession getSession() {
-/*  59 */     return this.session;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setSession(HttpSession session) {
-/*  64 */     this.session = session;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public Base getSelected() {
-/*  69 */     return this.selected;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setSelected(Base selected) {
-/*  74 */     this.selected = selected;
-/*     */   }
-/*     */   
-/*     */   public List<Base> getNiveauxFormations() {
-/*  78 */     return this.niveauxFormations;
-/*     */   }
-/*     */   
-/*     */   public void setNiveauxFormations(List<Base> niveauxFormations) {
-/*  82 */     this.niveauxFormations = niveauxFormations;
-/*     */   }
+ package vuesPaie;
+ 
+ import classesPaie.Base;
+ import classesPaie.ExerciceC;
+ import classesPaie.HelperC;
+ import classesPaie.Historique;
+ import classesPaie.OperateurC;
+ import classesPaie.Tables;
+ import java.io.IOException;
+ import java.util.Calendar;
+ import java.util.List;
+ import javax.annotation.PostConstruct;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.context.FacesContext;
+ import javax.servlet.http.HttpSession;
+ import org.primefaces.event.SelectEvent;
+ import persistencePaie.FichierBaseDAO;
+ 
+ 
+ 
+ 
+ 
+ @ManagedBean
+ @ViewScoped
+ public class NiveauFormationB
+   extends Base
+ {
+   private static final long serialVersionUID = -1864592058311941323L;
+   private Base selected;
+   private List<Base> niveauxFormations;
+   private OperateurC operateur;
+   private ExerciceC exercice;
+   private HttpSession session = HelperC.getSession();
+ 	private boolean disableMsg;
+ 
+   
+   public OperateurC getOperateur() {
+     return this.operateur;
+   }
+ 
+   
+   public void setOperateur(OperateurC operateur) {
+     this.operateur = operateur;
+   }
+ 
+   
+   public ExerciceC getExercice() {
+     return this.exercice;
+   }
+ 
+   
+   public void setExercice(ExerciceC exercice) {
+     this.exercice = exercice;
+   }
+ 
+   
+   public HttpSession getSession() {
+     return this.session;
+   }
+ 
+   
+   public void setSession(HttpSession session) {
+     this.session = session;
+   }
+ 
+   
+   public Base getSelected() {
+     return this.selected;
+   }
+ 
+   
+   public void setSelected(Base selected) {
+     this.selected = selected;
+   }
+   
+   public List<Base> getNiveauxFormations() {
+     return this.niveauxFormations;
+   }
+   
+   public void setNiveauxFormations(List<Base> niveauxFormations) {
+     this.niveauxFormations = niveauxFormations;
+   }
 			
 			
 			public boolean isDisableMsg() {
@@ -89,153 +89,149 @@
 			public void setDisableMsg(boolean disableMsg) {
 				this.disableMsg = disableMsg;
 			}
-/*     */   
-/*     */   @PostConstruct
-/*     */   private void init() {
-/*  88 */     this.operateur = new OperateurC();
-/*  89 */     this.exercice = new ExerciceC();
-/*  90 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/*  91 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/*  92 */     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/*  93 */     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
-/*  94 */     if (this.operateur == null || this.exercice == null) {
-/*     */ 
-/*     */       
-/*     */       try {
-/*  98 */         FacesContext context = FacesContext.getCurrentInstance();
-/*  99 */         context.getExternalContext().redirect("/payRoll/login.xhtml");
-/*     */       }
-/* 101 */       catch (IOException e) {
-/*     */         
-/* 103 */         e.printStackTrace();
-/*     */       } 
-/*     */     } else {
-/*     */       disableMsg=true;
-/* 107 */       charger();
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void charger() {
-/* 113 */     this.niveauxFormations = FichierBaseDAO.getInstance().getAllBase(Tables.getTableName(Tables.TableName.niveauFormation));
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void clear(boolean b) {
-/* 118 */     if (b)
-/*     */     {
-/* 120 */       setCode("");
-/*     */     }
-/* 122 */     setId(0);
-/* 123 */     setDesignation("");
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void setObject() {
+   
+   @PostConstruct
+   private void init() {
+     this.operateur = new OperateurC();
+     this.exercice = new ExerciceC();
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
+     if (this.operateur == null || this.exercice == null) {
+ 
+       
+       try {
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/login.xhtml");
+       }
+       catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     } else {
+       disableMsg=true;
+       charger();
+     } 
+   }
+ 
+   
+   private void charger() {
+     this.niveauxFormations = FichierBaseDAO.getInstance().getAllBase(Tables.getTableName(Tables.TableName.niveauFormation));
+   }
+ 
+   
+   private void clear(boolean b) {
+     if (b)
+     {
+       setCode("");
+     }
+     setId(0);
+     setDesignation("");
+   }
+ 
+   
+   private void setObject() {
 				disableMsg=true;
-/* 128 */     if (this.selected != null) {
-/*     */       disableMsg=false;
-/* 130 */       setId(this.selected.getId());
-/* 131 */       setCode(this.selected.getCode());
-/* 132 */       setDesignation(this.selected.getDesignation());
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeCode() {
-/* 138 */     if (getCode().trim().equals("")) {
-/*     */       
-/* 140 */       clear(true);
-/*     */     } else {
-/*     */       
-/* 143 */       this.selected = FichierBaseDAO.getInstance().getBaseByCode(getCode(), Tables.getTableName(Tables.TableName.niveauFormation));
-/* 144 */       if (this.selected == null) {
-/*     */         
-/* 146 */         clear(false);
-/*     */       } else {
-/*     */         
-/* 149 */         setObject();
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void onRowSelected(SelectEvent event) {
-/* 156 */     this.selected = (Base)event.getObject();
-/* 157 */     if (this.selected != null)
-/*     */     {
-/* 159 */       setObject();
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void enregistrer() {
-/* 165 */     if (getCode().trim().equals("") || getDesignation().trim().equals("")) {
-/*     */       
-/* 167 */       HelperC.afficherMessage("Information", "Code et Dï¿½signation sont obligatoires");
-/*     */     }
-/* 169 */     else if (FichierBaseDAO.getInstance().getBase(getCode(), getId(), Tables.getTableName(Tables.TableName.niveauFormation)) != null) {
-/*     */       
-/* 171 */       HelperC.afficherMessage("Information", "Ce code existe dï¿½jï¿½ ");
-/*     */     }
-/* 173 */     else if (FichierBaseDAO.getInstance().getBases(getDesignation(), getId(), Tables.getTableName(Tables.TableName.niveauFormation)) != null) {
-/*     */       
-/* 175 */       HelperC.afficherMessage("Information", "Cette dï¿½signation existe dï¿½jï¿½ ");
-/*     */     } else {
-/*     */       
-/* 178 */       Historique hist = new Historique();
-/* 179 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 180 */       hist.setOperateur(this.operateur);
-/* 181 */       if (getId() == 0) {
-/*     */         
-/* 183 */         hist.setOperation("Crï¿½ation du niveau de formation " + getCode());
-/*     */       } else {
-/*     */         
-/* 186 */         hist.setOperation("Modification du niveau de formation " + getCode());
-/*     */       } 
-/* 188 */       hist.setTable(Tables.getTableName(Tables.TableName.niveauFormation));
-/* 189 */       setHistorique(hist);
-/* 190 */       if (FichierBaseDAO.getInstance().insertUpdateBase(this, Tables.getTableName(Tables.TableName.niveauFormation))) {
-/*     */         
-/* 192 */         clear(true);
-/* 193 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
-/* 194 */         charger();
-/*     */       } else {
-/*     */         
-/* 197 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void supprimer() {
-/* 204 */     if (getId() == 0) {
-/*     */       
-/* 206 */       HelperC.afficherDeleteMessage();
-/*     */     }
-/* 208 */     else if (FichierBaseDAO.getInstance().delete(Tables.getTableName(Tables.TableName.niveauFormation), getId())) {
-/*     */        HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
-/* 210 */       clear(true);
-/* 211 */      
-/* 212 */       charger();
-/*     */     } else {
-/*     */       
-/* 215 */       HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void initialiser() {
-/* 221 */     clear(true);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   
-/*     */ }
+     if (this.selected != null) {
+       disableMsg=false;
+       setId(this.selected.getId());
+       setCode(this.selected.getCode());
+       setDesignation(this.selected.getDesignation());
+     } 
+   }
+ 
+   
+   public void changeCode() {
+     if (getCode().trim().equals("")) {
+       
+       clear(true);
+     } else {
+       
+       this.selected = FichierBaseDAO.getInstance().getBaseByCode(getCode(), Tables.getTableName(Tables.TableName.niveauFormation));
+       if (this.selected == null) {
+         
+         clear(false);
+       } else {
+         
+         setObject();
+       } 
+     } 
+   }
+ 
+   
+   public void onRowSelected(SelectEvent event) {
+     this.selected = (Base)event.getObject();
+     if (this.selected != null)
+     {
+       setObject();
+     }
+   }
+ 
+   
+   public void enregistrer() {
+     if (getCode().trim().equals("") || getDesignation().trim().equals("")) {
+       
+       HelperC.afficherMessage("Information", "Code et Désignation sont obligatoires");
+     }
+     else if (FichierBaseDAO.getInstance().getBase(getCode(), getId(), Tables.getTableName(Tables.TableName.niveauFormation)) != null) {
+       
+       HelperC.afficherMessage("Information", "Ce code existe déjà ");
+     }
+     else if (FichierBaseDAO.getInstance().getBases(getDesignation(), getId(), Tables.getTableName(Tables.TableName.niveauFormation)) != null) {
+       
+       HelperC.afficherMessage("Information", "Cette désignation existe déjà ");
+     } else {
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         
+         hist.setOperation("Création du niveau de formation " + getCode());
+       } else {
+         
+         hist.setOperation("Modification du niveau de formation " + getCode());
+       } 
+       hist.setTable(Tables.getTableName(Tables.TableName.niveauFormation));
+       setHistorique(hist);
+       if (FichierBaseDAO.getInstance().insertUpdateBase(this, Tables.getTableName(Tables.TableName.niveauFormation))) {
+         
+         clear(true);
+         HelperC.afficherMessage("Information", "Succès de l'opération ");
+         charger();
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+       } 
+     } 
+   }
+ 
+   
+   public void supprimer() {
+     if (getId() == 0) {
+       
+       HelperC.afficherDeleteMessage();
+     }
+     else if (FichierBaseDAO.getInstance().delete(Tables.getTableName(Tables.TableName.niveauFormation), getId())) {
+        HelperC.afficherMessage("Information", "Succès de l'opération ");
+       clear(true);
+      
+       charger();
+     } else {
+       
+       HelperC.afficherMessage("Désolé", "Echec de suppression");
+     } 
+   }
+ 
+   
+   public void initialiser() {
+     clear(true);
+   }
+ 
+ 
+   
+   
+ }
 
 
-/* Location:              G:\PAIE\!\vuesPaie\NiveauFormationB.class
- * Java compiler version: 7 (51.0)
- * JD-Core Version:       1.1.3
- */

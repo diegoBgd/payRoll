@@ -1,67 +1,67 @@
-/*    */ package vuesPaie;
-/*    */ 
-/*    */ import classesPaie.Base;
+ package vuesPaie;
+ 
+ import classesPaie.Base;
 import classesPaie.CategoriePersonnelC;
 import classesPaie.DetailPrimeEmployeC;
 import classesPaie.EmployeC;
 import classesPaie.ExerciceC;
 import classesPaie.GradePersonnelC;
-/*    */ import classesPaie.HelperC;
-/*    */ import classesPaie.OperateurC;
+ import classesPaie.HelperC;
+ import classesPaie.OperateurC;
 import classesPaie.ParametrageGeneralC;
-/*    */ import classesPaie.ParametragePrimeC;
+ import classesPaie.ParametragePrimeC;
 import classesPaie.PrimeIndemniteC;
 import classesPaie.Tables;
 import classesPaie.Tables.TableName;
 
-/*    */ import java.io.IOException;
-/*    */ import java.io.Serializable;
+ import java.io.IOException;
+ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-/*    */ import java.util.List;
+ import java.util.List;
 import java.util.Random;
 
-/*    */ import javax.annotation.PostConstruct;
-/*    */ import javax.faces.bean.ManagedBean;
-/*    */ import javax.faces.bean.ViewScoped;
-/*    */ import javax.faces.context.FacesContext;
+ import javax.annotation.PostConstruct;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-/*    */ import javax.servlet.http.HttpSession;
+ import javax.servlet.http.HttpSession;
 
 import persistencePaie.FactoryDAO;
-/*    */ import persistencePaie.FichierBaseDAO;
-/*    */ import persistencePaie.UtilitaireDAO;
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ @ManagedBean
-/*    */ @ViewScoped
-/*    */ public class UtilitaireVue
-/*    */   implements Serializable
-/*    */ {
-/*    */   private static final long serialVersionUID = 3942587143941760472L;
-/* 28 */   private HttpSession session = HelperC.getSession();
-/*    */   private EmployeC selectedEmploye;
-/*    */   private OperateurC operateur;
-/*    */   private List<SelectItem> listPersonnel,listCateg,listGrd,listFoct;
-/*    */   private ExerciceC exercice;
-/*    */   private int idPrsnl,idCateg,idGrd,idFonct;
-/*    */   private String infoMsg,codeLine,matricule,mail,nom;
-/*    */   List<EmployeC>listEmploye;
-/*    */   private List<ParametragePrimeC> listParmPrim;
-/*    */   private boolean sendMail;
-/*    */   ParametrageGeneralC parm;
+ import persistencePaie.FichierBaseDAO;
+ import persistencePaie.UtilitaireDAO;
+ 
+ 
+ 
+ 
+ 
+ @ManagedBean
+ @ViewScoped
+ public class UtilitaireVue
+   implements Serializable
+ {
+   private static final long serialVersionUID = 3942587143941760472L;
+   private HttpSession session = HelperC.getSession();
+   private EmployeC selectedEmploye;
+   private OperateurC operateur;
+   private List<SelectItem> listPersonnel,listCateg,listGrd,listFoct;
+   private ExerciceC exercice;
+   private int idPrsnl,idCateg,idGrd,idFonct;
+   private String infoMsg,codeLine,matricule,mail,nom;
+   List<EmployeC>listEmploye;
+   private List<ParametragePrimeC> listParmPrim;
+   private boolean sendMail;
+   ParametrageGeneralC parm;
 
-/*    */   public String getInfoMsg() {
-/* 40 */     return this.infoMsg;
-/*    */   }
-/*    */   
-/*    */   public void setInfoMsg(String infoMsg) {
-/* 44 */     this.infoMsg = infoMsg;
-/*    */   }
+   public String getInfoMsg() {
+     return this.infoMsg;
+   }
+   
+   public void setInfoMsg(String infoMsg) {
+     this.infoMsg = infoMsg;
+   }
 			public int getIdCateg() {
 				return idCateg;
 			}
@@ -158,33 +158,33 @@ import persistencePaie.FactoryDAO;
 			public void setNom(String nom) {
 				this.nom = nom;
 			}
-/*    */   @PostConstruct
-/*    */   public void init() {
-/* 50 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/* 51 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/* 52 */     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/* 53 */     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
-/*    */     
-/* 55 */     if (this.operateur == null || this.exercice == null) {
-/*    */       
-/*    */       try {
-/*    */         
-/* 59 */         FacesContext context = FacesContext.getCurrentInstance();
-/* 60 */         context.getExternalContext().redirect("/payRoll/login.xhtml");
-/*    */       }
-/* 62 */       catch (IOException e) {
-/*    */         
-/* 64 */         e.printStackTrace();
-/*    */       } 
-/*    */     }
+   @PostConstruct
+   public void init() {
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
+     
+     if (this.operateur == null || this.exercice == null) {
+       
+       try {
+         
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/login.xhtml");
+       }
+       catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     }
 			else{
 				parm=FichierBaseDAO.getInstance().getParametrageGeneral();
 				chargementPersonnel();
 				chargerFonction();
 			}
-/*    */   }
-/*    */ 
-/*    */   
+   }
+ 
+   
 public void chargerParmetre(){
 	 			listParmPrim = FichierBaseDAO.getInstance().getListParametragePrime(0, 0, 0, 0);
 	 			PrimeIndemniteC prim;
@@ -312,10 +312,10 @@ private void chargementPersonnel() {
 					ok = updatePrim(empl);
 			}
 			if (ok) {
-				this.infoMsg = "Opï¿½ration rï¿½ussie !";
+				this.infoMsg = "Opération réussie !";
 				listParmPrim.clear();
 			} else {
-				this.infoMsg = "Opï¿½ration ï¿½chouï¿½e !";
+				this.infoMsg = "Opération échouée !";
 			}
 		}
  
@@ -328,10 +328,10 @@ public void chargermentParm(){
 		bl=updatePrim(empl);
 	}
 	if (bl) {
-		this.infoMsg = "Opï¿½ration rï¿½ussie !";
+		this.infoMsg = "Opération réussie !";
 		listParmPrim.clear();
 	} else {
-		this.infoMsg = "Opï¿½ration ï¿½chouï¿½e !";
+		this.infoMsg = "Opération échouée !";
 	}
 	}
 }

@@ -255,7 +255,7 @@ public class SaisiePlanCongeB extends SaisiePlanCongeC{
 				if(prmDure==null || prmDure.getNombreJoursAnnuel()==0)
 				{
 					disableSave=true;
-					 HelperC.afficherAttention("ATTENTION", "Il faut paramï¿½trer la durï¿½e pour ce type de congï¿½");
+					 HelperC.afficherAttention("ATTENTION", "Il faut paramétrer la durée pour ce type de congé");
 					 return;
 				}
 				else
@@ -275,7 +275,7 @@ public class SaisiePlanCongeB extends SaisiePlanCongeC{
 				if(duree>prmDure.getNombreJoursAnnuel())
 				{
 					disableSave=true;
-					 HelperC.afficherAttention("ATTENTION", "Vous ne puvez pas dï¿½passer la durï¿½e pour ce type de congï¿½ !");
+					 HelperC.afficherAttention("ATTENTION", "Vous ne puvez pas dépasser la durée pour ce type de congé !");
 					 return;
 				}
 			}
@@ -365,7 +365,7 @@ public class SaisiePlanCongeB extends SaisiePlanCongeC{
 			{
 				if(!droit.isCreer())
 				{
-					 HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crï¿½er");
+					 HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer");
 					 return;
 				}
 			}
@@ -379,11 +379,11 @@ public class SaisiePlanCongeB extends SaisiePlanCongeC{
 			setIdExercice(exercice.getId());
 			if(FactoryDAO.getInstance().insertUpdateSaisiePlanConge(this))
 			{
-				 HelperC.afficherInformation("FELICITATION", "Succï¿½s de l'Opï¿½ration");
+				 HelperC.afficherInformation("FELICITATION", "Succès de l'Opération");
 				 initialiser();
 			}
 			else
-				  HelperC.afficherErreur("DESOLE!", "Echec de l'Opï¿½ration");
+				  HelperC.afficherErreur("DESOLE!", "Echec de l'Opération");
 		}
 	}
 	
@@ -399,11 +399,11 @@ public class SaisiePlanCongeB extends SaisiePlanCongeC{
 				}
 				if(FactoryDAO.getInstance().deleteSaisiePlanConge(selected))
 				{
-					 HelperC.afficherInformation("FELICITATION", "Succï¿½s de l'Opï¿½ration");
+					 HelperC.afficherInformation("FELICITATION", "Succès de l'Opération");
 					 initialiser();
 				}
 				else
-					 HelperC.afficherErreur("DESOLE!", "Echec de l'Opï¿½ration");
+					 HelperC.afficherErreur("DESOLE!", "Echec de l'Opération");
 			}
 		}
 	}

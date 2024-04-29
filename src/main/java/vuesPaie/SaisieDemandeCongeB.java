@@ -504,7 +504,7 @@ public class SaisieDemandeCongeB extends SaisieDemandeCongeC {
 			
 			checkDelay();
 		} else {
-			HelperC.afficherAttention("Attention", "Il faut prÃ©ciser lla date dÃ©but et la durÃ©e");
+			HelperC.afficherAttention("Attention", "Il faut préciser lla date début et la durée");
 			disableSave = true;
 		}
 	}
@@ -586,7 +586,7 @@ public class SaisieDemandeCongeB extends SaisieDemandeCongeC {
 		if (solde > 0) {
 			if (getDuree() > solde) {
 				disableSave = true;
-				HelperC.afficherAttention("Attention", "La durÃ©e de congÃ© ne doit pas dÃ©passer les jours restants  ");
+				HelperC.afficherAttention("Attention", "La durée de congé ne doit pas dépasser les jours restants  ");
 				return;
 			}
 			else
@@ -685,7 +685,7 @@ public class SaisieDemandeCongeB extends SaisieDemandeCongeC {
 	public void saveDemande() {
 		
 		if (getId() == 0 && !this.droit.isCreer()) {
-			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crÃ©er");
+			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer");
 		} else if (getId() > 0 && !this.droit.isModifier()) {
 			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
 		} else if (getEmploye() == null || getTypeConge() == null || getDateDebut() == null || getDateFin() == null
@@ -701,19 +701,19 @@ public class SaisieDemandeCongeB extends SaisieDemandeCongeC {
 			hist.setDateOperation(Calendar.getInstance().getTime());
 			hist.setOperateur(this.operateur);
 			if (getId() == 0) {
-				hist.setOperation("CrÃ©ation de la saisie de demande de congÃ© ");
+				hist.setOperation("Création de la saisie de demande de congé ");
 			} else {
-				hist.setOperation("Modification de la saisie de demande de congÃ© ");
+				hist.setOperation("Modification de la saisie de demande de congé ");
 			}
 			hist.setTable(Tables.getTableName(Tables.TableName.saisieDemandeConge));
 			setHistorique(hist);
 			setExercise(exercice);
 			if (FactoryDAO.getInstance().insertUpdateSaisieDemandeConge(this)) {
-				HelperC.afficherMessage("FÃ©licitation", "Enregistrement avec succÃ¨s");
+				HelperC.afficherMessage("Félicitation", "Enregistrement avec succès");
 				clear(true);
 			} else {
 
-				HelperC.afficherMessage("DÃ¨solÃ©", "Echec d'enregistrement");
+				HelperC.afficherMessage("Dèsolé", "Echec d'enregistrement");
 			}
 		}
 	}
@@ -727,16 +727,16 @@ public class SaisieDemandeCongeB extends SaisieDemandeCongeC {
 			Historique hist = new Historique();
 			hist.setDateOperation(Calendar.getInstance().getTime());
 			hist.setOperateur(this.operateur);
-			hist.setOperation("Traitement de la demande de congÃ© ");
+			hist.setOperation("Traitement de la demande de congé ");
 			hist.setTable(Tables.getTableName(Tables.TableName.saisieDemandeConge));
 			setHistorique(hist);
 			setExercise(exercice);
 			if (FactoryDAO.getInstance().insertUpdateSaisieDemandeConge(this)) {
-				HelperC.afficherMessage("FÃ©licitation", "Enregistrement avec succÃ¨s");
+				HelperC.afficherMessage("Félicitation", "Enregistrement avec succès");
 				clear(true);
 			} else {
 
-				HelperC.afficherMessage("DÃ¨solÃ©", "Echec d'enregistrement");
+				HelperC.afficherMessage("Dèsolé", "Echec d'enregistrement");
 			}
 		}
 	}
@@ -750,7 +750,7 @@ public class SaisieDemandeCongeB extends SaisieDemandeCongeC {
 			FactoryDAO.getInstance().delete(getId(), Tables.getTableName(Tables.TableName.saisieDemandeConge));
 
 			clear(true);
-			HelperC.afficherMessage("FÃ©licitation", "Suppression avec succÃ¨s");
+			HelperC.afficherMessage("Félicitation", "Suppression avec succès");
 		}
 	}
 
@@ -776,7 +776,7 @@ public class SaisieDemandeCongeB extends SaisieDemandeCongeC {
 	public void annuler() {
 		if (selected != null)
 			if (FactoryDAO.getInstance().annulerConge(selected)) {
-				HelperC.afficherMessage("Info", "Annulation avec succÃ¨s");
+				HelperC.afficherMessage("Info", "Annulation avec succès");
 				clear(true);
 			}
 	}

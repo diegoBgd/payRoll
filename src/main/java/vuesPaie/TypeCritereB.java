@@ -1,253 +1,249 @@
-/*     */ package vuesPaie;
-/*     */ 
-/*     */ import classesPaie.ExerciceC;
-/*     */ import classesPaie.HelperC;
-/*     */ import classesPaie.Historique;
-/*     */ import classesPaie.OperateurC;
-/*     */ import classesPaie.Tables;
-/*     */ import classesPaie.TypeCritereC;
-/*     */ import java.io.IOException;
-/*     */ import java.util.ArrayList;
-/*     */ import java.util.Calendar;
-/*     */ import java.util.List;
-/*     */ import javax.annotation.PostConstruct;
-/*     */ import javax.faces.bean.ManagedBean;
-/*     */ import javax.faces.bean.ViewScoped;
-/*     */ import javax.faces.context.FacesContext;
-/*     */ import javax.servlet.http.HttpSession;
-/*     */ import org.primefaces.event.SelectEvent;
-/*     */ import persistencePaie.FichierBaseDAO;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class TypeCritereB
-/*     */   extends TypeCritereC
-/*     */ {
-/*     */   private static final long serialVersionUID = 2862485259253372895L;
-/*  34 */   private List<TypeCritereC> allCriteres = new ArrayList<TypeCritereC>();
-/*  35 */   private TypeCritereC selected = null;
-/*  36 */   private HttpSession session = HelperC.getSession();
-/*     */   private OperateurC operateur;
-/*     */   private ExerciceC exercice;
-/*     */   
-/*     */   public OperateurC getOperateur() {
-/*  41 */     return this.operateur;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setOperateur(OperateurC operateur) {
-/*  46 */     this.operateur = operateur;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public ExerciceC getExercice() {
-/*  51 */     return this.exercice;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setExercice(ExerciceC exercice) {
-/*  56 */     this.exercice = exercice;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public HttpSession getSession() {
-/*  61 */     return this.session;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setSession(HttpSession session) {
-/*  66 */     this.session = session;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public List<TypeCritereC> getAllCriteres() {
-/*  71 */     return this.allCriteres;
-/*     */   }
-/*     */   
-/*     */   public void setAllCriteres(List<TypeCritereC> allCriteres) {
-/*  75 */     this.allCriteres = allCriteres;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public TypeCritereC getSelected() {
-/*  80 */     return this.selected;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setSelected(TypeCritereC selected) {
-/*  85 */     this.selected = selected;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   @PostConstruct
-/*     */   private void charger() {
-/*  91 */     this.operateur = new OperateurC();
-/*  92 */     this.exercice = new ExerciceC();
-/*  93 */     this.operateur = (OperateurC)this.session.getAttribute("operateur");
-/*  94 */     this.exercice = (ExerciceC)this.session.getAttribute("exercice");
-/*  95 */     if (this.operateur == null || this.exercice == null) {
-/*     */       
-/*     */       try {
-/*     */         
-/*  99 */         FacesContext context = FacesContext.getCurrentInstance();
-/* 100 */         context.getExternalContext().redirect("/payRoll/identification.xhtml");
-/*     */       }
-/* 102 */       catch (IOException e) {
-/*     */         
-/* 104 */         e.printStackTrace();
-/*     */       } 
-/*     */     }
-/* 107 */     this.allCriteres = FichierBaseDAO.getInstance().getAllTypeCritere();
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void findByCode() {
-/* 112 */     if (getCode().equalsIgnoreCase("")) {
-/*     */       
-/* 114 */       clear(true);
-/*     */     } else {
-/*     */       
-/* 117 */       this.selected = FichierBaseDAO.getInstance().getTypeCritere(getCode());
-/* 118 */       if (this.selected == null) {
-/*     */         
-/* 120 */         clear(false);
-/*     */       } else {
-/*     */         
-/* 123 */         setObject();
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void clear(boolean b) {
-/* 130 */     if (b)
-/*     */     {
-/* 132 */       setCode("");
-/*     */     }
-/* 134 */     setId(0);
-/* 135 */     setDesignation("");
-/* 136 */     setNoteAppreciationGlobale(0.0D);
-/* 137 */     setNoteAppreciationGlobaleS("");
-/* 138 */     this.selected = null;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void setObject() {
-/* 143 */     if (this.selected != null) {
-/*     */       
-/* 145 */       setId(this.selected.getId());
-/* 146 */       setCode(this.selected.getCode());
-/* 147 */       setDesignation(this.selected.getDesignation());
-/* 148 */       setNoteAppreciationGlobale(this.selected.getNoteAppreciationGlobale());
-/* 149 */       setNoteAppreciationGlobaleS(this.selected.getNoteAppreciationGlobaleS());
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeNoteAppreciation() {
-/*     */     try {
-/* 156 */       setNoteAppreciationGlobale(Double.valueOf(getNoteAppreciationGlobaleS().replace(" ", "").replace(",", ".").trim()).doubleValue());
-/* 157 */     } catch (Exception e) {
-/* 158 */       setNoteAppreciationGlobale(0.0D);
-/*     */     } finally {
-/* 160 */       if (getNoteAppreciationGlobale() < 0.0D) {
-/* 161 */         setNoteAppreciationGlobale(0.0D);
-/*     */       }
-/* 163 */       if (getNoteAppreciationGlobale() > 0.0D) {
-/*     */         
-/* 165 */         setNoteAppreciationGlobaleS(HelperC.TraitementMontant.getMontantFormate(getNoteAppreciationGlobale(), 2));
-/* 166 */         setNoteAppreciationGlobale(Double.valueOf(getNoteAppreciationGlobaleS().replace(" ", "").replace(",", ".").trim()).doubleValue());
-/*     */       } else {
-/*     */         
-/* 169 */         setNoteAppreciationGlobaleS("");
-/* 170 */         setNoteAppreciationGlobale(0.0D);
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void onRowSelected(SelectEvent event) {
-/* 180 */     this.selected = (TypeCritereC)event.getObject();
-/* 181 */     if (this.selected != null)
-/*     */     {
-/* 183 */       setObject();
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void enregistrer() {
-/* 189 */     if (getDesignation().trim().equals("")) {
-/*     */       
-/* 191 */       HelperC.afficherMessage("Information", "Completez tous les champs nï¿½cessaires");
-/*     */     }
-/* 193 */     else if (FichierBaseDAO.getInstance().getTypeCritere(getCode(), getId()) != null) {
-/*     */       
-/* 195 */       HelperC.afficherMessage("Information", "Ce code de type critere existe dï¿½jï¿½ ");
-/*     */     } else {
-/*     */       
-/* 198 */       Historique hist = new Historique();
-/* 199 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 200 */       hist.setOperateur(this.operateur);
-/* 201 */       if (getId() == 0) {
-/*     */         
-/* 203 */         hist.setOperation("Crï¿½ation d'un type critï¿½re d'ï¿½valuation " + getCode());
-/*     */       } else {
-/*     */         
-/* 206 */         hist.setOperation("Modification d'un type critï¿½re d'ï¿½valuation " + getCode());
-/*     */       } 
-/* 208 */       hist.setTable(Tables.getTableName(Tables.TableName.typeCritere));
-/* 209 */       setHistorique(hist);
-/* 210 */       if (FichierBaseDAO.getInstance().insertUpdateTypeCritere(this)) {
-/*     */         
-/* 212 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
-/* 213 */         this.allCriteres = FichierBaseDAO.getInstance().getAllTypeCritere();
-/* 214 */         clear(true);
-/*     */       } else {
-/*     */         
-/* 217 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration");
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void supprimer() {
-/* 224 */     if (getId() == 0) {
-/*     */       
-/* 226 */       HelperC.afficherMessage("Information", "Prï¿½cisez le type de critere ï¿½ supprimer");
-/*     */     }
-/* 228 */     else if (FichierBaseDAO.getInstance().deleteTypeCritere(this)) {
-/*     */       
-/* 230 */       HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
-/* 231 */       this.allCriteres = FichierBaseDAO.getInstance().getAllTypeCritere();
-/* 232 */       clear(true);
-/*     */     } else {
-/*     */       
-/* 235 */       HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void initialiser() {
-/* 241 */     clear(true);
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
+ package vuesPaie;
+ 
+ import classesPaie.ExerciceC;
+ import classesPaie.HelperC;
+ import classesPaie.Historique;
+ import classesPaie.OperateurC;
+ import classesPaie.Tables;
+ import classesPaie.TypeCritereC;
+ import java.io.IOException;
+ import java.util.ArrayList;
+ import java.util.Calendar;
+ import java.util.List;
+ import javax.annotation.PostConstruct;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.context.FacesContext;
+ import javax.servlet.http.HttpSession;
+ import org.primefaces.event.SelectEvent;
+ import persistencePaie.FichierBaseDAO;
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ @ManagedBean
+ @ViewScoped
+ public class TypeCritereB
+   extends TypeCritereC
+ {
+   private static final long serialVersionUID = 2862485259253372895L;
+   private List<TypeCritereC> allCriteres = new ArrayList<TypeCritereC>();
+   private TypeCritereC selected = null;
+   private HttpSession session = HelperC.getSession();
+   private OperateurC operateur;
+   private ExerciceC exercice;
+   
+   public OperateurC getOperateur() {
+     return this.operateur;
+   }
+ 
+   
+   public void setOperateur(OperateurC operateur) {
+     this.operateur = operateur;
+   }
+ 
+   
+   public ExerciceC getExercice() {
+     return this.exercice;
+   }
+ 
+   
+   public void setExercice(ExerciceC exercice) {
+     this.exercice = exercice;
+   }
+ 
+   
+   public HttpSession getSession() {
+     return this.session;
+   }
+ 
+   
+   public void setSession(HttpSession session) {
+     this.session = session;
+   }
+ 
+   
+   public List<TypeCritereC> getAllCriteres() {
+     return this.allCriteres;
+   }
+   
+   public void setAllCriteres(List<TypeCritereC> allCriteres) {
+     this.allCriteres = allCriteres;
+   }
+ 
+   
+   public TypeCritereC getSelected() {
+     return this.selected;
+   }
+ 
+   
+   public void setSelected(TypeCritereC selected) {
+     this.selected = selected;
+   }
+ 
+   
+   @PostConstruct
+   private void charger() {
+     this.operateur = new OperateurC();
+     this.exercice = new ExerciceC();
+     this.operateur = (OperateurC)this.session.getAttribute("operateur");
+     this.exercice = (ExerciceC)this.session.getAttribute("exercice");
+     if (this.operateur == null || this.exercice == null) {
+       
+       try {
+         
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/identification.xhtml");
+       }
+       catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     }
+     this.allCriteres = FichierBaseDAO.getInstance().getAllTypeCritere();
+   }
+ 
+   
+   public void findByCode() {
+     if (getCode().equalsIgnoreCase("")) {
+       
+       clear(true);
+     } else {
+       
+       this.selected = FichierBaseDAO.getInstance().getTypeCritere(getCode());
+       if (this.selected == null) {
+         
+         clear(false);
+       } else {
+         
+         setObject();
+       } 
+     } 
+   }
+ 
+   
+   private void clear(boolean b) {
+     if (b)
+     {
+       setCode("");
+     }
+     setId(0);
+     setDesignation("");
+     setNoteAppreciationGlobale(0.0D);
+     setNoteAppreciationGlobaleS("");
+     this.selected = null;
+   }
+ 
+   
+   private void setObject() {
+     if (this.selected != null) {
+       
+       setId(this.selected.getId());
+       setCode(this.selected.getCode());
+       setDesignation(this.selected.getDesignation());
+       setNoteAppreciationGlobale(this.selected.getNoteAppreciationGlobale());
+       setNoteAppreciationGlobaleS(this.selected.getNoteAppreciationGlobaleS());
+     } 
+   }
+ 
+   
+   public void changeNoteAppreciation() {
+     try {
+       setNoteAppreciationGlobale(Double.valueOf(getNoteAppreciationGlobaleS().replace(" ", "").replace(",", ".").trim()).doubleValue());
+     } catch (Exception e) {
+       setNoteAppreciationGlobale(0.0D);
+     } finally {
+       if (getNoteAppreciationGlobale() < 0.0D) {
+         setNoteAppreciationGlobale(0.0D);
+       }
+       if (getNoteAppreciationGlobale() > 0.0D) {
+         
+         setNoteAppreciationGlobaleS(HelperC.TraitementMontant.getMontantFormate(getNoteAppreciationGlobale(), 2));
+         setNoteAppreciationGlobale(Double.valueOf(getNoteAppreciationGlobaleS().replace(" ", "").replace(",", ".").trim()).doubleValue());
+       } else {
+         
+         setNoteAppreciationGlobaleS("");
+         setNoteAppreciationGlobale(0.0D);
+       } 
+     } 
+   }
+ 
+ 
+ 
+ 
+   
+   public void onRowSelected(SelectEvent event) {
+     this.selected = (TypeCritereC)event.getObject();
+     if (this.selected != null)
+     {
+       setObject();
+     }
+   }
+ 
+   
+   public void enregistrer() {
+     if (getDesignation().trim().equals("")) {
+       
+       HelperC.afficherMessage("Information", "Completez tous les champs nécessaires");
+     }
+     else if (FichierBaseDAO.getInstance().getTypeCritere(getCode(), getId()) != null) {
+       
+       HelperC.afficherMessage("Information", "Ce code de type critere existe déjé ");
+     } else {
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         
+         hist.setOperation("Création d'un type critére d'évaluation " + getCode());
+       } else {
+         
+         hist.setOperation("Modification d'un type critére d'évaluation " + getCode());
+       } 
+       hist.setTable(Tables.getTableName(Tables.TableName.typeCritere));
+       setHistorique(hist);
+       if (FichierBaseDAO.getInstance().insertUpdateTypeCritere(this)) {
+         
+         HelperC.afficherMessage("Information", "Succès de l'opération");
+         this.allCriteres = FichierBaseDAO.getInstance().getAllTypeCritere();
+         clear(true);
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération");
+       } 
+     } 
+   }
+ 
+   
+   public void supprimer() {
+     if (getId() == 0) {
+       
+       HelperC.afficherMessage("Information", "Précisez le type de critere é supprimer");
+     }
+     else if (FichierBaseDAO.getInstance().deleteTypeCritere(this)) {
+       
+       HelperC.afficherMessage("Information", "Succès de l'opération ");
+       this.allCriteres = FichierBaseDAO.getInstance().getAllTypeCritere();
+       clear(true);
+     } else {
+       
+       HelperC.afficherMessage("Désolé", "Echec de suppression");
+     } 
+   }
+ 
+   
+   public void initialiser() {
+     clear(true);
+   }
+ 
+ 
+   
 
-/*     */ }
+ }
 
 
-/* Location:              G:\PAIE\!\vuesPaie\TypeCritereB.class
- * Java compiler version: 7 (51.0)
- * JD-Core Version:       1.1.3
- */

@@ -33,7 +33,7 @@ import persistencePaie.FichierBaseDAO;
 @ViewScoped
 public class PersonneChargeB extends PersonneChargeC {
 	private String dateNss;
-
+ 
 	private List<SelectItem> listEmploye = new ArrayList<SelectItem>();
 	private List<SelectItem> listStatuts = new ArrayList<SelectItem>();
 	private HttpSession session = HelperC.getSession();

@@ -143,12 +143,12 @@ public class ParametrageSanctionB extends ParametrageSanctionC{
 		{
 			if(FichierBaseDAO.getInstance().insertUpdateParametrageSanction(this))
 			{
-				 HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration!", FacesMessage.SEVERITY_INFO);
+				 HelperC.afficherMessage("Information", "Succès de l'opération!", FacesMessage.SEVERITY_INFO);
 				 charger();
 				 initialiser();
 			}
 			else
-				HelperC.afficherMessage("Information", "Echec de l'opÃ©ration!", FacesMessage.SEVERITY_INFO);
+				HelperC.afficherMessage("Information", "Echec de l'opération!", FacesMessage.SEVERITY_INFO);
 		}
 	}
 	
@@ -157,12 +157,12 @@ public class ParametrageSanctionB extends ParametrageSanctionC{
 		{
 			if(FichierBaseDAO.getInstance().deleteParametrageSanction(selected))
 			{
-				 HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration!", FacesMessage.SEVERITY_INFO);
+				 HelperC.afficherMessage("Information", "Succès de l'opération!", FacesMessage.SEVERITY_INFO);
 				 charger();
 				 initialiser();
 			}
 			else
-				HelperC.afficherMessage("Information", "Echec de l'opÃ©ration!", FacesMessage.SEVERITY_INFO);
+				HelperC.afficherMessage("Information", "Echec de l'opération!", FacesMessage.SEVERITY_INFO);
 		}
 		else
 			HelperC.afficherDeleteMessage();

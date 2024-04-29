@@ -160,7 +160,7 @@ public class IdentificationB implements Serializable {
 
 			this.desableLogin = true;
 			this.disable = true;
-			this.message = "Il y a un problème de connexion à  la base de données! Vèrifiez les paramètres de connexion!";
+			this.message = "Il y a un problème de connexion à  la base de données! Vérifiez les paramètres de connexion!";
 		}
 	}
 

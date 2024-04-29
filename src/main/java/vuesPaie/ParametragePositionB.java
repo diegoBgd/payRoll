@@ -1,12 +1,12 @@
-/*     */ package vuesPaie;
-/*     */ 
-/*     */ import classesPaie.Base;
+ package vuesPaie;
+ 
+ import classesPaie.Base;
 import classesPaie.CategoriePersonnelC;
 import classesPaie.ConditionPositionC;
 import classesPaie.Constante;
-/*     */ import classesPaie.ExerciceC;
-/*     */ import classesPaie.HelperC;
-/*     */ import classesPaie.OperateurC;
+ import classesPaie.ExerciceC;
+ import classesPaie.HelperC;
+ import classesPaie.OperateurC;
 import classesPaie.ParametragePositionC;
 import classesPaie.ParametragePositionDetailC;
 import classesPaie.ParametragePrimeC;
@@ -14,116 +14,114 @@ import classesPaie.PrimeIndemniteC;
 import classesPaie.Tables;
 import classesPaie.Tables.TableName;
 
-/*     */ import java.io.IOException;
-/*     */ import java.util.ArrayList;
-/*     */ import java.util.List;
+ import java.io.IOException;
+ import java.util.ArrayList;
+ import java.util.List;
 
-/*     */ import javax.annotation.PostConstruct;
-/*     */ import javax.faces.bean.ManagedBean;
-/*     */ import javax.faces.bean.ViewScoped;
-/*     */ import javax.faces.context.FacesContext;
-/*     */ import javax.faces.event.ValueChangeEvent;
-/*     */ import javax.faces.model.SelectItem;
-/*     */ import javax.servlet.http.HttpSession;
+ import javax.annotation.PostConstruct;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.context.FacesContext;
+ import javax.faces.event.ValueChangeEvent;
+ import javax.faces.model.SelectItem;
+ import javax.servlet.http.HttpSession;
 
 import org.primefaces.PrimeFaces;
-/*     */ import org.primefaces.event.SelectEvent;
+ import org.primefaces.event.SelectEvent;
 
 import persistencePaie.FichierBaseDAO;
 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class ParametragePositionB
-/*     */   extends ParametragePositionC
-/*     */ {
-		/**
-		 * 
-		 */
+ @ManagedBean
+ @ViewScoped
+ public class ParametragePositionB
+   extends ParametragePositionC
+ {
+		
 		private static final long serialVersionUID = 2390725938584318293L;
-/*     */  
+  
 
-/*     */   private int dureeDetail,idPrime;
-/*     */   private int anciennetteMin;
-/*     */   private int anciennetteMax;
-/*  40 */   private int index = 1;
+   private int dureeDetail,idPrime;
+   private int anciennetteMin;
+   private int anciennetteMax;
+   private int index = 1;
             
-/*     */   private ParametragePositionC selected;
-/*  49 */   private HttpSession session = HelperC.getSession();
-/*     */   
-/*     */   private ParametragePositionDetailC selectedPrime;
-/*     */   private List<ParametragePositionC> listParametrage;
-/*     */   private List<SelectItem> listCondition;
+   private ParametragePositionC selected;
+   private HttpSession session = HelperC.getSession();
+   
+   private ParametragePositionDetailC selectedPrime;
+   private List<ParametragePositionC> listParametrage;
+   private List<SelectItem> listCondition;
 			private List<SelectItem> listPersonnel,listCateg;
 			private List<SelectItem> listPrime;
-/*     */   private OperateurC operateur; 
+   private OperateurC operateur; 
             private ExerciceC exercice; 
 			ConditionPositionC condition;
-/*     */   PrimeIndemniteC prime;
+   PrimeIndemniteC prime;
             List<ParametragePrimeC> listParmPrim;
             int idParam;
-/*     */   public List<SelectItem> getListCondition() {
-/*  74 */     return this.listCondition;
-/*     */   }
-/*     */   
-/*     */   public void setListCondition(List<SelectItem> listCondition) {
-/*  78 */     this.listCondition = listCondition;
-/*     */   }
-/*     */   
-/*     */   public OperateurC getOperateur() {
-/*  82 */     return this.operateur;
-/*     */   }
-/*     */   
-/*     */   public void setOperateur(OperateurC operateur) {
-/*  86 */     this.operateur = operateur;
-/*     */   }
-/*     */   
-/*     */   public ExerciceC getExercice() {
-/*  90 */     return this.exercice;
-/*     */   }
-/*     */   
-/*     */   public void setExercice(ExerciceC exercice) {
-/*  94 */     this.exercice = exercice;
-/*     */   }
-/*     */   
-/*     */   public HttpSession getSession() {
-/*  98 */     return this.session;
-/*     */   }
-/*     */   
-/*     */   public void setSession(HttpSession session) {
-/* 102 */     this.session = session;
-/*     */   }
+   public List<SelectItem> getListCondition() {
+     return this.listCondition;
+   }
+   
+   public void setListCondition(List<SelectItem> listCondition) {
+     this.listCondition = listCondition;
+   }
+   
+   public OperateurC getOperateur() {
+     return this.operateur;
+   }
+   
+   public void setOperateur(OperateurC operateur) {
+     this.operateur = operateur;
+   }
+   
+   public ExerciceC getExercice() {
+     return this.exercice;
+   }
+   
+   public void setExercice(ExerciceC exercice) {
+     this.exercice = exercice;
+   }
+   
+   public HttpSession getSession() {
+     return this.session;
+   }
+   
+   public void setSession(HttpSession session) {
+     this.session = session;
+   }
  
-/*     */   public int getAnciennetteMin() {
-/* 171 */     return this.anciennetteMin;
-/*     */   }
-/*     */   
-/*     */   public void setAnciennetteMin(int anciennetteMin) {
-/* 175 */     this.anciennetteMin = anciennetteMin;
-/*     */   }
-/*     */   
-/*     */   public int getAnciennetteMax() {
-/* 179 */     return this.anciennetteMax;
-/*     */   }
-/*     */   
-/*     */   public void setAnciennetteMax(int anciennetteMax) {
-/* 183 */     this.anciennetteMax = anciennetteMax;
-/*     */   }
-/*     */   
-/*     */   public int getDureeDetail() {
-/* 187 */     return this.dureeDetail;
-/*     */   }
-/*     */   
-/*     */   public void setDureeDetail(int dureeDetail) {
-/* 191 */     this.dureeDetail = dureeDetail;
-/*     */   }
-/*     */   
-/*     */   public int getIndex() {
-/* 195 */     return this.index;
-/*     */   }
-/*     */   
-/*     */   public void setIndex(int index) {
-/* 199 */     this.index = index;
-/*     */   }
+   public int getAnciennetteMin() {
+     return this.anciennetteMin;
+   }
+   
+   public void setAnciennetteMin(int anciennetteMin) {
+     this.anciennetteMin = anciennetteMin;
+   }
+   
+   public int getAnciennetteMax() {
+     return this.anciennetteMax;
+   }
+   
+   public void setAnciennetteMax(int anciennetteMax) {
+     this.anciennetteMax = anciennetteMax;
+   }
+   
+   public int getDureeDetail() {
+     return this.dureeDetail;
+   }
+   
+   public void setDureeDetail(int dureeDetail) {
+     this.dureeDetail = dureeDetail;
+   }
+   
+   public int getIndex() {
+     return this.index;
+   }
+   
+   public void setIndex(int index) {
+     this.index = index;
+   }
 			public ParametragePositionC getSelected() {
 				return selected;
 			}
@@ -173,86 +171,86 @@ import persistencePaie.FichierBaseDAO;
 			
 	
 			
-/*     */   @PostConstruct
-/*     */   private void init() {
-/* 204 */     this.operateur = new OperateurC();
-/* 205 */     this.exercice = new ExerciceC();
-/*     */     
-/* 207 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/* 208 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/* 209 */     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/* 210 */     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
-/*     */     
-/* 212 */     if (this.operateur == null || this.exercice == null) {
-/*     */       
-/*     */       try {
-/* 215 */         FacesContext context = FacesContext.getCurrentInstance();
-/* 216 */         context.getExternalContext().redirect("/payRoll/login.xhtml");
-/* 217 */       } catch (IOException e) {
-/*     */         
-/* 219 */         e.printStackTrace();
-/*     */       }
-/*     */     
-/*     */     } else {
-/*     */       listParmPrim=new ArrayList<ParametragePrimeC>();
-/* 224 */       this.listCondition = new ArrayList<SelectItem>();
+   @PostConstruct
+   private void init() {
+     this.operateur = new OperateurC();
+     this.exercice = new ExerciceC();
+     
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
+     
+     if (this.operateur == null || this.exercice == null) {
+       
+       try {
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/login.xhtml");
+       } catch (IOException e) {
+         
+         e.printStackTrace();
+       }
+     
+     } else {
+       listParmPrim=new ArrayList<ParametragePrimeC>();
+       this.listCondition = new ArrayList<SelectItem>();
 
-/* 225 */       listCateg=new ArrayList<SelectItem>();
+       listCateg=new ArrayList<SelectItem>();
 				listCateg.add(new SelectItem(0,""));
 				
 				chargerPrime();
 				chargerPersonnel();
-/*     */     } 
-/*     */   }
+     } 
+   }
 
 
-/*     */   public void chargement() {
-/* 233 */     this.listParametrage = FichierBaseDAO.getInstance().getListParametrePosition();
+   public void chargement() {
+     this.listParametrage = FichierBaseDAO.getInstance().getListParametrePosition();
 				for (ParametragePositionC prmPs : listParametrage) 
 				{
 					prmPs.setLibellePersonnel(FichierBaseDAO.getInstance().getBaseById(prmPs.getIdPersonnel(), Tables.getTableName(TableName.personnel)).getDesignation());
 					prmPs.setLibelleCondition(FichierBaseDAO.getInstance().getConditionPosition(prmPs.getIdCondition()).getLibellePosition());
 				}
-/*     */   }
-/*     */   private void setObject() {
-/* 236 */     if (this.selected != null) {
-/* 237 */       setId(this.selected.getId());
-/* 238 */       setAjoutAllocationFamiliale(this.selected.isAjoutAllocationFamiliale());
-/* 239 */       setAjoutAllocationLogement(this.selected.isAjoutAllocationLogement());
-/* 240 */       setAvancementTraitement(this.selected.isAvancementTraitement());
-/* 242 */       setAvancementGrade(selected.isAvancementGrade());
-/* 244 */       setIdPersonnel(selected.getIdPersonnel());
+   }
+   private void setObject() {
+     if (this.selected != null) {
+       setId(this.selected.getId());
+       setAjoutAllocationFamiliale(this.selected.isAjoutAllocationFamiliale());
+       setAjoutAllocationLogement(this.selected.isAjoutAllocationLogement());
+       setAvancementTraitement(this.selected.isAvancementTraitement());
+       setAvancementGrade(selected.isAvancementGrade());
+       setIdPersonnel(selected.getIdPersonnel());
 				chargerCategorie();
 				setIdCategorie(selected.getIdCategorie());				
                 setIdCondition(selected.getIdCondition());
                 condition=FichierBaseDAO.getInstance().getConditionPosition(selected.getIdCondition());
                 setIdposition(Constante.getPosition(condition.getPosition()));
                 chargerCondition();
-/* 245 */       setDureePosition(this.selected.getDureePosition());
-/* 246 */       setListDetailPrime(selected.getListDetailPrime());
+       setDureePosition(this.selected.getDureePosition());
+       setListDetailPrime(selected.getListDetailPrime());
 
-/* 252 */      for (ParametragePositionDetailC det : selected.getListDetailPrime()) {
+      for (ParametragePositionDetailC det : selected.getListDetailPrime()) {
 					prime=FichierBaseDAO.getInstance().getPrimeIndemnite(det.getIdPrime());
 					if(prime!=null)
 					det.setLibellePrime(prime.getDesignation());
 				}
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void clear() {
-/* 259 */       setId(0);
-/* 238 */       setAjoutAllocationFamiliale(false);
-/* 239 */       setAjoutAllocationLogement(false);
-/* 240 */       setAvancementTraitement(false);
-/* 242 */       setAvancementGrade(false);
-/* 244 */       setIdPersonnel(0);
+     } 
+   }
+ 
+   
+   private void clear() {
+       setId(0);
+       setAjoutAllocationFamiliale(false);
+       setAjoutAllocationLogement(false);
+       setAvancementTraitement(false);
+       setAvancementGrade(false);
+       setIdPersonnel(0);
                 setIdCondition(0);
-/* 245 */       setDureePosition(0);
-/* 246 */       getListDetailPrime().clear(); 
-/*     */   }
-/*     */ 
-/*     */   private void chargerPrime(){
+       setDureePosition(0);
+       getListDetailPrime().clear(); 
+   }
+ 
+   private void chargerPrime(){
 				listPrime=new ArrayList<SelectItem>();
 				listPrime.add(new SelectItem(0,""));
 				for (PrimeIndemniteC prm : FichierBaseDAO.getInstance().getAllPrimeIndemnite()) {
@@ -275,31 +273,31 @@ import persistencePaie.FichierBaseDAO;
 					listCateg.add(new SelectItem(cat.getId(),cat.getCode()+"-"+cat.getDesignation()));
 				}
 			}
-/*     */   public void onRowSelect(SelectEvent event) {
-/* 278 */     this.selected = (ParametragePositionC)event.getObject();
-/* 279 */     if (this.selected != null)
-/* 280 */       setObject(); 
-/* 281 */     
+   public void onRowSelect(SelectEvent event) {
+     this.selected = (ParametragePositionC)event.getObject();
+     if (this.selected != null)
+       setObject(); 
+     
 			PrimeFaces.current().executeScript("PF('rechercheDialog').hide();");
-/*     */   }
-/*     */ 
-/*     */  public void onPrmRowSelect(SelectEvent event)
+   }
+ 
+  public void onPrmRowSelect(SelectEvent event)
 			{
 				selectedPrime=(ParametragePositionDetailC)event.getObject();
 				if(selectedPrime!=null)
 					idPrime=selectedPrime.getIdPrime();
 			}
-/*     */   
-/*     */   public void initialiser() {
-/* 292 */     clear();
-/*     */   }
-/*     */   
-/*     */   public void changePosition(ValueChangeEvent event) {
-/* 296 */    setIdposition(((Integer)event.getNewValue()).intValue());
-/* 297 */    chargerCondition();
-/* 299 */    
-/*     */   }
-/*     */   
+   
+   public void initialiser() {
+     clear();
+   }
+   
+   public void changePosition(ValueChangeEvent event) {
+    setIdposition(((Integer)event.getNewValue()).intValue());
+    chargerCondition();
+    
+   }
+   
 			public void changerIdPrime(ValueChangeEvent event){
 				idPrime=((Integer)event.getNewValue()).intValue();
 				prime=FichierBaseDAO.getInstance().getPrimeIndemnite(idPrime);
@@ -337,26 +335,26 @@ import persistencePaie.FichierBaseDAO;
 					ajouterDetailPrime();
 				}
 			}
-/*     */   private void chargerCondition() {
+   private void chargerCondition() {
 		     this.listCondition.clear();
              this.listCondition.add(new SelectItem(Integer.valueOf(0), ""));
-/* 306 */     for (ConditionPositionC condi : FichierBaseDAO.getInstance().getListeConditionPosition(getIdposition()))
-/* 307 */       this.listCondition.add(new SelectItem(Integer.valueOf(condi.getId()), condi.getCondition())); 
-/*     */   }
-/*     */   
-/*     */  
-/*     */ 
-/*     */   
-/*     */   public void changeCondition(ValueChangeEvent event) {
-/* 320 */     if (event.getNewValue() != null) {
-/*     */       
-/* 322 */       setIdCondition(((Integer)event.getNewValue()).intValue());
+     for (ConditionPositionC condi : FichierBaseDAO.getInstance().getListeConditionPosition(getIdposition()))
+       this.listCondition.add(new SelectItem(Integer.valueOf(condi.getId()), condi.getCondition())); 
+   }
+   
+  
+ 
+   
+   public void changeCondition(ValueChangeEvent event) {
+     if (event.getNewValue() != null) {
+       
+       setIdCondition(((Integer)event.getNewValue()).intValue());
 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void ajouterDetailPrime(){
+     } 
+   }
+ 
+   
+   public void ajouterDetailPrime(){
 	              int num=0;
 				if(selectedPrime==null)
 					selectedPrime=new ParametragePositionDetailC();
@@ -393,56 +391,52 @@ import persistencePaie.FichierBaseDAO;
 			 		clearDetail();
 			 	}
 			}
-/*     */   
-/*     */   private void clearDetail() {
-/* 366 */     selectedPrime = null;
-/* 367 */     idPrime = 0;
-/* 368 */    
-/*     */   }
+   
+   private void clearDetail() {
+     selectedPrime = null;
+     idPrime = 0;
+    
+   }
 
-/*     */   public void save() {
-/* 430 */     if (getIdCondition() == 0) {
-/* 431 */       HelperC.afficherMessage("Information", "Veillez saisir la position!");
-/* 432 */     } 
-/* 436 */     else if (FichierBaseDAO.getInstance().insertUpdateParametragePosition(this)) {
-/* 437 */       HelperC.afficherMessage("Information", "Succï¿½s d'enregistrement");
-/* 438 */       chargement();
-/* 439 */       clear();
-/*     */     } else {
-/* 441 */       HelperC.afficherMessage("information", "Echec d'enregistrement");
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void supprimer() {
-/*     */     try {
-/* 450 */       if (getId() == 0) {
-/*     */         
-/* 452 */         HelperC.afficherDeleteMessage();
-/*     */       
-/*     */       }
-/* 455 */       else if (FichierBaseDAO.getInstance().deleteParametragePosition(selected)) {
-/*     */         
-/* 457 */         HelperC.afficherMessage("Fï¿½licitation", "Succï¿½s de l'Opï¿½ration");
-/* 458 */         clear();
-/* 459 */         chargement();
-/*     */       } else {
-/*     */         
-/* 462 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'Opï¿½ration");
-/*     */       
-/*     */       }
-/*     */     
-/*     */     }
-/* 467 */     catch (Exception e) {
-/* 468 */       System.out.println(e.getMessage());
-/*     */     } 
-/*     */   }
-/*     */ }
+   public void save() {
+     if (getIdCondition() == 0) {
+       HelperC.afficherMessage("Information", "Veillez saisir la position!");
+     } 
+     else if (FichierBaseDAO.getInstance().insertUpdateParametragePosition(this)) {
+       HelperC.afficherMessage("Information", "Succès d'enregistrement");
+       chargement();
+       clear();
+     } else {
+       HelperC.afficherMessage("information", "Echec d'enregistrement");
+     } 
+   }
+ 
+ 
+ 
+   
+   public void supprimer() {
+     try {
+       if (getId() == 0) {
+         
+         HelperC.afficherDeleteMessage();
+       
+       }
+       else if (FichierBaseDAO.getInstance().deleteParametragePosition(selected)) {
+         
+         HelperC.afficherMessage("Félicitation", "Succès de l'Opération");
+         clear();
+         chargement();
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'Opération");
+       
+       }
+     
+     }
+     catch (Exception e) {
+       System.out.println(e.getMessage());
+     } 
+   }
+ }
 
 
-/* Location:              G:\PAIE\!\vuesPaie\ParametrageDureeEtTraitementPositionB.class
- * Java compiler version: 7 (51.0)
- * JD-Core Version:       1.1.3
- */

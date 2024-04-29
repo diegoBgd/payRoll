@@ -322,12 +322,12 @@ public void setDisableMsg(boolean disableMsg) {
        }
        else
        {
-         HelperC.afficherAttention("ATTENTION", "Ce signataire est d√©j√† ajout√© !");
+         HelperC.afficherAttention("ATTENTION", "Ce signataire est dÈj‡† ajoutÈ !");
        }
      
      } else {
        
-       HelperC.afficherAttention("ATTENTION", "Il faut prr√©ciser le signataire !");
+       HelperC.afficherAttention("ATTENTION", "Il faut prrÈciser le signataire !");
      } 
    }
    private boolean isAdded(EmployeC empl) {
@@ -398,14 +398,14 @@ public void setDisableMsg(boolean disableMsg) {
    
    public void enregistrer() {
      if (getId() == 0 && !this.droit.isCreer()) {
-       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de cr√©er");
+       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crÈer");
      } else if (getId() != 0 && !this.droit.isModifier()) {
        HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
      } else if (getFonction() != null && getPersonnel() != null && this.idTypeOperation == 0) {
-       HelperC.afficherAttention("ATTENTION", "Veillez selectionner les √©l√©ments entrant dans le param√©trage");
+       HelperC.afficherAttention("ATTENTION", "Veillez selectionner les ÈlÈments entrant dans le paramÈtrage");
      }
      else if (getTypeOperation() == 0) {
-       HelperC.afficherAttention("ATTENTION", "Veillez selectionner le type d'op√©ration");
+       HelperC.afficherAttention("ATTENTION", "Veillez selectionner le type d'opÈration");
      }
      else {
        
@@ -413,19 +413,19 @@ public void setDisableMsg(boolean disableMsg) {
        hist.setDateOperation(Calendar.getInstance().getTime());
        hist.setOperateur(this.operateur);
        if (getId() == 0) {
-         hist.setOperation("Saisie Parametrage d√©cideur/signataire ");
+         hist.setOperation("Saisie Parametrage dÈcideur/signataire ");
        } else {
-         hist.setOperation("Modification Parametrage d√©cideur/signataire ");
+         hist.setOperation("Modification Parametrage dÈcideur/signataire ");
        }  hist.setTable(Tables.getTableName(Tables.TableName.parametrageDecideurSignataire));
        setHistorique(hist);
  
        
        if (FichierBaseDAO.getInstance().insertUpdateParametrageDecideurSignataire(this)) {
          clear();
-         HelperC.afficherInformation("FELICITATION", "Succ√®s de l'Op√©ration");
+         HelperC.afficherInformation("FELICITATION", "SuccËs de l'OpÈration");
        } else {
          
-         HelperC.afficherErreur("DESOLE!", "Echec de l'Op√©ration");
+         HelperC.afficherErreur("DESOLE!", "Echec de l'OpÈration");
        } 
      } 
    }
@@ -441,16 +441,16 @@ public void setDisableMsg(boolean disableMsg) {
        Historique hist = new Historique();
        hist.setDateOperation(Calendar.getInstance().getTime());
        hist.setOperateur(this.operateur);
-       hist.setOperation("Suppression Parametrage d√©cideur/signataire ");
+       hist.setOperation("Suppression Parametrage dÈcideur/signataire ");
        hist.setTable(Tables.getTableName(Tables.TableName.parametrageDecideurSignataire));
        hist.setIdLigne(getId());
        setHistorique(hist);
        if (FichierBaseDAO.getInstance().deleteParametrageDecideurSignataire(this)) {
          clear();
-         HelperC.afficherInformation("FELICITATION", "Succ√©s de l'Op√©ration");
+         HelperC.afficherInformation("FELICITATION", "SuccÈs de l'OpÈration");
        } else {
          
-         HelperC.afficherErreur("DESOLE!", "Echec de l'Op√©ration");
+         HelperC.afficherErreur("DESOLE!", "Echec de l'OpÈration");
        } 
      } 
    }

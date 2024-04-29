@@ -368,7 +368,7 @@
         
         public void save() {
        if (getId() == 0 && !this.droit.isCreer()) {
-         HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crï¿½er");
+         HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer");
        } else if (getId() > 0 && !this.droit.isModifier()) {
          HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
        } else if (getEmploye() == null || getDesignation().trim().equalsIgnoreCase("") || getMontantPeriode() == 0.0D) {
@@ -377,7 +377,7 @@
             
          this.selected = FactoryDAO.getInstance().getPrevisionFraisMedicaux(getEmploye(), getId());
          if (this.selected != null) {
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Information", "Cette prevision de frais mï¿½dical  est dï¿½ja saisie"));
+           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Information", "Cette prevision de frais médical  est déja saisie"));
             }
             else {
               
@@ -385,29 +385,29 @@
            hist.setDateOperation(Calendar.getInstance().getTime());
            hist.setOperateur(this.operateur);
            if (getId() == 0) {
-             hist.setOperation("Crï¿½ation des prï¿½visions des frais medicaux " + getCode());
+             hist.setOperation("Création des prévisions des frais medicaux " + getCode());
               } else {
-             hist.setOperation("Modification des prï¿½visions des frais medicaux " + getCode());
+             hist.setOperation("Modification des prévisions des frais medicaux " + getCode());
            }  hist.setTable(Tables.getTableName(Tables.TableName.previsionFraisMedicaux));
            setHistorique(hist);
            if (FactoryDAO.getInstance().insertUpdatePrevisionFraisMedicaux(this)) {
-             HelperC.afficherMessage("Fï¿½licitation", "Enregistrement avec succï¿½");
+             HelperC.afficherMessage("Félicitation", "Enregistrement avec succé");
              clear(true);
              this.allPrevisionFraisMedicaux = FactoryDAO.getInstance().getListAllPrevisionFraisMedicaux();
               } else {
                 
-             HelperC.afficherMessage("Fï¿½licitation", "Enregistrement avec succï¿½s");
+             HelperC.afficherMessage("Félicitation", "Enregistrement avec Succès");
               } 
             } 
           } 
         } public void delete() {
        if (this.selected == null) {
-         HelperC.afficherAttention("ATTENTION", "Aucun ï¿½lï¿½ment ï¿½ supprimer");
+         HelperC.afficherAttention("ATTENTION", "Aucun élément é supprimer");
        } else if (this.selected != null && !this.droit.isSupprimer()) {
          HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de supprimer");
           } else {
          FactoryDAO.getInstance().delete(getId(), Tables.getTableName(Tables.TableName.previsionFraisMedicaux));
-         HelperC.afficherMessage("Fï¿½licitation", "Enregistrement avec succï¿½s");
+         HelperC.afficherMessage("Félicitation", "Enregistrement avec Succès");
          clear(true);
          this.allPrevisionFraisMedicaux = FactoryDAO.getInstance().getListAllPrevisionFraisMedicaux();
           } 

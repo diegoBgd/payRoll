@@ -301,7 +301,7 @@ import org.primefaces.PrimeFaces;
    public void enregistrer() {
      if (getId() == 0 && !this.droit.isCreer()) {
        HelperC.afficherAttention("ATTENTION", 
-           "Vous n'avez pas le droit de crï¿½er");
+           "Vous n'avez pas le droit de créer");
      } else if (getId() > 0 && !this.droit.isModifier()) {
        HelperC.afficherAttention("ATTENTION", 
            "Vous n'avez pas le droit de modifier");
@@ -316,20 +316,20 @@ import org.primefaces.PrimeFaces;
        hist.setDateOperation(Calendar.getInstance().getTime());
        hist.setOperateur(this.operateur);
        if (getId() == 0) {
-         hist.setOperation("Crï¿½ation du parametrage des congï¿½s du personnel" + 
+         hist.setOperation("Création du parametrage des congés du personnel" + 
              getPersonnel().getDesignation());
        } else {
-         hist.setOperation("du parametrage des congï¿½s du personnel" + 
+         hist.setOperation("du parametrage des congés du personnel" + 
              getPersonnel().getDesignation());
        }  hist.setTable(Tables.getTableName(Tables.TableName.parametrageDureeConge));
        setHistorique(hist);
        
        if (FichierBaseDAO.getInstance().insertUpdateParametrageDureeConge(this)) {
          clear(false);
-         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
+         HelperC.afficherMessage("Information", "Succès de l'opération ");
          this.listParametrage = FichierBaseDAO.getInstance().getAllParametrageDureeConge();
        } else {
-         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
        } 
      } 
    }
@@ -344,10 +344,10 @@ import org.primefaces.PrimeFaces;
      else if (FichierBaseDAO.getInstance().delete(
          Tables.getTableName(Tables.TableName.parametrageDureeConge), getId())) {
        clear(true);
-       HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
+       HelperC.afficherMessage("Information", "Succès de l'opération ");
        this.listParametrage = FichierBaseDAO.getInstance().getAllParametrageDureeConge();
      } else {
-       HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
+       HelperC.afficherMessage("Désolé", "Echec de suppression");
      } 
    }
  
@@ -357,14 +357,7 @@ import org.primefaces.PrimeFaces;
    }
  
    
-   public void fermer() {
-     try {
-       FacesContext.getCurrentInstance().getExternalContext()
-         .redirect("/asystPaie/masterPage.jsf");
-     } catch (IOException e) {
-       System.out.println(e.getMessage());
-     } 
-   }
+ 
  }
 
 

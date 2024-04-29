@@ -338,16 +338,16 @@ public class OperateurB extends OperateurC {
 			}
 			if (getId() == 0 && !this.droit.isCreer()) {
 
-				HelperC.afficherInformation("Information", "Vous n'avez pas le droit de CrÃ©er un nouveau OpÃ©rateur");
+				HelperC.afficherInformation("Information", "Vous n'avez pas le droit de Créer un nouveau Opérateur");
 				return;
 			}
 			if (getCodeSecret().trim().equals("")) {
 
-				HelperC.afficherInformation("Information", "PrÃ©cisez le code Secret");
+				HelperC.afficherInformation("Information", "Précisez le code Secret");
 				return;
 			}
 			if (fonction == null) {
-				HelperC.afficherInformation("Information", "PrÃ©cisez la fonction de l'opÃ©rateur");
+				HelperC.afficherInformation("Information", "Précisez la fonction de l'opérateur");
 				return;
 			}
 			setDateModif(Calendar.getInstance().getTime());
@@ -360,10 +360,10 @@ public class OperateurB extends OperateurC {
 			if (FichierBaseDAO.getInstance().insertUpdateOperateur(this)) {
 
 				clear(true);
-				HelperC.afficherInformation("FELICITATION", "SuccÃ¨s de l'opÃ©ration");
+				HelperC.afficherInformation("FELICITATION", "Succès de l'opération");
 			} else {
 
-				HelperC.afficherAttention("DESOLE!", "Echec de l'opÃ©ration");
+				HelperC.afficherAttention("DESOLE!", "Echec de l'opération");
 			}
 		} else {
 
@@ -386,10 +386,10 @@ public class OperateurB extends OperateurC {
 			if (FichierBaseDAO.getInstance().insertPremierOperateur(this)) {
 
 				clear(true);
-				HelperC.afficherInformation("FELICITATION", "SuccÃ¨s de l'opÃ©ration");
+				HelperC.afficherInformation("FELICITATION", "Succès de l'opération");
 			} else {
 
-				HelperC.afficherAttention("DESOLE!", "Echec de l'opÃ©ration");
+				HelperC.afficherAttention("DESOLE!", "Echec de l'opération");
 			}
 
 		}
@@ -427,7 +427,7 @@ public class OperateurB extends OperateurC {
 			HelperC.afficherDeleteMessage();
 		} else if (this.operateur.getId() == getId()) {
 
-			HelperC.afficherAttention("ATTENTION", "Un opÃ©rateur ne peut pas se supprimer !");
+			HelperC.afficherAttention("ATTENTION", "Un opérateur ne peut pas se supprimer !");
 		} else {
 
 			Historique hist = new Historique();
@@ -438,10 +438,10 @@ public class OperateurB extends OperateurC {
 			if (FichierBaseDAO.getInstance().deleteOperateur(this)) {
 
 				clear(true);
-				HelperC.afficherInformation("FELICITATION", "SuccÃ¨s de l'opÃ©ration");
+				HelperC.afficherInformation("FELICITATION", "Succès de l'opération");
 			} else {
 
-				HelperC.afficherAttention("DESOLE!", "Echec de l'opÃ©ration");
+				HelperC.afficherAttention("DESOLE!", "Echec de l'opération");
 			}
 		}
 	}

@@ -235,7 +235,7 @@ public class ParametreAvancementSalaireB extends ParametreAvancementSalaireC{
 	public void save(){
 		if(idPrsnl==0)
 		{
-			 HelperC.afficherAttention("Information", "Veillez prï¿½ciser le personnel!");
+			 HelperC.afficherAttention("Information", "Veillez préciser le personnel!");
 			 return;
 		}
 		

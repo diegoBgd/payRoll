@@ -22,127 +22,127 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-/*     */ import javax.servlet.http.HttpSession;
+ import javax.servlet.http.HttpSession;
 
-/*     */ import org.primefaces.PrimeFaces;
-/*     */ import org.primefaces.event.SelectEvent;
+ import org.primefaces.PrimeFaces;
+ import org.primefaces.event.SelectEvent;
 
-/*     */ import persistencePaie.FactoryDAO;
-/*     */ import persistencePaie.FichierBaseDAO;
+ import persistencePaie.FactoryDAO;
+ import persistencePaie.FichierBaseDAO;
 
-/*     */ 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class SaisieSanctionB
-/*     */   extends SaisieSanctionC
-/*     */ {
-/*     */   private static final long serialVersionUID = -7482694101907046862L;
-/*     */   private SaisieSanctionC selected;
-/*     */   private EmployeC selection;
-/*  45 */   private List<SaisieSanctionC> listSaisie,listRecours,
+ 
+ @ManagedBean
+ @ViewScoped
+ public class SaisieSanctionB
+   extends SaisieSanctionC
+ {
+   private static final long serialVersionUID = -7482694101907046862L;
+   private SaisieSanctionC selected;
+   private EmployeC selection;
+   private List<SaisieSanctionC> listSaisie,listRecours,
 								          listDecision,listRetard;
-/*  46 */   private List<SelectItem> listTypeSanction;
-/*  47 */   private List<EmployeC> listEmploye = new ArrayList<EmployeC>();
-/*     */   private OperateurC operateur;
-/*     */   private ExerciceC exercice;
-/*     */   
-/*  51 */   private HttpSession session = HelperC.getSession();
-/*     */   private boolean disableSave,disableElt,disableMsg;
-/*     */   private String code;
-/*     */   private String dateSaisieS,dateDebutSanctionS,
+   private List<SelectItem> listTypeSanction;
+   private List<EmployeC> listEmploye = new ArrayList<EmployeC>();
+   private OperateurC operateur;
+   private ExerciceC exercice;
+   
+   private HttpSession session = HelperC.getSession();
+   private boolean disableSave,disableElt,disableMsg;
+   private String code;
+   private String dateSaisieS,dateDebutSanctionS,
 						   dateFinSanctionS,dateRecoursS,
 						   dateDecisionS;
-/*     */   private String codeEmployeRecherche;
-/*     */   private String nomEmployeRecherche;
-/*     */   private String prenomEmployeRecherche;
-/*     */   private int decision,dureeSanction,typeDossier,typeDecision;
-/*     */   ParametrageSanctionC parm;
-/*     */   double salaireActuel=0;
-/*     */   TraitementSalarialC traitement;
-/*     */   ParametrageGeneralC parametre;
+   private String codeEmployeRecherche;
+   private String nomEmployeRecherche;
+   private String prenomEmployeRecherche;
+   private int decision,dureeSanction,typeDossier,typeDecision;
+   ParametrageSanctionC parm;
+   double salaireActuel=0;
+   TraitementSalarialC traitement;
+   ParametrageGeneralC parametre;
             List<ParametrageSanctionC> listParam;
-/*     */   public EmployeC getSelection() {
-/*  70 */     return this.selection;
-/*     */   }
-/*     */   
-/*     */   public void setSelection(EmployeC selection) {
-/*  74 */     this.selection = selection;
-/*     */   }
-/*     */   
+   public EmployeC getSelection() {
+     return this.selection;
+   }
+   
+   public void setSelection(EmployeC selection) {
+     this.selection = selection;
+   }
+   
 
-/*     */   public List<EmployeC> getListEmploye() {
-/*  87 */     return this.listEmploye;
-/*     */   }
-/*     */   
-/*     */   public void setListEmploye(List<EmployeC> listEmploye) {
-/*  91 */     this.listEmploye = listEmploye;
-/*     */   }
-/*     */   
-/*     */   public OperateurC getOperateur() {
-/*  95 */     return this.operateur;
-/*     */   }
-/*     */   
-/*     */   public void setOperateur(OperateurC operateur) {
-/*  99 */     this.operateur = operateur;
-/*     */   }
-/*     */   
-/*     */   public ExerciceC getExercice() {
-/* 103 */     return this.exercice;
-/*     */   }
-/*     */   
-/*     */   public void setExercice(ExerciceC exercice) {
-/* 107 */     this.exercice = exercice;
-/*     */   }
-/*     */   
-/*     */   
-/*     */   public HttpSession getSession() {
-/* 119 */     return this.session;
-/*     */   }
-/*     */   
-/*     */   public void setSession(HttpSession session) {
-/* 123 */     this.session = session;
-/*     */   }
-/*     */   
-/*     */   public String getCode() {
-/* 127 */     return this.code;
-/*     */   }
-/*     */   
-/*     */   public void setCode(String code) {
-/* 131 */     this.code = code;
-/*     */   }
-/*     */   
-/*     */   public String getCodeEmployeRecherche() {
-/* 135 */     return this.codeEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public void setCodeEmployeRecherche(String codeEmployeRecherche) {
-/* 139 */     this.codeEmployeRecherche = codeEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public String getNomEmployeRecherche() {
-/* 143 */     return this.nomEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public void setNomEmployeRecherche(String nomEmployeRecherche) {
-/* 147 */     this.nomEmployeRecherche = nomEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public String getPrenomEmployeRecherche() {
-/* 151 */     return this.prenomEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public void setPrenomEmployeRecherche(String prenomEmployeRecherche) {
-/* 155 */     this.prenomEmployeRecherche = prenomEmployeRecherche;
-/*     */   }
-/*     */   
-/*     */   public int getDecision() {
-/* 159 */     return this.decision;
-/*     */   }
-/*     */   
-/*     */   public void setDecision(int decision) {
-/* 163 */     this.decision = decision;
-/*     */   }
-/*     */   
+   public List<EmployeC> getListEmploye() {
+     return this.listEmploye;
+   }
+   
+   public void setListEmploye(List<EmployeC> listEmploye) {
+     this.listEmploye = listEmploye;
+   }
+   
+   public OperateurC getOperateur() {
+     return this.operateur;
+   }
+   
+   public void setOperateur(OperateurC operateur) {
+     this.operateur = operateur;
+   }
+   
+   public ExerciceC getExercice() {
+     return this.exercice;
+   }
+   
+   public void setExercice(ExerciceC exercice) {
+     this.exercice = exercice;
+   }
+   
+   
+   public HttpSession getSession() {
+     return this.session;
+   }
+   
+   public void setSession(HttpSession session) {
+     this.session = session;
+   }
+   
+   public String getCode() {
+     return this.code;
+   }
+   
+   public void setCode(String code) {
+     this.code = code;
+   }
+   
+   public String getCodeEmployeRecherche() {
+     return this.codeEmployeRecherche;
+   }
+   
+   public void setCodeEmployeRecherche(String codeEmployeRecherche) {
+     this.codeEmployeRecherche = codeEmployeRecherche;
+   }
+   
+   public String getNomEmployeRecherche() {
+     return this.nomEmployeRecherche;
+   }
+   
+   public void setNomEmployeRecherche(String nomEmployeRecherche) {
+     this.nomEmployeRecherche = nomEmployeRecherche;
+   }
+   
+   public String getPrenomEmployeRecherche() {
+     return this.prenomEmployeRecherche;
+   }
+   
+   public void setPrenomEmployeRecherche(String prenomEmployeRecherche) {
+     this.prenomEmployeRecherche = prenomEmployeRecherche;
+   }
+   
+   public int getDecision() {
+     return this.decision;
+   }
+   
+   public void setDecision(int decision) {
+     this.decision = decision;
+   }
+   
 			public SaisieSanctionC getSelected() {
 				return selected;
 			}
@@ -248,26 +248,26 @@ import javax.faces.model.SelectItem;
 			public void setDisableMsg(boolean disableMsg) {
 				this.disableMsg = disableMsg;
 			}
-/*     */   @PostConstruct
-/*     */   private void init() {
-/* 185 */     this.operateur = new OperateurC();
-/* 186 */     this.exercice = new ExerciceC();
-/*     */     
-/* 188 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/* 189 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/* 190 */     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/* 191 */     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
-/*     */     
-/* 193 */     if (this.operateur == null || this.exercice == null) {
-/*     */       
-/*     */       try {
-/* 196 */         FacesContext context = FacesContext.getCurrentInstance();
-/* 197 */         context.getExternalContext().redirect("/payRoll/login.xhtml");
-/* 198 */       } catch (IOException e) {
-/*     */         
-/* 200 */         e.printStackTrace();
-/*     */       } 
-/*     */     }
+   @PostConstruct
+   private void init() {
+     this.operateur = new OperateurC();
+     this.exercice = new ExerciceC();
+     
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
+     
+     if (this.operateur == null || this.exercice == null) {
+       
+       try {
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/login.xhtml");
+       } catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     }
 				
 			else{
 				disableMsg=true;
@@ -417,23 +417,23 @@ import javax.faces.model.SelectItem;
 					dureeSanction=(int)HelperC.daysBetween(getDateDebutSanction(), getDateFinSanction());
 				}
 			}
-/*     */   private void clear1(boolean b) {
-/* 302 */     if (b)
-/* 303 */       this.selection = null; 
+   private void clear1(boolean b) {
+     if (b)
+       this.selection = null; 
 				code="";
-/*     */   }
-/*     */   
-/*     */   private void setObject() {
+   }
+   
+   private void setObject() {
 				disableMsg=true;
-/* 307 */     if (this.selected != null) {
-/* 308 */       setId(this.selected.getId());
-/* 309 */       setEmploye(this.selected.getEmploye());
-/* 310 */       if (getEmploye() != null)
-/* 311 */         setCode(getEmploye().getCode()); 
-/* 312 */       setDateDebutSanction(this.selected.getDateDebutSanction());   
-/* 327 */       setMotifDecision(this.selected.getMotifDecision());
-/* 328 */       setDateSaisie(this.selected.getDateSaisie());
-/* 329 */       setIdSanction(selected.getIdSanction());
+     if (this.selected != null) {
+       setId(this.selected.getId());
+       setEmploye(this.selected.getEmploye());
+       if (getEmploye() != null)
+         setCode(getEmploye().getCode()); 
+       setDateDebutSanction(this.selected.getDateDebutSanction());   
+       setMotifDecision(this.selected.getMotifDecision());
+       setDateSaisie(this.selected.getDateSaisie());
+       setIdSanction(selected.getIdSanction());
 				searchSanction();
 				dateSaisieS=HelperC.convertDate(selected.getDateSaisie());
 				setDateSaisie(selected.getDateSaisie());
@@ -456,134 +456,134 @@ import javax.faces.model.SelectItem;
 				setMoisLettre(HelperC.moisEnLettres(selected.getMoisPaie()));			
 				setCloture(selected.isCloture());
 				disableMsg=false;
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   private void clear(boolean b) {
-/* 338 */     this.code = "";
-/* 339 */     setId(0);
-/* 340 */     setEmploye(null);
-/* 341 */     setDateDebutSanction(null);
-/* 342 */     setDateDebutSanctionS("");
-/* 343 */     setDateFinSanction(null);
-/* 344 */     setDateFinSanctionS("");
-/* 345 */     setDureeSanction(0);
-/* 346 */     setIdSanction(0);
+     } 
+   }
+ 
+ 
+   
+   private void clear(boolean b) {
+     this.code = "";
+     setId(0);
+     setEmploye(null);
+     setDateDebutSanction(null);
+     setDateDebutSanctionS("");
+     setDateFinSanction(null);
+     setDateFinSanctionS("");
+     setDureeSanction(0);
+     setIdSanction(0);
 			  setTauxRetenu(0);
 			  setSalaireBase(0);
 			  setMontantRetenu(0);
 			  setMoisPaie(0);
 			  setMotifSanction("");
-/* 347 */     disableSave=false;
-/* 349 */     setDateRecours(null);
-/* 350 */     setLibelleSanction("");
-/* 351 */     setDateDecision(null);
-/* 352 */     setMoisLettre("");
-/* 354 */     setDateSaisie(null);
-/* 355 */     setDateSaisieS("");
-/* 356 */     setMotifRecours("");
-/* 359 */     this.nomEmployeRecherche = "";
-/* 360 */     this.prenomEmployeRecherche = "";
-/* 361 */     this.selected = null;
+     disableSave=false;
+     setDateRecours(null);
+     setLibelleSanction("");
+     setDateDecision(null);
+     setMoisLettre("");
+     setDateSaisie(null);
+     setDateSaisieS("");
+     setMotifRecours("");
+     this.nomEmployeRecherche = "";
+     this.prenomEmployeRecherche = "";
+     this.selected = null;
 			  setDecision(0);
 			  dateDecisionS="";
 			  setCloture(false);
 			  setMotifDecision("");
 			  disableMsg=true;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeDateDebutSanction() {
-/* 366 */     if (getDateDebutSanctionS().replace("/", "").replace("_", "").trim().equals("")) {
-/* 367 */       setDateDebutSanction(null);
-/*     */     } else {
-/*     */       
-/* 370 */       setDateDebutSanction(HelperC.validerDate(getDateDebutSanctionS()));
-/* 371 */       if (getDateDebutSanction() == null) {
-/* 372 */         setDateDebutSanctionS("");
-/*     */         
-/* 374 */         HelperC.afficherMessage("Information", "Date invalide");
-/*     */       } else {
-/*     */         checkDays();
+   }
+ 
+   
+   public void changeDateDebutSanction() {
+     if (getDateDebutSanctionS().replace("/", "").replace("_", "").trim().equals("")) {
+       setDateDebutSanction(null);
+     } else {
+       
+       setDateDebutSanction(HelperC.validerDate(getDateDebutSanctionS()));
+       if (getDateDebutSanction() == null) {
+         setDateDebutSanctionS("");
+         
+         HelperC.afficherMessage("Information", "Date invalide");
+       } else {
+         checkDays();
 				  calculRetenu();
-/* 377 */         setDateDebutSanctionS(HelperC.convertDate(getDateDebutSanction()));
-/* 378 */        
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void changeDateSaisie() {
-/* 389 */     if (getDateSaisieS().replace("/", "").replace("_", "").trim().equals("")) {
-/* 390 */       setDateSaisie(null);
-/*     */     } else {
-/*     */       
-/* 393 */       setDateSaisie(HelperC.validerDate(getDateSaisieS()));
-/* 394 */       if (getDateSaisie() == null) {
-/* 395 */         setDateSaisieS("");
-/* 396 */         HelperC.afficherMessage("Information", "Date invalide");
-/*     */       } else {
-/*     */         
-/* 399 */         setDateSaisieS(HelperC.convertDate(getDateSaisie()));
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */   
-/*     */   public void changeDateRecours() {
-/* 405 */     if (getDateRecoursS().replace("/", "").replace("_", "").trim().equals("")) {
-/* 406 */       setDateRecours(null);
-/*     */     } else {
-/*     */       
-/* 409 */       setDateRecours(HelperC.validerDate(getDateRecoursS()));
-/* 410 */       if (getDateRecours() == null) {
-/* 411 */         setDateRecoursS("");
-/* 412 */         HelperC.afficherMessage("Information", "Date invalide");
-/*     */       } else {
-/*     */         
-/* 415 */         setDateRecoursS(HelperC.convertDate(getDateRecours()));
+         setDateDebutSanctionS(HelperC.convertDate(getDateDebutSanction()));
+        
+       } 
+     } 
+   }
+ 
+ 
+   
+   public void changeDateSaisie() {
+     if (getDateSaisieS().replace("/", "").replace("_", "").trim().equals("")) {
+       setDateSaisie(null);
+     } else {
+       
+       setDateSaisie(HelperC.validerDate(getDateSaisieS()));
+       if (getDateSaisie() == null) {
+         setDateSaisieS("");
+         HelperC.afficherMessage("Information", "Date invalide");
+       } else {
+         
+         setDateSaisieS(HelperC.convertDate(getDateSaisie()));
+       } 
+     } 
+   }
+   
+   public void changeDateRecours() {
+     if (getDateRecoursS().replace("/", "").replace("_", "").trim().equals("")) {
+       setDateRecours(null);
+     } else {
+       
+       setDateRecours(HelperC.validerDate(getDateRecoursS()));
+       if (getDateRecours() == null) {
+         setDateRecoursS("");
+         HelperC.afficherMessage("Information", "Date invalide");
+       } else {
+         
+         setDateRecoursS(HelperC.convertDate(getDateRecours()));
 				  checkRecours();
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeDateDecision() {
-/* 422 */     if (getDateDecisionS().replace("/", "").replace("_", "").trim().equals("")) {
-/* 423 */       setDateDecision(null);
-/*     */     } else {
-/*     */       
-/* 426 */       setDateDecision(HelperC.validerDate(getDateDecisionS()));
-/* 427 */       if (getDateDecision() == null) {
-/* 428 */         setDateDecisionS("");
-/* 429 */         HelperC.afficherMessage("Information", "Date invalide");
-/*     */       } else {
-/*     */         
-/* 432 */         setDateDecisionS(HelperC.convertDate(getDateDecision()));
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */   
-/*     */   public void changeDateFinSanction() {
-/* 438 */     if (getDateFinSanctionS().replace("/", "").replace("_", "").trim().equals("")) {
-/* 439 */       setDateDebutSanction(null);
-/*     */     } else {
-/*     */       
-/* 442 */       setDateFinSanction(HelperC.validerDate(getDateFinSanctionS()));
-/* 443 */       if (getDateFinSanction() == null) {
-/* 444 */         setDateFinSanctionS("");
-/* 445 */         HelperC.afficherMessage("Information", "Date invalide");
-/*     */       } else {
-/*     */         checkDays();
+       } 
+     } 
+   }
+ 
+   
+   public void changeDateDecision() {
+     if (getDateDecisionS().replace("/", "").replace("_", "").trim().equals("")) {
+       setDateDecision(null);
+     } else {
+       
+       setDateDecision(HelperC.validerDate(getDateDecisionS()));
+       if (getDateDecision() == null) {
+         setDateDecisionS("");
+         HelperC.afficherMessage("Information", "Date invalide");
+       } else {
+         
+         setDateDecisionS(HelperC.convertDate(getDateDecision()));
+       } 
+     } 
+   }
+   
+   public void changeDateFinSanction() {
+     if (getDateFinSanctionS().replace("/", "").replace("_", "").trim().equals("")) {
+       setDateDebutSanction(null);
+     } else {
+       
+       setDateFinSanction(HelperC.validerDate(getDateFinSanctionS()));
+       if (getDateFinSanction() == null) {
+         setDateFinSanctionS("");
+         HelperC.afficherMessage("Information", "Date invalide");
+       } else {
+         checkDays();
 				  calculRetenu();
-/* 448 */         setDateFinSanctionS(HelperC.convertDate(getDateFinSanction()));
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */   
-/*     */   public void changeSanction(ValueChangeEvent event) {
+         setDateFinSanctionS(HelperC.convertDate(getDateFinSanction()));
+       } 
+     } 
+   }
+   
+   public void changeSanction(ValueChangeEvent event) {
 			setIdSanction((Integer)event.getNewValue());
 			searchSanction();
 			}
@@ -615,13 +615,13 @@ import javax.faces.model.SelectItem;
 						nbJr=(int)HelperC.daysBetween(getDateDebutSanction(), getDateRecours());
 						if(nbJr>parm.getDureeRecours())
 						{
-							HelperC.afficherAttention("Information", "La durï¿½e de recours doit ï¿½tre infï¿½rieures ou ï¿½gale ï¿½ "+parm.getDureeRecours()+" jours");
+							HelperC.afficherAttention("Information", "La durée de recours doit étre inférieures ou égale é "+parm.getDureeRecours()+" jours");
 							disableSave=true;
 							return;
 						}
 						}
 						else {
-							HelperC.afficherAttention("Information", "La date recours doit ï¿½tre entre la date dï¿½but sanction et la date fin sanction");
+							HelperC.afficherAttention("Information", "La date recours doit étre entre la date début sanction et la date fin sanction");
 							disableSave=true;
 							return;
 						}
@@ -638,14 +638,14 @@ import javax.faces.model.SelectItem;
 					{
 						if(dureeSanction<parm.getDureeMin() && parm.getDureeMin()>0)
 						{
-							HelperC.afficherAttention("Information", "La durï¿½e doit ï¿½tre supï¿½rieure ou ï¿½gale ï¿½ "+parm.getDureeMin()+" jours");
+							HelperC.afficherAttention("Information", "La durée doit étre supérieure ou égale é "+parm.getDureeMin()+" jours");
 							disableSave=true;
 							return;
 						}
 						
 						if(dureeSanction>parm.getDureeMax() && parm.getDureeMax()>0)
 						{
-							HelperC.afficherAttention("Information", "La durï¿½e doit ï¿½tre infï¿½rieure ï¿½ ou ï¿½gale "+parm.getDureeMax()+" jours");
+							HelperC.afficherAttention("Information", "La durée doit étre inférieure é ou égale "+parm.getDureeMax()+" jours");
 							disableSave=true;
 							return;
 						}
@@ -663,14 +663,14 @@ import javax.faces.model.SelectItem;
 				}
 			}
 				
-/*     */   public void onRowSelected(SelectEvent event) {
-/* 464 */     this.selected = (SaisieSanctionC)event.getObject();
-/* 465 */     if (this.selected != null) {
-/* 466 */       setObject();
-/* 467 */       PrimeFaces.current().executeScript("PF('dlgSct').hide();");
-/*     */     } 
-/*     */   }
-/*     */ 
+   public void onRowSelected(SelectEvent event) {
+     this.selected = (SaisieSanctionC)event.getObject();
+     if (this.selected != null) {
+       setObject();
+       PrimeFaces.current().executeScript("PF('dlgSct').hide();");
+     } 
+   }
+ 
 
 		public void onRowRecoursSelected(SelectEvent event) {
 		    this.selected = (SaisieSanctionC)event.getObject();
@@ -703,52 +703,52 @@ import javax.faces.model.SelectItem;
 		     } 
 		   }
  
-/*     */   
-/*     */   public void onRowselected1(SelectEvent event) {
-/* 488 */     this.selection = (EmployeC)event.getObject();
-/* 489 */      affeterEmploye();
-/* 490 */     PrimeFaces.current().executeScript("PF('dlg').hide();");
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void chargerEmploye() {
-/* 498 */     this.listEmploye = FactoryDAO.getInstance().getListEmploye(this.codeEmployeRecherche, 
-/* 499 */         this.nomEmployeRecherche,true);
-/*     */   }
+   
+   public void onRowselected1(SelectEvent event) {
+     this.selection = (EmployeC)event.getObject();
+      affeterEmploye();
+     PrimeFaces.current().executeScript("PF('dlg').hide();");
+   }
+ 
+ 
+ 
+ 
+   
+   public void chargerEmploye() {
+     this.listEmploye = FactoryDAO.getInstance().getListEmploye(this.codeEmployeRecherche, 
+         this.nomEmployeRecherche,true);
+   }
 
 
-/*     */   public void enregistrerRecours() {
-/* 577 */     if (getDateRecours() == null) {
-/* 578 */       HelperC.afficherMessage("Information", "Veillez saisir la date du recours");
-/* 579 */     } 
-/* 581 */      else {
-/* 594 */      
-/*     */ 
-/*     */       
-/* 597 */       Historique hist = new Historique();
-/* 598 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 599 */       hist.setOperateur(this.operateur);
-/* 600 */       if (getId() == 0) {
-/* 601 */         hist.setOperation("Recours des mesures disciplinaires de l'employï¿½ " + getEmploye().getNomPrenom());
-/*     */       } else {
-/* 603 */         hist.setOperation("Modification Recours mesures disciplinaires de l'employï¿½ " + getEmploye().getNomPrenom());
-/* 604 */       }  hist.setTable(Tables.getTableName(Tables.TableName.saisiesanction));
-/* 605 */       setHistorique(hist);
+   public void enregistrerRecours() {
+     if (getDateRecours() == null) {
+       HelperC.afficherMessage("Information", "Veillez saisir la date du recours");
+     } 
+      else {
+      
+ 
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         hist.setOperation("Recours des mesures disciplinaires de l'employé " + getEmploye().getNomPrenom());
+       } else {
+         hist.setOperation("Modification Recours mesures disciplinaires de l'employé " + getEmploye().getNomPrenom());
+       }  hist.setTable(Tables.getTableName(Tables.TableName.saisiesanction));
+       setHistorique(hist);
 				this.setEtat(Constante.getEtatSanction(Constante.EtatSanction.recours));
 				
-/* 606 */       if (FactoryDAO.getInstance().insertUpdateSaisieSanction(this)) {
-/*     */         
-/* 608 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
-/* 609 */         clear(true);
-/*     */       } else {
-/*     */         
-/* 612 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */       } 
-/*     */     } 
-/*     */   }
+       if (FactoryDAO.getInstance().insertUpdateSaisieSanction(this)) {
+         
+         HelperC.afficherMessage("Information", "Succès de l'opération");
+         clear(true);
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+       } 
+     } 
+   }
 
 	public void enregistrerRecoursLine() {
 		if (getDateRecours() == null) {
@@ -760,78 +760,78 @@ import javax.faces.model.SelectItem;
 				hist.setDateOperation(Calendar.getInstance().getTime());
 				hist.setOperateur(this.operateur);
 				if (getId() == 0) {
-					hist.setOperation("Recours sur la sanction de l'employï¿½ " + getEmploye().getNomPrenom());
+					hist.setOperation("Recours sur la sanction de l'employé " + getEmploye().getNomPrenom());
 				} else {
-					hist.setOperation("Modification sur la sanction de l'employï¿½ " + getEmploye().getNomPrenom());
+					hist.setOperation("Modification sur la sanction de l'employé " + getEmploye().getNomPrenom());
 				}
 				hist.setTable(Tables.getTableName(Tables.TableName.saisiesanction));
 				setHistorique(hist);
 				this.setEtat(Constante.getEtatSanction(Constante.EtatSanction.recours));
 				this.setInLine(true);
 				if (FactoryDAO.getInstance().insertUpdateSaisieSanction(this)) {
-					HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
+					HelperC.afficherMessage("Information", "Succès de l'opération");
 					clear(true);
 				} else {
 
-					HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
+					HelperC.afficherMessage("Désolé", "Echec de l'opération ");
 				}
 			}
 			else
-				HelperC.afficherAttention("Dï¿½solï¿½", "Il faut prï¿½ciser le motif ");
+				HelperC.afficherAttention("Désolé", "Il faut préciser le motif ");
 		}
 	}
 		
-/*     */   public void enregistrerDecision() {
-/* 617 */     if (getEmploye() == null) {
-/* 618 */       HelperC.afficherMessage("Information", "Veillez saisir l'employï¿½");
-/* 619 */     } 
-/*     */     else {
-/*     */       
-/* 640 */       Historique hist = new Historique();
-/* 641 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 642 */       hist.setOperateur(this.operateur);
-/* 643 */       if (getId() == 0) {
-/* 644 */         hist.setOperation("Dï¿½cision sur la sanction de l'employï¿½ " + getEmploye().getNomPrenom());
-/*     */       } else {
-/* 646 */         hist.setOperation("Modification de la dï¿½cision sur la sanction de l'employï¿½ " + getEmploye().getNomPrenom());
+   public void enregistrerDecision() {
+     if (getEmploye() == null) {
+       HelperC.afficherMessage("Information", "Veillez saisir l'employé");
+     } 
+     else {
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         hist.setOperation("Décision sur la sanction de l'employé " + getEmploye().getNomPrenom());
+       } else {
+         hist.setOperation("Modification de la décision sur la sanction de l'employé " + getEmploye().getNomPrenom());
 
-/* 647 */       }  hist.setTable(Tables.getTableName(Tables.TableName.saisiesanction));
-/* 648 */       setHistorique(hist);
+       }  hist.setTable(Tables.getTableName(Tables.TableName.saisiesanction));
+       setHistorique(hist);
 				this.setEtat(Constante.getEtatSanction(Constante.EtatSanction.decision));
 				this.setIdOperateur(operateur.getId());
 				
-/* 649 */       if (FactoryDAO.getInstance().insertUpdateSaisieSanction(this)) {
-/*     */         
-/* 651 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
-/* 652 */         clear(true);
-/*     */       } else {
-/*     */         
-/* 655 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */       } 
-/*     */     } 
-/*     */   }
+       if (FactoryDAO.getInstance().insertUpdateSaisieSanction(this)) {
+         
+         HelperC.afficherMessage("Information", "Succès de l'opération");
+         clear(true);
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+       } 
+     } 
+   }
 
 	public void enregistrerSaisie() {
 		if (getEmploye() == null) {
-			HelperC.afficherMessage("Information", "Veillez saisir l'employï¿½");
+			HelperC.afficherMessage("Information", "Veillez saisir l'employé");
 			return;
 		}
 		if (getMotifSanction() == "") {
-			HelperC.afficherMessage("Information", "Veillez dï¿½crire la raison de la sanction");
+			HelperC.afficherMessage("Information", "Veillez décrire la raison de la sanction");
 			return;
 		}
 		if (getDateDebutSanction() == null) {
-			HelperC.afficherAttention("Information", "Veillez prï¿½ciser la date dï¿½but de la sanction");
+			HelperC.afficherAttention("Information", "Veillez préciser la date début de la sanction");
 			return;
 		}
 		if (getDateDebutSanction().after(getDateFinSanction())) {
 			HelperC.afficherAttention("Information",
-					"Veillez la date de dï¿½but ne peut pas etre supï¿½rieur ï¿½ la date fin");
+					"Veillez la date de début ne peut pas etre supérieur é la date fin");
 			return;
 		}
 
 		if (parm.getIdRetenu() > 0 && getMoisPaie() == 0) {
-			HelperC.afficherAttention("Information", "Veillez prï¿½ciser le mois de paie pour la retenu");
+			HelperC.afficherAttention("Information", "Veillez préciser le mois de paie pour la retenu");
 			return;
 		}
 		
@@ -840,9 +840,9 @@ import javax.faces.model.SelectItem;
 		hist.setOperateur(this.operateur);
 		if (getId() == 0) {
 			hist.setOperation(
-					"Saisie de la sanction de l'employï¿½ " + getEmploye().getNom() + " " + getEmploye().getPrenom());
+					"Saisie de la sanction de l'employé " + getEmploye().getNom() + " " + getEmploye().getPrenom());
 		} else {
-			hist.setOperation("Modification sur la sanction de l'employï¿½ " + getEmploye().getNom() + " "
+			hist.setOperation("Modification sur la sanction de l'employé " + getEmploye().getNom() + " "
 					+ getEmploye().getPrenom());
 		}
 		hist.setTable(Tables.getTableName(Tables.TableName.saisiesanction));
@@ -853,64 +853,64 @@ import javax.faces.model.SelectItem;
 		
 		if (FactoryDAO.getInstance().insertUpdateSaisieSanction(this)) {
 
-			HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
+			HelperC.afficherMessage("Information", "Succès de l'opération");
 			clear(true);
 		} else {
 
-			HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
+			HelperC.afficherMessage("Désolé", "Echec de l'opération ");
 		}
 	}
    
  
-/*     */   public void supprimer() {
-/* 696 */     if (getId() == 0) {
-/* 697 */       HelperC.afficherDeleteMessage();
-/*     */     }
+   public void supprimer() {
+     if (getId() == 0) {
+       HelperC.afficherDeleteMessage();
+     }
 			else {
 				if(selected.getEtat()!=Constante.getEtatSanction(Constante.EtatSanction.saisie))
-					 HelperC.afficherAttention("Information", "On ne peut pas supprimer cette sanction car il est dï¿½jï¿½ utilisï¿½ ailleur!");
+					 HelperC.afficherAttention("Information", "On ne peut pas supprimer cette sanction car il est déjé utilisé ailleur!");
 				else 
 				{
-/* 699 */      if (FactoryDAO.getInstance().deleteSaisieSanction(this)) {
-/* 700 */       clear(true);
-/* 701 */       HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
-/*     */     } else {
-/*     */       
-/* 704 */       HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
-/*     */     } 
+      if (FactoryDAO.getInstance().deleteSaisieSanction(this)) {
+       clear(true);
+       HelperC.afficherMessage("Information", "Succès de l'opération ");
+     } else {
+       
+       HelperC.afficherMessage("Désolé", "Echec de suppression");
+     } 
 				}
-/*     */   }
-/*     */ }
-/*     */   
-/*     */   public void initialiser() {
-/* 710 */     clear(true);
-/*     */   }
-/*     */ 
-/*     */   
-/*     */  
+   }
+ }
+   
+   public void initialiser() {
+     clear(true);
+   }
+ 
+   
+  
 			public void annulerRecours(){
 				if(selected.getDecision()==0)
 				{
 				if(FactoryDAO.getInstance().annulerRecourSanction(selected))
 				{
 					 clear(true);
-				     HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
+				     HelperC.afficherMessage("Information", "Succès de l'opération ");
 				}
 				else
-					 HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
+					 HelperC.afficherMessage("Désolé", "Echec de suppression");
 				}
 				else
-					 HelperC.afficherAttention("Attention", "Impossible d'annuler le recours car la dï¿½cision est dï¿½jï¿½ prise !");
+					 HelperC.afficherAttention("Attention", "Impossible d'annuler le recours car la décision est déjé prise !");
 			}
 			
 			public void annulerDecision(){
 				if(FactoryDAO.getInstance().annulerDecisionSanction(selected))
 				{
 					 clear(true);
-				     HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
+				     HelperC.afficherMessage("Information", "Succès de l'opération ");
 				}
 				else
-					 HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression");
+					 HelperC.afficherMessage("Désolé", "Echec de suppression");
 			}
-/*     */ }
+ }
 

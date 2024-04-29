@@ -204,28 +204,28 @@ public class JourFerieB extends JourFerieC {
 		setExercice(this.exercice);
 		if (getId() == 0 && !this.droit.isCreer()) {
 
-			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de cr√©er");
+			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crÈer");
 		} else if (getId() > 0 && !this.droit.isModifier()) {
 
 			HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
 		} else if (getCode().trim().equals("")) {
 
-			HelperC.afficherMessage("Information", "Pr√©cisez le code");
+			HelperC.afficherMessage("Information", "PrÈcisez le code");
 		} else if (getDesignation().trim().equals("")) {
 
-			HelperC.afficherMessage("Information", "Pr√©cisez la d√©signation");
+			HelperC.afficherMessage("Information", "PrÈcisez la dÈsignation");
 		} else if (getExercice() == null) {
 
-			HelperC.afficherMessage("Information", "Pr√©cisez l'exercice");
+			HelperC.afficherMessage("Information", "PrÈcisez l'exercice");
 		} else if (FichierBaseDAO.getInstance().getCurrentJourFerier(getCode(), getId()) != null) {
 
-			HelperC.afficherMessage("Information", "Ce code est d√©j√† utilis√©");
+			HelperC.afficherMessage("Information", "Ce code est dÈj‡† utilisÈ");
 		} else if (FichierBaseDAO.getInstance().getCurrentJourFeriers(getDesignation(), getId()) != null) {
 
-			HelperC.afficherMessage("Information", "Cette d√©signation est d√©j√† utilis√©");
+			HelperC.afficherMessage("Information", "Cette dÈsignation est dÈj‡† utilisÈ");
 		} else if (getDateFerie() == null) {
 
-			HelperC.afficherMessage("Information", "Il faut pr√©ciser la date du jour f√©ri√©!");
+			HelperC.afficherMessage("Information", "Il faut prÈciser la date du jour fÈriÈ!");
 		} else {
 
 			Historique hist = new Historique();
@@ -233,21 +233,21 @@ public class JourFerieB extends JourFerieC {
 			hist.setOperateur(this.operateur);
 			if (getId() == 0) {
 
-				hist.setOperation("Cr√©ation du jour f√©rier " + getCode());
+				hist.setOperation("CrÈation du jour fÈrier " + getCode());
 			} else {
 
-				hist.setOperation("Modification du du jour f√©rier " + getCode());
+				hist.setOperation("Modification du du jour fÈrier " + getCode());
 			}
 			hist.setTable(Tables.getTableName(Tables.TableName.jourFerie));
 			setHistorique(hist);
 			if (FichierBaseDAO.getInstance().insertUpdateJourFerier(this)) {
 
-				HelperC.afficherMessage("Information", "Succ√®s de l'op√©ration");
+				HelperC.afficherMessage("Information", "SuccË de l'opÈration");
 				this.listeHolyDays = FichierBaseDAO.getInstance().getAllJourFerier();
 				clear(true);
 			} else {
 
-				HelperC.afficherMessage("D√©sol√©", "Echec de l'op√©ration ");
+				HelperC.afficherMessage("DÈsolÈ", "Echec de l'opÈration ");
 			}
 		}
 	}
@@ -263,12 +263,12 @@ public class JourFerieB extends JourFerieC {
 			HelperC.afficherDeleteMessage();
 		} else if (FichierBaseDAO.getInstance().delete(Tables.getTableName(Tables.TableName.jourFerie), getId())) {
 
-			HelperC.afficherMessage("Information", "Succ√®s de la suppression");
+			HelperC.afficherMessage("Information", "SuccËs de la suppression");
 			this.listeHolyDays = FichierBaseDAO.getInstance().getAllJourFerier();
 			clear(true);
 		} else {
 
-			HelperC.afficherMessage("D√©sol√©", "Echec de suppression");
+			HelperC.afficherMessage("DÈsolÈ", "Echec de suppression");
 		}
 	}
 

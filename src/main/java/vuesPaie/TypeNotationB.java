@@ -1,105 +1,105 @@
-/*     */ package vuesPaie;
-/*     */ 
-/*     */ import classesPaie.Base;
-/*     */ import classesPaie.Constante;
-/*     */ import classesPaie.DroitC;
-/*     */ import classesPaie.ExerciceC;
-/*     */ import classesPaie.HelperC;
-/*     */ import classesPaie.Historique;
-/*     */ import classesPaie.OperateurC;
-/*     */ import classesPaie.Tables;
-/*     */ import classesPaie.TypeNotationC;
-/*     */ import java.io.IOException;
-/*     */ import java.util.ArrayList;
-/*     */ import java.util.Calendar;
-/*     */ import java.util.List;
-/*     */ import javax.annotation.PostConstruct;
-/*     */ import javax.faces.bean.ManagedBean;
-/*     */ import javax.faces.bean.ViewScoped;
-/*     */ import javax.faces.context.FacesContext;
-/*     */ import javax.servlet.http.HttpSession;
-/*     */ import org.primefaces.event.SelectEvent;
-/*     */ import persistencePaie.FichierBaseDAO;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class TypeNotationB
-/*     */   extends TypeNotationC
-/*     */ {
-/*     */   private static final long serialVersionUID = 7974345831064783703L;
-/*     */   private TypeNotationC selected;
-/*     */   private OperateurC operateur;
-/*     */   private ExerciceC exercice;
-/*  35 */   private HttpSession session = HelperC.getSession();
-/*     */   private boolean disableMsg;
+ package vuesPaie;
+ 
+ import classesPaie.Base;
+ import classesPaie.Constante;
+ import classesPaie.DroitC;
+ import classesPaie.ExerciceC;
+ import classesPaie.HelperC;
+ import classesPaie.Historique;
+ import classesPaie.OperateurC;
+ import classesPaie.Tables;
+ import classesPaie.TypeNotationC;
+ import java.io.IOException;
+ import java.util.ArrayList;
+ import java.util.Calendar;
+ import java.util.List;
+ import javax.annotation.PostConstruct;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.context.FacesContext;
+ import javax.servlet.http.HttpSession;
+ import org.primefaces.event.SelectEvent;
+ import persistencePaie.FichierBaseDAO;
+ 
+ 
+ 
+ @ManagedBean
+ @ViewScoped
+ public class TypeNotationB
+   extends TypeNotationC
+ {
+   private static final long serialVersionUID = 7974345831064783703L;
+   private TypeNotationC selected;
+   private OperateurC operateur;
+   private ExerciceC exercice;
+   private HttpSession session = HelperC.getSession();
+   private boolean disableMsg;
 
-/*     */   private List<TypeNotationC> listNotation;
-/*     */   
-/*     */   public DroitC getDroit() {
-/*  40 */     return this.droit;
-/*     */   }
-/*     */   Base userFonction; private DroitC droit;
-/*     */   
-/*     */   public void setDroit(DroitC droit) {
-/*  45 */     this.droit = droit;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public OperateurC getOperateur() {
-/*  50 */     return this.operateur;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setOperateur(OperateurC operateur) {
-/*  55 */     this.operateur = operateur;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public ExerciceC getExercice() {
-/*  60 */     return this.exercice;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setExercice(ExerciceC exercice) {
-/*  65 */     this.exercice = exercice;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public HttpSession getSession() {
-/*  70 */     return this.session;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setSession(HttpSession session) {
-/*  75 */     this.session = session;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public List<TypeNotationC> getListNotation() {
-/*  80 */     return this.listNotation;
-/*     */   }
-/*     */   
-/*     */   public void setListNotation(List<TypeNotationC> listNotation) {
-/*  84 */     this.listNotation = listNotation;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public static long getSerialversionuid() {
-/*  89 */     return 749760639710887039L;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public TypeNotationC getSelected() {
-/*  94 */     return this.selected;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setSelected(TypeNotationC selected) {
-/*  99 */     this.selected = selected;
-/*     */   }
-/*     */ 
+   private List<TypeNotationC> listNotation;
+   
+   public DroitC getDroit() {
+     return this.droit;
+   }
+   Base userFonction; private DroitC droit;
+   
+   public void setDroit(DroitC droit) {
+     this.droit = droit;
+   }
+ 
+   
+   public OperateurC getOperateur() {
+     return this.operateur;
+   }
+ 
+   
+   public void setOperateur(OperateurC operateur) {
+     this.operateur = operateur;
+   }
+ 
+   
+   public ExerciceC getExercice() {
+     return this.exercice;
+   }
+ 
+   
+   public void setExercice(ExerciceC exercice) {
+     this.exercice = exercice;
+   }
+ 
+   
+   public HttpSession getSession() {
+     return this.session;
+   }
+ 
+   
+   public void setSession(HttpSession session) {
+     this.session = session;
+   }
+ 
+   
+   public List<TypeNotationC> getListNotation() {
+     return this.listNotation;
+   }
+   
+   public void setListNotation(List<TypeNotationC> listNotation) {
+     this.listNotation = listNotation;
+   }
+ 
+   
+   public static long getSerialversionuid() {
+     return 749760639710887039L;
+   }
+ 
+   
+   public TypeNotationC getSelected() {
+     return this.selected;
+   }
+ 
+   
+   public void setSelected(TypeNotationC selected) {
+     this.selected = selected;
+   }
+ 
 public boolean isDisableMsg() {
 	return disableMsg;
 }
@@ -107,182 +107,182 @@ public void setDisableMsg(boolean disableMsg) {
 	this.disableMsg = disableMsg;
 }
 			@PostConstruct
-/*     */   private void init() {
-/* 105 */     
-/* 107 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/* 108 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/* 109 */     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/* 110 */     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
-/* 111 */     if (this.operateur == null || this.exercice == null) {
-/*     */ 
-/*     */       
-/*     */       try {
-/* 115 */         FacesContext context = FacesContext.getCurrentInstance();
-/* 116 */         context.getExternalContext().redirect("/payRoll/login.xhtml");
-/*     */       }
-/* 118 */       catch (IOException e) {
-/*     */         
-/* 120 */         e.printStackTrace();
-/*     */       } 
-/*     */     } else {
-/*     */       disableMsg=true;
-/* 124 */       this.listNotation = new ArrayList<TypeNotationC>();
-/* 125 */       this.userFonction = FichierBaseDAO.getInstance().getFonctionActive(this.operateur.getIdEmploye());
-/* 126 */       if (this.userFonction != null)
-/*     */       {
-/* 128 */         this.droit = FichierBaseDAO.getInstance().getDroit(this.userFonction.getId(), Constante.Role.fichierBase);
-/*     */       }
-/* 130 */       chargement();
-/*     */     } 
-/*     */   }
+   private void init() {
+     
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+     this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
+     if (this.operateur == null || this.exercice == null) {
+ 
+       
+       try {
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/login.xhtml");
+       }
+       catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     } else {
+       disableMsg=true;
+       this.listNotation = new ArrayList<TypeNotationC>();
+       this.userFonction = FichierBaseDAO.getInstance().getFonctionActive(this.operateur.getIdEmploye());
+       if (this.userFonction != null)
+       {
+         this.droit = FichierBaseDAO.getInstance().getDroit(this.userFonction.getId(), Constante.Role.fichierBase);
+       }
+       chargement();
+     } 
+   }
 		
-/*     */ 
-/*     */   
-/*     */   private void chargement() {
-/* 136 */     this.listNotation = FichierBaseDAO.getInstance().getAllTypeNotation();
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void clear(boolean b) {
-/* 141 */     if (b)
-/*     */     {
-/* 143 */       setCode("");
-/*     */     }
-/* 145 */     setId(0);
-/* 146 */     setDesignation("");
-/* 147 */     setPourcentageMax(0.0D);
-/* 148 */     setPourcentageMaxS("");
-/* 149 */     setPourcentageMin(0.0D);
-/* 150 */     setPourcentageMinS("");
-/* 151 */     setTauxAugmentation(0.0D);
-/* 152 */     setTauxAugmentationS("");
-/* 153 */     this.selected = null;
+ 
+   
+   private void chargement() {
+     this.listNotation = FichierBaseDAO.getInstance().getAllTypeNotation();
+   }
+ 
+   
+   private void clear(boolean b) {
+     if (b)
+     {
+       setCode("");
+     }
+     setId(0);
+     setDesignation("");
+     setPourcentageMax(0.0D);
+     setPourcentageMaxS("");
+     setPourcentageMin(0.0D);
+     setPourcentageMinS("");
+     setTauxAugmentation(0.0D);
+     setTauxAugmentationS("");
+     this.selected = null;
 			  disableMsg=true;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeCode() {
-/* 158 */     if (!getCode().trim().equals("")) {
-/*     */       disableMsg=true;
-/* 160 */       this.selected = FichierBaseDAO.getInstance().getTypeNotation(getCode());
-/* 161 */       if (this.selected != null) {
-/*     */         disableMsg=false;
-/* 163 */         setObject();
-/*     */       } else {
-/*     */         
-/* 166 */         clear(false);
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void setObject() {
-/* 173 */     if (this.selected != null) {
-/*     */       
-/* 175 */       setCode(this.selected.getCode());
-/* 176 */       setId(this.selected.getId());
-/* 177 */       setDesignation(this.selected.getDesignation());
-/* 178 */       setPourcentageMax(this.selected.getPourcentageMax());
-/* 179 */       setPourcentageMin(this.selected.getPourcentageMin());
-/* 180 */       setPourcentageMaxS(this.selected.getPourcentageMaxS());
-/* 181 */       setPourcentageMinS(this.selected.getPourcentageMinS());
-/* 182 */       setTauxAugmentation(this.selected.getTauxAugmentation());
-/* 183 */       setTauxAugmentationS(this.selected.getTauxAugmentationS());
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void onRowSelected(SelectEvent event) {
-/* 189 */     this.selected = (TypeNotationC)event.getObject();
-/* 190 */     if (this.selected != null)
-/*     */     {
-/* 192 */       setObject();
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void enregistrer() {
-/* 198 */     if (getCode().trim().equals("")) {
-/*     */       
-/* 200 */       HelperC.afficherMessage("Information", "Prï¿½cisez le code");
-/*     */     }
-/* 202 */     else if (getDesignation().trim().equals("")) {
-/*     */       
-/* 204 */       HelperC.afficherMessage("Information", "Prï¿½cisez la dï¿½signation");
-/*     */     }
-/* 206 */     else if (getPourcentageMax() == 0.0D) {
-/*     */       
-/* 208 */       HelperC.afficherMessage("Information", "Prï¿½cisez le taux maximum");
-/*     */     }
-/* 210 */     else if (FichierBaseDAO.getInstance().getTypeNotationNotCurrent(getCode(), getId()) != null) {
-/*     */       
-/* 212 */       HelperC.afficherMessage("Information", "Ce code du type notation existe dï¿½jï¿½ ");
-/*     */     }
-/* 214 */     else if (FichierBaseDAO.getInstance().getTypeNotationNotCurrents(getDesignation(), getId()) != null) {
-/*     */       
-/* 216 */       HelperC.afficherMessage("Information", "Le type notation de mï¿½me dï¿½signation existe dï¿½jï¿½ ");
-/*     */     } else {
-/*     */       
-/* 219 */       Historique hist = new Historique();
-/* 220 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 221 */       hist.setOperateur(this.operateur);
-/* 222 */       if (getId() == 0) {
-/*     */         
-/* 224 */         hist.setOperation("Crï¿½ation du type de notation " + getCode());
-/*     */       } else {
-/*     */         
-/* 227 */         hist.setOperation("Modification du type de notation" + getCode());
-/*     */       } 
-/* 229 */       hist.setTable(Tables.getTableName(Tables.TableName.typeNotation));
-/* 230 */       setHistorique(hist);
-/* 231 */       if (getId() == 0 && !this.droit.isCreer()) {
-/*     */         
-/* 233 */         HelperC.afficherMessage("Information", "Vous n'avez pas le droit de crï¿½er le type de notation !");
-/*     */         return;
-/*     */       } 
-/* 236 */       if (getId() > 0 && !this.droit.isModifier()) {
-/*     */         
-/* 238 */         HelperC.afficherMessage("Information", "Vous n'avez pas le droit de modifier le type de notation !");
-/*     */         return;
-/*     */       } 
-/* 241 */       if (FichierBaseDAO.getInstance().insertUpdateTypeNotation(this)) {
-/*     */         
-/* 243 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration ");
-/* 244 */         chargement();
-/* 245 */         clear(true);
-/*     */       } else {
-/*     */         
-/* 248 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void supprimer() {
-/* 255 */     if (getId() == 0) {
-/*     */       
-/* 257 */       HelperC.afficherDeleteMessage();
-/*     */     } else {
-/*     */       
-/* 260 */       if (!this.droit.isSupprimer()) {
-/*     */         
-/* 262 */         HelperC.afficherMessage("Information", "Vous n'avez pas le droit de supprimer le type de notation !");
-/*     */         return;
-/*     */       } 
-/* 265 */       if (FichierBaseDAO.getInstance().deleteTypeNotation(this)) {
-/*     */         
-/* 267 */         clear(true);
-/* 268 */         chargement();
-/* 269 */         HelperC.afficherMessage("Information", "Succes de l'opï¿½ration");
-/*     */       } else {
-/*     */         
-/* 272 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de suppression ");
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void initialiser() {
-/* 279 */     clear(true);
-/*     */   }
-/*     */ }
+   }
+ 
+   
+   public void changeCode() {
+     if (!getCode().trim().equals("")) {
+       disableMsg=true;
+       this.selected = FichierBaseDAO.getInstance().getTypeNotation(getCode());
+       if (this.selected != null) {
+         disableMsg=false;
+         setObject();
+       } else {
+         
+         clear(false);
+       } 
+     } 
+   }
+ 
+   
+   private void setObject() {
+     if (this.selected != null) {
+       
+       setCode(this.selected.getCode());
+       setId(this.selected.getId());
+       setDesignation(this.selected.getDesignation());
+       setPourcentageMax(this.selected.getPourcentageMax());
+       setPourcentageMin(this.selected.getPourcentageMin());
+       setPourcentageMaxS(this.selected.getPourcentageMaxS());
+       setPourcentageMinS(this.selected.getPourcentageMinS());
+       setTauxAugmentation(this.selected.getTauxAugmentation());
+       setTauxAugmentationS(this.selected.getTauxAugmentationS());
+     } 
+   }
+ 
+   
+   public void onRowSelected(SelectEvent event) {
+     this.selected = (TypeNotationC)event.getObject();
+     if (this.selected != null)
+     {
+       setObject();
+     }
+   }
+ 
+   
+   public void enregistrer() {
+     if (getCode().trim().equals("")) {
+       
+       HelperC.afficherMessage("Information", "Précisez le code");
+     }
+     else if (getDesignation().trim().equals("")) {
+       
+       HelperC.afficherMessage("Information", "Précisez la désignation");
+     }
+     else if (getPourcentageMax() == 0.0D) {
+       
+       HelperC.afficherMessage("Information", "Précisez le taux maximum");
+     }
+     else if (FichierBaseDAO.getInstance().getTypeNotationNotCurrent(getCode(), getId()) != null) {
+       
+       HelperC.afficherMessage("Information", "Ce code du type notation existe déjé ");
+     }
+     else if (FichierBaseDAO.getInstance().getTypeNotationNotCurrents(getDesignation(), getId()) != null) {
+       
+       HelperC.afficherMessage("Information", "Le type notation de méme désignation existe déjé ");
+     } else {
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         
+         hist.setOperation("Création du type de notation " + getCode());
+       } else {
+         
+         hist.setOperation("Modification du type de notation" + getCode());
+       } 
+       hist.setTable(Tables.getTableName(Tables.TableName.typeNotation));
+       setHistorique(hist);
+       if (getId() == 0 && !this.droit.isCreer()) {
+         
+         HelperC.afficherMessage("Information", "Vous n'avez pas le droit de créer le type de notation !");
+         return;
+       } 
+       if (getId() > 0 && !this.droit.isModifier()) {
+         
+         HelperC.afficherMessage("Information", "Vous n'avez pas le droit de modifier le type de notation !");
+         return;
+       } 
+       if (FichierBaseDAO.getInstance().insertUpdateTypeNotation(this)) {
+         
+         HelperC.afficherMessage("Information", "Succès de l'opération ");
+         chargement();
+         clear(true);
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+       } 
+     } 
+   }
+ 
+   
+   public void supprimer() {
+     if (getId() == 0) {
+       
+       HelperC.afficherDeleteMessage();
+     } else {
+       
+       if (!this.droit.isSupprimer()) {
+         
+         HelperC.afficherMessage("Information", "Vous n'avez pas le droit de supprimer le type de notation !");
+         return;
+       } 
+       if (FichierBaseDAO.getInstance().deleteTypeNotation(this)) {
+         
+         clear(true);
+         chargement();
+         HelperC.afficherMessage("Information", "Succes de l'opération");
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de suppression ");
+       } 
+     } 
+   }
+ 
+   
+   public void initialiser() {
+     clear(true);
+   }
+ }

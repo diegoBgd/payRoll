@@ -283,10 +283,10 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 	public void enregistrerPrime() {
 		if (getCode().trim().equals("")) {
 
-			HelperC.afficherMessage("Information", "PrÃ©cisez le code");
+			HelperC.afficherMessage("Information", "Précisez le code");
 		} else if (getDesignation().trim().equals("")) {
 
-			HelperC.afficherMessage("Information", "PrÃ©cisez la dÃ©signation");
+			HelperC.afficherMessage("Information", "Précisez la désignation");
 		} else {
 
 			setTauxPrime(this.tauxPrime);
@@ -296,16 +296,16 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 
 					if (FichierBaseDAO.getInstance().insertUpdatePrimeIndemnite(this)) {
 
-						HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration ");
+						HelperC.afficherMessage("Information", "Succès de l'opération ");
 						chargementPrime();
 						clear(true);
 					} else {
 
-						HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration ");
+						HelperC.afficherMessage("Désolé", "Echec de l'opération ");
 					}
 				} else {
 
-					HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de crÃ©er ");
+					HelperC.afficherMessage("ATTENTION", "Vous n'avez pas le droit de créer ");
 				}
 			}
 			if (getId() > 0) {
@@ -313,12 +313,12 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 
 					if (FichierBaseDAO.getInstance().insertUpdatePrimeIndemnite(this)) {
 
-						HelperC.afficherMessage("Information", "SuccÃ¨s de l'opÃ©ration ");
+						HelperC.afficherMessage("Information", "Succès de l'opération ");
 						chargementPrime();
 						clear(true);
 					} else {
 
-						HelperC.afficherMessage("DÃ©solÃ©", "Echec de l'opÃ©ration ");
+						HelperC.afficherMessage("Désolé", "Echec de l'opération ");
 					}
 				} else {
 
@@ -337,11 +337,11 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 			if (FichierBaseDAO.getInstance().deletePrimeIndemnite(this)) {
 
 				clear(true);
-				HelperC.afficherMessage("Information", "Succes de l'opÃ©ration");
+				HelperC.afficherMessage("Information", "Succes de l'opération");
 				chargementPrime();
 			} else {
 
-				HelperC.afficherMessage("DÃ©solÃ©", "Echec de suppression ");
+				HelperC.afficherMessage("Désolé", "Echec de suppression ");
 			}
 		} else {
 

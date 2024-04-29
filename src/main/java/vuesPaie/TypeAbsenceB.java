@@ -1,246 +1,246 @@
-/*     */ package vuesPaie;
-/*     */ 
-/*     */ import classesPaie.Base;
-/*     */ import classesPaie.Constante;
-/*     */ import classesPaie.DroitC;
-/*     */ import classesPaie.ExerciceC;
-/*     */ import classesPaie.HelperC;
-/*     */ import classesPaie.Historique;
-/*     */ import classesPaie.OperateurC;
-/*     */ import classesPaie.Tables;
-/*     */ import java.io.IOException;
-/*     */ import java.util.Calendar;
-/*     */ import java.util.List;
-/*     */ import javax.annotation.PostConstruct;
-/*     */ import javax.faces.bean.ManagedBean;
-/*     */ import javax.faces.bean.ViewScoped;
-/*     */ import javax.faces.context.FacesContext;
-/*     */ import javax.servlet.http.HttpSession;
-/*     */ import org.primefaces.event.SelectEvent;
-/*     */ import persistencePaie.FichierBaseDAO;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class TypeAbsenceB
-/*     */   extends Base
-/*     */ {
-/*     */   private static final long serialVersionUID = -1453927867592142501L;
-/*     */   private Base typeAbsence;
-/*     */   private List<Base> typeAbsences;
-/*     */   private OperateurC operateur;
-/*     */   private ExerciceC exercice;
-/*     */   private DroitC droit;
-/*  37 */   private HttpSession session = HelperC.getSession();
-/*     */   
-/*     */   Base userFonction;
-/*     */   
-/*     */   public Base getTypeAbsence() {
-/*  42 */     return this.typeAbsence;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setTypeAbsence(Base typeAbsence) {
-/*  47 */     this.typeAbsence = typeAbsence;
-/*     */   }
-/*     */   
-/*     */   public List<Base> getTypeAbsences() {
-/*  51 */     return this.typeAbsences;
-/*     */   }
-/*     */   
-/*     */   public void setTypeAbsences(List<Base> typeAbsences) {
-/*  55 */     this.typeAbsences = typeAbsences;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public OperateurC getOperateur() {
-/*  60 */     return this.operateur;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setOperateur(OperateurC operateur) {
-/*  65 */     this.operateur = operateur;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public ExerciceC getExercice() {
-/*  70 */     return this.exercice;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setExercice(ExerciceC exercice) {
-/*  75 */     this.exercice = exercice;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public HttpSession getSession() {
-/*  80 */     return this.session;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setSession(HttpSession session) {
-/*  85 */     this.session = session;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   @PostConstruct
-/*     */   private void init() {
-/*  91 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/*  92 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/*  93 */     if (codeOperateur == null || codeExercice == null) {
-/*     */ 
-/*     */       
-/*     */       try {
-/*  97 */         FacesContext context = FacesContext.getCurrentInstance();
-/*  98 */         context.getExternalContext().redirect("/payRoll/login.xhtml");
-/*     */       }
-/* 100 */       catch (IOException e) {
-/*     */         
-/* 102 */         e.printStackTrace();
-/*     */       } 
-/*     */     } else {
-/*     */       
-/* 106 */       this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
-/* 107 */       this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/* 108 */       this.userFonction = FichierBaseDAO.getInstance().getFonctionActive(this.operateur.getIdEmploye());
-/* 109 */       if (this.userFonction != null)
-/*     */       {
-/* 111 */         this.droit = FichierBaseDAO.getInstance().getDroit(this.userFonction.getId(), Constante.Role.fichierBase);
-/*     */       }
-/* 113 */       charger();
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void charger() {
-/* 119 */     this.typeAbsences = FichierBaseDAO.getInstance().getAllBase(Tables.getTableName(Tables.TableName.typeAbsence));
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void clear(boolean b) {
-/* 124 */     if (b)
-/*     */     {
-/* 126 */       setCode("");
-/*     */     }
-/* 128 */     setId(0);
-/* 129 */     setDesignation("");
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void setObject() {
-/* 134 */     if (this.typeAbsence != null) {
-/*     */       
-/* 136 */       setId(this.typeAbsence.getId());
-/* 137 */       setCode(this.typeAbsence.getCode());
-/* 138 */       setDesignation(this.typeAbsence.getDesignation());
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void changeCode() {
-/* 144 */     if (getCode().trim().equals("")) {
-/*     */       
-/* 146 */       clear(true);
-/*     */     } else {
-/*     */       
-/* 149 */       this.typeAbsence = FichierBaseDAO.getInstance().getBaseByCode(getCode(), Tables.getTableName(Tables.TableName.typeAbsence));
-/* 150 */       if (this.typeAbsence == null) {
-/*     */         
-/* 152 */         clear(false);
-/*     */       } else {
-/*     */         
-/* 155 */         setObject();
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void onRowSelected(SelectEvent event) {
-/* 162 */     this.typeAbsence = (Base)event.getObject();
-/* 163 */     if (this.typeAbsence != null)
-/*     */     {
-/* 165 */       setObject();
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void enregistrer() {
-/* 171 */     if (getId() == 0 && !this.droit.isCreer()) {
-/*     */       
-/* 173 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crï¿½er");
-/*     */     }
-/* 175 */     else if (getId() > 0 && !this.droit.isModifier()) {
-/*     */       
-/* 177 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
-/*     */     }
-/* 179 */     else if (getCode().trim().equals("")) {
-/*     */       
-/* 181 */       HelperC.afficherMessage("Information", "Code et Dï¿½signation sont obligatoires");
-/*     */     }
-/* 183 */     else if (FichierBaseDAO.getInstance().getBase(getCode(), getId(), Tables.getTableName(Tables.TableName.typeAbsence)) != null) {
-/*     */       
-/* 185 */       HelperC.afficherMessage("Information", "Ce code existe dï¿½jï¿½ ");
-/*     */     }
-/* 187 */     else if (FichierBaseDAO.getInstance().getBases(getDesignation(), getId(), Tables.getTableName(Tables.TableName.typeAbsence)) != null) {
-/*     */       
-/* 189 */       HelperC.afficherMessage("Information", "Cette dï¿½signation existe dï¿½jï¿½ ");
-/*     */     } else {
-/*     */       
-/* 192 */       Historique hist = new Historique();
-/* 193 */       hist.setDateOperation(Calendar.getInstance().getTime());
-/* 194 */       hist.setOperateur(this.operateur);
-/* 195 */       if (getId() == 0) {
-/*     */         
-/* 197 */         hist.setOperation("Crï¿½ation du type d'absence " + getCode());
-/*     */       } else {
-/*     */         
-/* 200 */         hist.setOperation("Modification du type d'absence " + getCode());
-/*     */       } 
-/* 202 */       hist.setTable(Tables.getTableName(Tables.TableName.typeAbsence));
-/* 203 */       setHistorique(hist);
-/* 204 */       if (FichierBaseDAO.getInstance().insertUpdateBase(this, Tables.getTableName(Tables.TableName.typeAbsence))) {
-/*     */         
-/* 206 */         clear(true);
-/* 207 */         HelperC.afficherMessage("Information", "Succï¿½s de l'opï¿½ration");
-/* 208 */         charger();
-/*     */       } else {
-/*     */         
-/* 211 */         HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */       } 
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void initialiser() {
-/* 218 */     clear(true);
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void supprimer() {
-/* 223 */     if (getId() == 0) {
-/*     */       
-/* 225 */       HelperC.afficherMessage("Information", "Prï¿½cisez le type d'absence ï¿½ supprimer");
-/*     */     }
-/* 227 */     else if (getId() > 0 && !this.droit.isSupprimer()) {
-/*     */       
-/* 229 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de supprimer");
-/*     */     }
-/* 231 */     else if (FichierBaseDAO.getInstance().delete(Tables.getTableName(Tables.TableName.typeAbsence), getId())) {
-/*     */       
-/* 233 */       clear(true);
-/* 234 */       HelperC.afficherMessage("Information", "Succes de l'opï¿½ration ");
-/* 235 */       charger();
-/*     */     } else {
-/*     */       
-/* 238 */       HelperC.afficherMessage("Dï¿½solï¿½", "Echec de l'opï¿½ration ");
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */  
-/*     */ }
+ package vuesPaie;
+ 
+ import classesPaie.Base;
+ import classesPaie.Constante;
+ import classesPaie.DroitC;
+ import classesPaie.ExerciceC;
+ import classesPaie.HelperC;
+ import classesPaie.Historique;
+ import classesPaie.OperateurC;
+ import classesPaie.Tables;
+ import java.io.IOException;
+ import java.util.Calendar;
+ import java.util.List;
+ import javax.annotation.PostConstruct;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.context.FacesContext;
+ import javax.servlet.http.HttpSession;
+ import org.primefaces.event.SelectEvent;
+ import persistencePaie.FichierBaseDAO;
+ 
+ 
+ 
+ 
+ 
+ @ManagedBean
+ @ViewScoped
+ public class TypeAbsenceB
+   extends Base
+ {
+   private static final long serialVersionUID = -1453927867592142501L;
+   private Base typeAbsence;
+   private List<Base> typeAbsences;
+   private OperateurC operateur;
+   private ExerciceC exercice;
+   private DroitC droit;
+   private HttpSession session = HelperC.getSession();
+   
+   Base userFonction;
+   
+   public Base getTypeAbsence() {
+     return this.typeAbsence;
+   }
+ 
+   
+   public void setTypeAbsence(Base typeAbsence) {
+     this.typeAbsence = typeAbsence;
+   }
+   
+   public List<Base> getTypeAbsences() {
+     return this.typeAbsences;
+   }
+   
+   public void setTypeAbsences(List<Base> typeAbsences) {
+     this.typeAbsences = typeAbsences;
+   }
+ 
+   
+   public OperateurC getOperateur() {
+     return this.operateur;
+   }
+ 
+   
+   public void setOperateur(OperateurC operateur) {
+     this.operateur = operateur;
+   }
+ 
+   
+   public ExerciceC getExercice() {
+     return this.exercice;
+   }
+ 
+   
+   public void setExercice(ExerciceC exercice) {
+     this.exercice = exercice;
+   }
+ 
+   
+   public HttpSession getSession() {
+     return this.session;
+   }
+ 
+   
+   public void setSession(HttpSession session) {
+     this.session = session;
+   }
+ 
+   
+   @PostConstruct
+   private void init() {
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     if (codeOperateur == null || codeExercice == null) {
+ 
+       
+       try {
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect("/payRoll/login.xhtml");
+       }
+       catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     } else {
+       
+       this.exercice = FichierBaseDAO.getInstance().getExercice(codeExercice);
+       this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+       this.userFonction = FichierBaseDAO.getInstance().getFonctionActive(this.operateur.getIdEmploye());
+       if (this.userFonction != null)
+       {
+         this.droit = FichierBaseDAO.getInstance().getDroit(this.userFonction.getId(), Constante.Role.fichierBase);
+       }
+       charger();
+     } 
+   }
+ 
+   
+   private void charger() {
+     this.typeAbsences = FichierBaseDAO.getInstance().getAllBase(Tables.getTableName(Tables.TableName.typeAbsence));
+   }
+ 
+   
+   private void clear(boolean b) {
+     if (b)
+     {
+       setCode("");
+     }
+     setId(0);
+     setDesignation("");
+   }
+ 
+   
+   private void setObject() {
+     if (this.typeAbsence != null) {
+       
+       setId(this.typeAbsence.getId());
+       setCode(this.typeAbsence.getCode());
+       setDesignation(this.typeAbsence.getDesignation());
+     } 
+   }
+ 
+   
+   public void changeCode() {
+     if (getCode().trim().equals("")) {
+       
+       clear(true);
+     } else {
+       
+       this.typeAbsence = FichierBaseDAO.getInstance().getBaseByCode(getCode(), Tables.getTableName(Tables.TableName.typeAbsence));
+       if (this.typeAbsence == null) {
+         
+         clear(false);
+       } else {
+         
+         setObject();
+       } 
+     } 
+   }
+ 
+   
+   public void onRowSelected(SelectEvent event) {
+     this.typeAbsence = (Base)event.getObject();
+     if (this.typeAbsence != null)
+     {
+       setObject();
+     }
+   }
+ 
+   
+   public void enregistrer() {
+     if (getId() == 0 && !this.droit.isCreer()) {
+       
+       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer");
+     }
+     else if (getId() > 0 && !this.droit.isModifier()) {
+       
+       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
+     }
+     else if (getCode().trim().equals("")) {
+       
+       HelperC.afficherMessage("Information", "Code et Désignation sont obligatoires");
+     }
+     else if (FichierBaseDAO.getInstance().getBase(getCode(), getId(), Tables.getTableName(Tables.TableName.typeAbsence)) != null) {
+       
+       HelperC.afficherMessage("Information", "Ce code existe déjé ");
+     }
+     else if (FichierBaseDAO.getInstance().getBases(getDesignation(), getId(), Tables.getTableName(Tables.TableName.typeAbsence)) != null) {
+       
+       HelperC.afficherMessage("Information", "Cette désignation existe déjé ");
+     } else {
+       
+       Historique hist = new Historique();
+       hist.setDateOperation(Calendar.getInstance().getTime());
+       hist.setOperateur(this.operateur);
+       if (getId() == 0) {
+         
+         hist.setOperation("Création du type d'absence " + getCode());
+       } else {
+         
+         hist.setOperation("Modification du type d'absence " + getCode());
+       } 
+       hist.setTable(Tables.getTableName(Tables.TableName.typeAbsence));
+       setHistorique(hist);
+       if (FichierBaseDAO.getInstance().insertUpdateBase(this, Tables.getTableName(Tables.TableName.typeAbsence))) {
+         
+         clear(true);
+         HelperC.afficherMessage("Information", "Succès de l'opération");
+         charger();
+       } else {
+         
+         HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+       } 
+     } 
+   }
+ 
+   
+   public void initialiser() {
+     clear(true);
+   }
+ 
+   
+   public void supprimer() {
+     if (getId() == 0) {
+       
+       HelperC.afficherMessage("Information", "Précisez le type d'absence é supprimer");
+     }
+     else if (getId() > 0 && !this.droit.isSupprimer()) {
+       
+       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de supprimer");
+     }
+     else if (FichierBaseDAO.getInstance().delete(Tables.getTableName(Tables.TableName.typeAbsence), getId())) {
+       
+       clear(true);
+       HelperC.afficherMessage("Information", "Succes de l'opération ");
+       charger();
+     } else {
+       
+       HelperC.afficherMessage("Désolé", "Echec de l'opération ");
+     } 
+   }
+ 
+ 
+   
+  
+ }
 

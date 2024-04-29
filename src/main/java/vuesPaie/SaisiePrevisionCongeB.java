@@ -1,183 +1,179 @@
-/*     */ package vuesPaie;
-/*     */ 
-/*     */ import classesPaie.Base;
-/*     */ import classesPaie.Constante;
-/*     */ import classesPaie.DroitC;
-/*     */ import classesPaie.EmployeC;
-/*     */ import classesPaie.HelperC;
-/*     */ import classesPaie.JoursCongeEmployeC;
-/*     */ import classesPaie.OperateurC;
-/*     */ import classesPaie.ParametrageDureeCongeC;
-/*     */ import java.io.IOException;
-/*     */ import java.util.ArrayList;
-/*     */ import java.util.List;
-/*     */ import javax.annotation.PostConstruct;
-/*     */ import javax.faces.application.FacesMessage;
-/*     */ import javax.faces.bean.ManagedBean;
-/*     */ import javax.faces.bean.ViewScoped;
-/*     */ import javax.faces.context.FacesContext;
-/*     */ import javax.servlet.http.HttpSession;
-/*     */ import persistencePaie.FactoryDAO;
-/*     */ import persistencePaie.FichierBaseDAO;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ @ManagedBean
-/*     */ @ViewScoped
-/*     */ public class SaisiePrevisionCongeB
-/*     */   extends JoursCongeEmployeC
-/*     */ {
-/*     */   private static final long serialVersionUID = 3512300548840150641L;
-/*  37 */   private List<JoursCongeEmployeC> allSaisiePrevisionConge = new ArrayList<JoursCongeEmployeC>();
-/*     */   private OperateurC operateur;
-/*     */   private DroitC droit;
-/*  40 */   private HttpSession session = HelperC.getSession();
-/*     */   
-/*     */   Base userFonction;
-/*     */   
-/*     */   private Constante.SorteConge sorteConge;
-/*     */ 
-/*     */   
-/*     */   @PostConstruct
-/*     */   private void charger() {
-/*  49 */     String codeExercice = (String)this.session.getAttribute("exercice");
-/*  50 */     String codeOperateur = (String)this.session.getAttribute("operateur");
-/*     */     
-/*  52 */     if (codeExercice == null || codeOperateur == null) {
-/*     */       try {
-/*  54 */         FacesContext context = FacesContext.getCurrentInstance();
-/*  55 */         context.getExternalContext().redirect(
-/*  56 */             "/payRoll/login.xhtml");
-/*  57 */       } catch (IOException e) {
-/*     */         
-/*  59 */         e.printStackTrace();
-/*     */       } 
-/*     */     } else {
-/*  62 */       setExercice(FichierBaseDAO.getInstance().getExercice(codeExercice));
-/*  63 */       this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
-/*  64 */       this.userFonction = FichierBaseDAO.getInstance().getFonctionActive(this.operateur.getIdEmploye());
-/*  65 */       if (this.userFonction != null)
-/*  66 */         this.droit = FichierBaseDAO.getInstance().getDroit(this.userFonction.getId(), Constante.Role.gestionConge); 
-/*  67 */       setSorteConge(Constante.SorteConge.congeReposAnnuel);
-/*  68 */       findEmployes();
-/*     */     } 
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public OperateurC getOperateur() {
-/*  74 */     return this.operateur;
-/*     */   }
-/*     */   
-/*     */   public void setOperateur(OperateurC operateur) {
-/*  78 */     this.operateur = operateur;
-/*     */   }
-/*     */   
-/*     */   public HttpSession getSession() {
-/*  82 */     return this.session;
-/*     */   }
-/*     */   
-/*     */   public void setSession(HttpSession session) {
-/*  86 */     this.session = session;
-/*     */   }
-/*     */   
-/*     */   public List<JoursCongeEmployeC> getAllSaisiePrevisionConge() {
-/*  90 */     return this.allSaisiePrevisionConge;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void setAllSaisiePrevisionConge(List<JoursCongeEmployeC> allSaisiePrevisionConge) {
-/*  95 */     this.allSaisiePrevisionConge = allSaisiePrevisionConge;
-/*     */   }
-/*     */   
-/*     */   public Constante.SorteConge getSorteConge() {
-/*  99 */     return this.sorteConge;
-/*     */   }
-/*     */   
-/*     */   public void setSorteConge(Constante.SorteConge sorteConge) {
-/* 103 */     this.sorteConge = sorteConge;
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   private void getAllConges() {
-/* 108 */     if (this.allSaisiePrevisionConge.size() > 0) {
-/* 109 */       for (JoursCongeEmployeC j : this.allSaisiePrevisionConge) {
-/* 110 */         j.setNumero(this.allSaisiePrevisionConge.indexOf(j) + 1);
-/*     */       }
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void findEmployes() {
-/* 118 */     if (getExercice() != null) {
-/* 119 */       this.allSaisiePrevisionConge = FactoryDAO.getInstance().getListAllJoursCongeEmploye(getExercice().getId());
-/*     */     }
-/* 121 */     if (this.allSaisiePrevisionConge.size() == 0) {
-/*     */       
-/* 123 */       JoursCongeEmployeC jour = null;
-/* 124 */       for (EmployeC employe : FactoryDAO.getInstance().getAllEmploye(false, 0))
-/*     */       {
-/* 126 */         jour = new JoursCongeEmployeC();
-/* 127 */         jour.setEmploye(employe);
-/* 128 */         jour.setExercice(getExercice());
-/* 129 */         ParametrageDureeCongeC conge = new ParametrageDureeCongeC();
-/* 130 */        
-/* 131 */         if (conge != null) {
-/* 132 */           jour.setJoursDu(conge.getNombreJoursAnnuel());
-/* 133 */           jour.setJoursDuS(HelperC.TraitementMontant.getMontantFormate(
-/* 134 */                 conge.getNombreJoursAnnuel(), 0));
-/*     */         } 
-/* 136 */         getAllSaisiePrevisionConge().add(jour);
-/*     */       }
-/*     */     
-/* 139 */     } else if (this.allSaisiePrevisionConge.size() > 0) {
-/* 140 */       if (getExercice() != null) {
-/* 141 */         setAllSaisiePrevisionConge(FactoryDAO.getInstance().getListAllJoursCongeEmploye(getExercice().getId()));
-/*     */       }
-/*     */       
-/* 144 */       for (EmployeC emp : FactoryDAO.getInstance().getAllEmploye(false, 0)) {
-/* 145 */         JoursCongeEmployeC jour = FactoryDAO.getInstance().getJoursCongeEmploye(emp);
-/*     */ 
-/*     */         
-/* 148 */         getAllSaisiePrevisionConge().add(jour);
-/*     */       } 
-/*     */     } 
-/*     */ 
-/*     */     
-/* 153 */     getAllConges();
-/*     */   }
-/*     */   
-/*     */   public void save() {
-/* 157 */     if (getId() == 0 && !this.droit.isCreer()) {
-/* 158 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de crÃ©er");
-/* 159 */     } else if (getId() > 0 && !this.droit.isModifier()) {
-/* 160 */       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
-/* 161 */     } else if (this.allSaisiePrevisionConge.size() > 0) {
-/* 162 */       for (JoursCongeEmployeC j : this.allSaisiePrevisionConge) {
-/* 163 */         if (FactoryDAO.getInstance().insertUpdateJoursCongeEmploye(j)) {
-/* 164 */           findEmployes(); continue;
-/*     */         } 
-/* 166 */         HelperC.afficherMessage("DÃ©solÃ©", "Echec d'enregistrement");
-/*     */       } 
-/*     */       
-/* 169 */       HelperC.afficherMessage("FÃ©licitation", "Enregistrement effectuÃ© avec succÃ¨s");
-/*     */     } else {
-/* 171 */       HelperC.afficherMessage(
-/* 172 */           "Information", 
-/* 173 */           "Il n'y a pas d'employÃ©s sur lesquels on va prÃ©vioir les congÃ©s", 
-/* 174 */           FacesMessage.SEVERITY_ERROR);
-/*     */     } 
-/*     */   }
-/*     */ }
+ package vuesPaie;
+ 
+ import classesPaie.Base;
+ import classesPaie.Constante;
+ import classesPaie.DroitC;
+ import classesPaie.EmployeC;
+ import classesPaie.HelperC;
+ import classesPaie.JoursCongeEmployeC;
+ import classesPaie.OperateurC;
+ import classesPaie.ParametrageDureeCongeC;
+ import java.io.IOException;
+ import java.util.ArrayList;
+ import java.util.List;
+ import javax.annotation.PostConstruct;
+ import javax.faces.application.FacesMessage;
+ import javax.faces.bean.ManagedBean;
+ import javax.faces.bean.ViewScoped;
+ import javax.faces.context.FacesContext;
+ import javax.servlet.http.HttpSession;
+ import persistencePaie.FactoryDAO;
+ import persistencePaie.FichierBaseDAO;
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ @ManagedBean
+ @ViewScoped
+ public class SaisiePrevisionCongeB
+   extends JoursCongeEmployeC
+ {
+   private static final long serialVersionUID = 3512300548840150641L;
+   private List<JoursCongeEmployeC> allSaisiePrevisionConge = new ArrayList<JoursCongeEmployeC>();
+   private OperateurC operateur;
+   private DroitC droit;
+   private HttpSession session = HelperC.getSession();
+   
+   Base userFonction;
+   
+   private Constante.SorteConge sorteConge;
+ 
+   
+   @PostConstruct
+   private void charger() {
+     String codeExercice = (String)this.session.getAttribute("exercice");
+     String codeOperateur = (String)this.session.getAttribute("operateur");
+     
+     if (codeExercice == null || codeOperateur == null) {
+       try {
+         FacesContext context = FacesContext.getCurrentInstance();
+         context.getExternalContext().redirect(
+             "/payRoll/login.xhtml");
+       } catch (IOException e) {
+         
+         e.printStackTrace();
+       } 
+     } else {
+       setExercice(FichierBaseDAO.getInstance().getExercice(codeExercice));
+       this.operateur = FichierBaseDAO.getInstance().getOperateur(codeOperateur);
+       this.userFonction = FichierBaseDAO.getInstance().getFonctionActive(this.operateur.getIdEmploye());
+       if (this.userFonction != null)
+         this.droit = FichierBaseDAO.getInstance().getDroit(this.userFonction.getId(), Constante.Role.gestionConge); 
+       setSorteConge(Constante.SorteConge.congeReposAnnuel);
+       findEmployes();
+     } 
+   }
+ 
+   
+   public OperateurC getOperateur() {
+     return this.operateur;
+   }
+   
+   public void setOperateur(OperateurC operateur) {
+     this.operateur = operateur;
+   }
+   
+   public HttpSession getSession() {
+     return this.session;
+   }
+   
+   public void setSession(HttpSession session) {
+     this.session = session;
+   }
+   
+   public List<JoursCongeEmployeC> getAllSaisiePrevisionConge() {
+     return this.allSaisiePrevisionConge;
+   }
+ 
+   
+   public void setAllSaisiePrevisionConge(List<JoursCongeEmployeC> allSaisiePrevisionConge) {
+     this.allSaisiePrevisionConge = allSaisiePrevisionConge;
+   }
+   
+   public Constante.SorteConge getSorteConge() {
+     return this.sorteConge;
+   }
+   
+   public void setSorteConge(Constante.SorteConge sorteConge) {
+     this.sorteConge = sorteConge;
+   }
+ 
+   
+   private void getAllConges() {
+     if (this.allSaisiePrevisionConge.size() > 0) {
+       for (JoursCongeEmployeC j : this.allSaisiePrevisionConge) {
+         j.setNumero(this.allSaisiePrevisionConge.indexOf(j) + 1);
+       }
+     }
+   }
+ 
+ 
+   
+   public void findEmployes() {
+     if (getExercice() != null) {
+       this.allSaisiePrevisionConge = FactoryDAO.getInstance().getListAllJoursCongeEmploye(getExercice().getId());
+     }
+     if (this.allSaisiePrevisionConge.size() == 0) {
+       
+       JoursCongeEmployeC jour = null;
+       for (EmployeC employe : FactoryDAO.getInstance().getAllEmploye(false, 0))
+       {
+         jour = new JoursCongeEmployeC();
+         jour.setEmploye(employe);
+         jour.setExercice(getExercice());
+         ParametrageDureeCongeC conge = new ParametrageDureeCongeC();
+        
+         if (conge != null) {
+           jour.setJoursDu(conge.getNombreJoursAnnuel());
+           jour.setJoursDuS(HelperC.TraitementMontant.getMontantFormate(
+                 conge.getNombreJoursAnnuel(), 0));
+         } 
+         getAllSaisiePrevisionConge().add(jour);
+       }
+     
+     } else if (this.allSaisiePrevisionConge.size() > 0) {
+       if (getExercice() != null) {
+         setAllSaisiePrevisionConge(FactoryDAO.getInstance().getListAllJoursCongeEmploye(getExercice().getId()));
+       }
+       
+       for (EmployeC emp : FactoryDAO.getInstance().getAllEmploye(false, 0)) {
+         JoursCongeEmployeC jour = FactoryDAO.getInstance().getJoursCongeEmploye(emp);
+ 
+         
+         getAllSaisiePrevisionConge().add(jour);
+       } 
+     } 
+ 
+     
+     getAllConges();
+   }
+   
+   public void save() {
+     if (getId() == 0 && !this.droit.isCreer()) {
+       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de créer");
+     } else if (getId() > 0 && !this.droit.isModifier()) {
+       HelperC.afficherAttention("ATTENTION", "Vous n'avez pas le droit de modifier");
+     } else if (this.allSaisiePrevisionConge.size() > 0) {
+       for (JoursCongeEmployeC j : this.allSaisiePrevisionConge) {
+         if (FactoryDAO.getInstance().insertUpdateJoursCongeEmploye(j)) {
+           findEmployes(); continue;
+         } 
+         HelperC.afficherMessage("Désolé", "Echec d'enregistrement");
+       } 
+       
+       HelperC.afficherMessage("Félicitation", "Enregistrement effectué avec succès");
+     } else {
+       HelperC.afficherMessage(
+           "Information", 
+           "Il n'y a pas d'employés sur lesquels on va prévioir les congés", 
+           FacesMessage.SEVERITY_ERROR);
+     } 
+   }
+ }
 
 
-/* Location:              G:\PAIE\!\vuesPaie\SaisiePrevisionCongeB.class
- * Java compiler version: 7 (51.0)
- * JD-Core Version:       1.1.3
- */
