@@ -55,9 +55,7 @@ static List<EmployeC> listAssistant;
 //			   }
 //		  
 		       
-		       /***
-		        * ----------------------------------- RECUPERATION DE L'AJUSTEMENT SALARIAL ET PENSION RETRAITE-----------------------
-		        */
+		       
 		       
 		       listEmpl=getListEmploye(conn);
 		       
@@ -89,9 +87,7 @@ static List<EmployeC> listAssistant;
 		       System.out.println(i);
 		       
 		       
-		       /***
-		        * ----------------------------------- RECUPERATION DES RETRAITES -----------------------
-		        */
+		       
 //		       EmployeC rt=null;
 //		       CotisationC cot=null;
 //		       listEmpl=getListRetraite(conn);
@@ -128,9 +124,7 @@ static List<EmployeC> listAssistant;
 //		    	   }
 //			}
 		       
-		       /***
-		        * ------------------------------------------------- RECUPERER SALAIRE EMPLOYE --------------------------------------
-		        */
+		       
 //		       listEmpl=getListEmploye(conn);
 //		       for (EmployeC employe : listEmpl) {
 //				empl=FactoryDAO.getInstance().getEmploye(employe.getCode());

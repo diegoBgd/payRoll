@@ -1829,11 +1829,7 @@ public class HelperC
         return cal.getTime();
     }
 
-   /* public static boolean validateAddresseEmail(String votreEmail)
-    {
-        EmailValidator emailValidator = EmailValidator.getInstance();
-        return emailValidator.isValid(votreEmail);
-    }*/
+   
 
     public static void sendEmail(String serverSmtp,String user,String origin,String pwdOrgine,String destination,String txtMsg,String objectMsg) {
     	

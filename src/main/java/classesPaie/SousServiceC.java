@@ -1,37 +1,23 @@
-/*    */ package classesPaie;
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ 
-/*    */ public class SousServiceC
-/*    */   extends Base
-/*    */ {
-/*    */   private static final long serialVersionUID = 8480493834693360741L;
-/*    */   private ServicesC service;
-/*    */   private String typeSubService;
-/*    */   
-/*    */   public ServicesC getService() {
-/* 17 */     return this.service;
-/*    */   }
-/*    */   
-/*    */   public void setService(ServicesC service) {
-/* 21 */     this.service = service;
-/*    */   }
-/*    */   
-/*    */   public String getTypeSubService() {
-/* 25 */     return this.typeSubService;
-/*    */   }
-/*    */   
-/*    */   public void setTypeSubService(String typeSubService) {
-/* 29 */     this.typeSubService = typeSubService;
-/*    */   }
-/*    */ }
+package classesPaie;
 
+public class SousServiceC extends Base {
+	private static final long serialVersionUID = 8480493834693360741L;
+	private ServicesC service;
+	private String typeSubService;
 
-/* Location:              G:\PAIE\!\classesPaie\SousServiceC.class
- * Java compiler version: 7 (51.0)
- * JD-Core Version:       1.1.3
- */
+	public ServicesC getService() {
+		return this.service;
+	}
+
+	public void setService(ServicesC service) {
+		this.service = service;
+	}
+
+	public String getTypeSubService() {
+		return this.typeSubService;
+	}
+
+	public void setTypeSubService(String typeSubService) {
+		this.typeSubService = typeSubService;
+	}
+}
