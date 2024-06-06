@@ -6,8 +6,11 @@
  import classesPaie.DroitC;
  import classesPaie.ExerciceC;
  import classesPaie.HelperC;
- import classesPaie.OperateurC;
- import java.io.IOException;
+import classesPaie.Historique;
+import classesPaie.OperateurC;
+import classesPaie.Tables;
+
+import java.io.IOException;
  import java.io.Serializable;
  import java.util.Date;
  import java.util.List;
@@ -37,6 +40,7 @@
    private OperateurC operateur;
    private ExerciceC exercice;
    private HttpSession session = HelperC.getSession();
+   private String infoMsg;
    
    private DroitC droit;
    
@@ -97,8 +101,18 @@
      this.listeBulletin = listeBulletin;
    }
  
-   
-   @PostConstruct
+ 
+ public String getInfoMsg() {
+	return infoMsg;
+}
+
+
+public void setInfoMsg(String infoMsg) {
+	this.infoMsg = infoMsg;
+}
+
+
+@PostConstruct
    private void init() {
      String codeOperateur = (String)this.session.getAttribute("operateur");
      String codeExercice = (String)this.session.getAttribute("exercice");
@@ -170,7 +184,7 @@
    
    public void delete() throws InterruptedException {
      if (this.droit != null && this.droit.isSupprimer()) {
-       
+    	Historique hist=null;
        chargementBulletin();
        if (this.listeBulletin.size() > 0) {
          
@@ -179,6 +193,13 @@
          
          for (BulletinPaieC bulletin : this.listeBulletin) {
            
+        	   hist=new Historique();
+				 hist.setDateOperation(new Date());
+				 hist.setOperateur(operateur);
+				 hist.setTable(Tables.getTableName(Tables.TableName.bulletinPaie));							
+				 hist.setOperation("Suppression de la paie de "+bulletin.getNomEmploye() +" pour le mois de "+HelperC.getMoisEnTouteLettre(bulletin.getMois())+" : Net ="+HelperC.decimalNumber(bulletin.getTotalNetPay(), 0, true));
+				 bulletin.setHistory(hist);
+				
            FactoryDAO.getInstance().deleteBulletinPaie(bulletin);
            i++;
            this.progressValue = i * 100 / this.listeBulletin.size();
@@ -188,6 +209,8 @@
        
        HelperC.afficherMessage("Information", "Opération terminée !");
      } 
+     else
+    	 HelperC.afficherAttention("Information", "Vous n'avez pas le droit de supprimer");
    }
  }
 

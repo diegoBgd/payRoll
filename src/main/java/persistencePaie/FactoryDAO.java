@@ -5427,6 +5427,7 @@ public class FactoryDAO implements Serializable {
 		if (listBulletin.size() > 0)
 			for (BulletinPaieC bulletin : listBulletin) {
 
+				bulletin.setNomEmploye(getEmployeSimple(bulletin.getIdEmploye()).getNomPrenom());
 				bulletin.setListAvance(getBulletinDetailAvance(bulletin.getId()));
 				bulletin.setListAllocation(getBulletinDetailAllocation(bulletin.getId()));
 				bulletin.setListeCotisation(getBulletinDetailCotisation(bulletin.getId()));
