@@ -27,7 +27,7 @@ public class LiaisonComptaDAO implements Serializable {
 			Class.forName("com.mysql.jdbc.Driver");
 
 			String url = "jdbc:mysql://localhost:3306/gestioncompta?characterEncoding=utf8";
-			con = DriverManager.getConnection(url, "root", "diego123");
+			con = DriverManager.getConnection(url, "root", "123");
 
 		} catch (ClassNotFoundException e) {
 
