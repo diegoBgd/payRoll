@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import persistencePaie.FichierBaseDAO;
+import persistencePaie.LiaisonComptaDAO;
 
 @ManagedBean
 @ViewScoped
@@ -33,12 +34,16 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 	private double plancherPrime;
 	private String type;
 	private PrimeIndemniteC selected;
+	private Base selectedCpt;
 	private DetailPrimeC detail;
 	private List<SelectItem> primes;
 	private List<PrimeIndemniteC> listePrime;
+	private List<Base> listCpte;
 	private OperateurC operateur;
 	private DroitC droit;
 	private boolean disable, disableMsg;
+	private String compteCpb,libelleCpte;
+	
 	private ExerciceC exercice;
 	private HttpSession session;
 	HttpServletRequest request;
@@ -160,6 +165,38 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 		this.disableMsg = disableMsg;
 	}
 
+	public String getCompteCpb() {
+		return compteCpb;
+	}
+
+	public void setCompteCpb(String compteCpb) {
+		this.compteCpb = compteCpb;
+	}
+
+	public String getLibelleCpte() {
+		return libelleCpte;
+	}
+
+	public void setLibelleCpte(String libelleCpte) {
+		this.libelleCpte = libelleCpte;
+	}
+
+	public List<Base> getListCpte() {
+		return listCpte;
+	}
+
+	public void setListCpte(List<Base> listCpte) {
+		this.listCpte = listCpte;
+	}
+
+	public Base getSelectedCpt() {
+		return selectedCpt;
+	}
+
+	public void setSelectedCpt(Base selectedCpt) {
+		this.selectedCpt = selectedCpt;
+	}
+
 	@PostConstruct
 	private void init() {
 		this.operateur = new OperateurC();
@@ -219,6 +256,9 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 		setHide(false);
 		setRetraite(false);
 		this.selected = null;
+		compteCpb="";
+		libelleCpte="";
+		selectedCpt=null;
 	}
 
 	public void changeCodeIndemnite() {
@@ -253,16 +293,18 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 		disableMsg = true;
 		if (this.selected != null) {
 			disableMsg = false;
+			compteCpb=selected.getPrefixeComptable();
 			setCode(this.selected.getCode());
 			setId(this.selected.getId());
 			setDesignation(this.selected.getDesignation());
-			setPrefixeComptable(this.selected.getPrefixeComptable());
+			setPrefixeComptable(compteCpb);
 			setType(this.selected.getTypePrime());
 			setImposable(this.selected.isImposable());
 			setSoumisCotisation(this.selected.isSoumisCotisation());
 			setHide(this.selected.isHide());
 			setRetraite(this.selected.isRetraite());
-
+			
+			searchCompte();
 		}
 	}
 
@@ -291,6 +333,8 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 
 			setTauxPrime(this.tauxPrime);
 			setTypePrime(this.type);
+			setPrefixeComptable(compteCpb);
+			
 			if (getId() == 0) {
 				if (this.droit.isCreer()) {
 
@@ -349,6 +393,29 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 		}
 	}
 
+	public void chargerCompte() {
+		listCpte=LiaisonComptaDAO.getConnection().getPlanComptable("", "");
+	}
+	public void takeSelectedCompte() {
+		setCompteValue();
+		PrimeFaces.current().executeScript("PF('dlgCpt').hide();");
+	}
+	public void searchCompte() {
+		if(compteCpb!=null && !compteCpb.equals(""))
+		{
+			selectedCpt=LiaisonComptaDAO.getConnection().getCompte(compteCpb);
+			setCompteValue();
+		}
+	}
+	private void setCompteValue() {
+		if(selectedCpt!=null)
+		{
+			compteCpb=selectedCpt.getCode();		
+			libelleCpte=selectedCpt.getDesignation();
+			this.setPrefixeComptable(compteCpb);
+		}
+	}
+	
 	public void initialiser() {
 		clear(true);
 	}

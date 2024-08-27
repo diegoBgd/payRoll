@@ -19,13 +19,13 @@
 					<div class="card">
 						<div class="ui-g">
 
-							<div class="ui-g-12 ui-md-6">
-								<p:commandButton value="Recherche des sanctions encours"
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Recherche des sanctions encours" style="border-radius:10px;"
 									icon="fa fa-search" onclick="PF('dlgSct').show();" />
 							</div>
 							
-							<div class="ui-g-12 ui-md-6">
-								<p:commandButton value="Recherche des recours encours"
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Recherche des recours encours" style="border-radius:10px;"
 									icon="fa fa-search" onclick="PF('dlgRec').show();" />
 							</div>
 							
@@ -130,15 +130,15 @@
 
 					<div class="ui-g card">
 					
-							<div class="ui-g-12 ui-md-4">
-								<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+							<div class="ui-g-12 ui-md-2">
+								<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" style="border-radius:10px;"
 									value="Enregistrer"  disabled="#{saisieSanctionB.disableSave}"
 									action="#{saisieSanctionB.enregistrerRecours()}"
 									update=":frmRec" />
 							</div>
-							<div class="ui-g-12 ui-md-4">
+							<div class="ui-g-12 ui-md-2">
 								<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
-									value="Annuler"
+									value="Annuler" style="border-radius:10px;"
 									action="#{saisieSanctionB.annulerRecours()}"
 									update=":frmRec" styleClass="orange-btn">
 								<p:confirm header="Confirmation"
@@ -147,9 +147,9 @@
 								</p:confirm>
 								</p:commandButton>
 							</div>
-							<div class="ui-g-12 ui-md-4">
+							<div class="ui-g-12 ui-md-2">
 								<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
-									value="Initialiser"
+									value="Initialiser" style="border-radius:10px;"
 									action="#{saisieSanctionB.initialiser()}"
 									update=":frmRec" />
 							</div>
@@ -175,7 +175,8 @@
 			<h:form id="frmRecSan">
 
 				<h:panelGrid columns="2" style="margin:auto;">
-					<p:commandButton value="Rechercher" style="width:150px"
+					<p:commandButton value="Rechercher" style="width:150px;border-radius:10px"
+					
 						actionListener="#{saisieSanctionB.chargerSaiaie()}"
 						update="tblRec" />
 				</h:panelGrid>
@@ -216,9 +217,9 @@
 			<h:form id="frmRc">
 
 				<h:panelGrid columns="2" style="margin:auto;">
-					<p:commandButton value="Rechercher" style="width:150px"
+					<p:commandButton value="Rechercher" style="width:150px;border-radius:10px"
 						actionListener="#{saisieSanctionB.chargerRecours()}"
-						update="tblRec" />
+						update="tblRec"/>
 				</h:panelGrid>
 				
 				<p:dataTable id="tblRec"

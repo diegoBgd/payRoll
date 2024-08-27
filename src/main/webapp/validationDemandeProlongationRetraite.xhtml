@@ -16,13 +16,13 @@
 				
 				<div class="card">
 						  <div class="ui-g">
-						  	<div class="ui-g-12 ui-md-2"/>
-							<div class="ui-g-12 ui-md-4">
-							 	<p:commandButton value="Liste des demandes"  
+						  	<div class="ui-g-12 ui-md-1"/>
+							<div class="ui-g-12 ui-md-3">
+							 	<p:commandButton value="Demandes encours" style="border-radius:10px" 
 							 	icon="fa fa-search" onclick="PF('dlgDmd').show();"/>
 							</div>
-		 					<div class="ui-g-12 ui-md-4">
-							 	<p:commandButton value="Liste des demandes traitées" 					 	
+		 					<div class="ui-g-12 ui-md-3">
+							 	<p:commandButton value="Demandes traitées" 		style="border-radius:10px"			 	
 							 	icon="fa fa-search" onclick="PF('dlgTrt').show();"/>
 							</div>
 						</div>
@@ -118,14 +118,14 @@
 					
 					
 					<div class="ui-g card">
-						<div class="ui-g-12 ui-md-4">
-							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" style="border-radius:10px"
 								value="Enregistrer" action="#{demandeProlongationRetraiteB.enregistrerDecision()}"
 								update=":frmVldPrl" />
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnDelete" icon="fa fa-rotate-left"
-								value="Annuler"
+								value="Annuler" style="border-radius:10px"
 								
 								action="#{demandeProlongationRetraiteB.annulerDecision()}" update=":frmVldPrl"
 								styleClass="orange-btn" >
@@ -134,8 +134,8 @@
 												icon="ui-icon-alert" />
 							</p:commandButton>
 						</div>
-						<div class="ui-g-12 ui-md-4">
-							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh" style="border-radius:10px"
 								value="Initialiser" action="#{demandeProlongationRetraiteB.initialiser()}"
 								update=":frmVldPrl" />
 						</div>

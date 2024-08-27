@@ -7,8 +7,7 @@ public class OrganismeSupportantBaseSalarialC implements Serializable {
 	private int id;
 	private String code;
 	private String designation;
-	private String compteBase;
-	private Historique historique;
+	private String compteCptbl;
 
 	public int getId() {
 		return this.id;
@@ -34,19 +33,14 @@ public class OrganismeSupportantBaseSalarialC implements Serializable {
 		this.designation = designation;
 	}
 
-	public String getCompteBase() {
-		return this.compteBase;
+	public String getCompteCptbl() {
+		return compteCptbl;
 	}
 
-	public void setCompteBase(String compteBase) {
-		this.compteBase = compteBase;
+	public void setCompteCptbl(String compteCptbl) {
+		this.compteCptbl = compteCptbl;
 	}
 
-	public Historique getHistorique() {
-		return this.historique;
-	}
-
-	public void setHistorique(Historique historique) {
-		this.historique = historique;
-	}
+	
+	
 }

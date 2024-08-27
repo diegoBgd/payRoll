@@ -3733,16 +3733,16 @@ public class FichierBaseDAO implements Serializable {
 	private boolean insertOrganismeSupportantBaseSalariale(OrganismeSupportantBaseSalarialC organisme) {
 		boolean saved = false;
 		PreparedStatement stmt = null;
-		organisme.setId(getId(Tables.getTableName(Tables.TableName.organismeSupportantBaseSalarial)));
-		String sql = "INSERT INTO " + Tables.getTableName(Tables.TableName.organismeSupportantBaseSalarial)
-				+ " (id,code,designation,compte_base) VALUES (?,?,?,?) ";
+		organisme.setId(getId(Tables.getTableName(Tables.TableName.organismesSociaux)));
+		String sql = "INSERT INTO " + Tables.getTableName(Tables.TableName.organismesSociaux)
+				+ " (id,code,designation,compte) VALUES (?,?,?,?) ";
 
 		try {
 			stmt = con.prepareStatement(sql);
 			stmt.setInt(1, organisme.getId());
 			stmt.setString(2, organisme.getCode());
 			stmt.setString(3, organisme.getDesignation());
-			stmt.setString(4, organisme.getCompteBase());
+			stmt.setString(4, organisme.getCompteCptbl());
 			stmt.execute();
 			saved = true;
 
@@ -3759,13 +3759,13 @@ public class FichierBaseDAO implements Serializable {
 	private boolean updateOrganismeSupportantBaseSalariale(OrganismeSupportantBaseSalarialC organisme) {
 		boolean saved = false;
 		PreparedStatement stmt = null;
-		String sql = "UPDATE " + Tables.getTableName(Tables.TableName.organismeSupportantBaseSalarial)
-				+ " SET designation=?,compte_base=? WHERE id=? ";
+		String sql = "UPDATE " + Tables.getTableName(Tables.TableName.organismesSociaux)
+				+ " SET designation=?,compte=? WHERE id=? ";
 
 		try {
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, organisme.getDesignation());
-			stmt.setString(2, organisme.getCompteBase());
+			stmt.setString(2, organisme.getCompteCptbl());
 			stmt.setInt(3, organisme.getId());
 			stmt.execute();
 			saved = true;
@@ -3812,7 +3812,7 @@ public class FichierBaseDAO implements Serializable {
 		ResultSet rs = null;
 		OrganismeSupportantBaseSalarialC organisme = null;
 		PreparedStatement stmt = null;
-		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismeSupportantBaseSalarial)
+		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismesSociaux)
 				+ " WHERE id=? ";
 
 		try {
@@ -3837,7 +3837,7 @@ public class FichierBaseDAO implements Serializable {
 		ResultSet rs = null;
 		PreparedStatement stmt = null;
 		OrganismeSupportantBaseSalarialC organisme = null;
-		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismeSupportantBaseSalarial)
+		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismesSociaux)
 				+ " WHERE code=? ";
 
 		try {
@@ -3858,37 +3858,12 @@ public class FichierBaseDAO implements Serializable {
 		return organisme;
 	}
 
-	public OrganismeSupportantBaseSalarialC getOrganismeSupportantBaseSalariale(String code, int id) {
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		OrganismeSupportantBaseSalarialC organisme = null;
-		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismeSupportantBaseSalarial)
-				+ " WHERE code=? AND id<>? ";
-
-		try {
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, code);
-			stmt.setInt(2, id);
-			rs = stmt.executeQuery();
-			if (rs.next()) {
-				organisme = setOrganismeSupportantBaseSalariale(rs);
-
-			}
-		} catch (SQLException e) {
-
-			System.out.println(e.getMessage());
-		} finally {
-
-			releaseResource(stmt, rs);
-		}
-		return organisme;
-	}
-
+	
 	public OrganismeSupportantBaseSalarialC getOrganismesSupportantBaseSalariale(String designation, int id) {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		OrganismeSupportantBaseSalarialC organisme = null;
-		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismeSupportantBaseSalarial)
+		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismesSociaux)
 				+ " WHERE designation=? AND id<>? ";
 
 		try {
@@ -3914,7 +3889,7 @@ public class FichierBaseDAO implements Serializable {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		List<OrganismeSupportantBaseSalarialC> liste = new ArrayList<OrganismeSupportantBaseSalarialC>();
-		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismeSupportantBaseSalarial);
+		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.organismesSociaux);
 
 		try {
 			stmt = con.prepareStatement(sql);
@@ -3939,7 +3914,7 @@ public class FichierBaseDAO implements Serializable {
 		organisme.setId(rs.getInt("id"));
 		organisme.setCode(rs.getString("code"));
 		organisme.setDesignation(rs.getString("designation"));
-		organisme.setCompteBase(rs.getString("compte_base"));
+		organisme.setCompteCptbl(rs.getString("compte"));
 		return organisme;
 	}
 
@@ -13963,7 +13938,7 @@ public class FichierBaseDAO implements Serializable {
 		parametrage.setId(getId(Tables.getTableName(Tables.TableName.parametrageFinCarriere)));
 		String sql = "INSERT INTO " + Tables.getTableName(Tables.TableName.parametrageFinCarriere)
 				+ " (id, id_personnel, age_retraite, periode_prolongation, age_max_retraite, periode_salaire, "
-				+ "pourcentage_salaire, periode_anticipe,id_grade,id_categorie) " + " VALUES (?,?,?,?,?,?,?,?,?,?)";
+				+ "pourcentage_salaire, periode_anticipe,id_grade) " + " VALUES (?,?,?,?,?,?,?,?,?)";
 
 		try {
 			stmt = con.prepareStatement(sql);
@@ -13987,11 +13962,7 @@ public class FichierBaseDAO implements Serializable {
 				stmt.setObject(9, (Object) null);
 			}
 
-			if (parametrage.getCategorie() != null) {
-				stmt.setInt(10, parametrage.getCategorie().getId());
-			} else {
-				stmt.setObject(10, (Object) null);
-			}
+			
 
 			stmt.execute();
 			saved = true;
@@ -14009,7 +13980,7 @@ public class FichierBaseDAO implements Serializable {
 		PreparedStatement stmt = null;
 		String sql = "UPDATE " + Tables.getTableName(Tables.TableName.parametrageFinCarriere) + " SET  "
 				+ " id_personnel=?, age_retraite=?, periode_prolongation=?, age_max_retraite=?, periode_salaire=?, "
-				+ " pourcentage_salaire=?, periode_anticipe=?, id_grade=?,id_categorie=? WHERE id=?";
+				+ " pourcentage_salaire=?, periode_anticipe=?, id_grade=? WHERE id=?";
 
 		try {
 			stmt = con.prepareStatement(sql);
@@ -14032,13 +14003,9 @@ public class FichierBaseDAO implements Serializable {
 				stmt.setObject(8, (Object) null);
 			}
 
-			if (parametrage.getCategorie() != null) {
-				stmt.setInt(9, parametrage.getCategorie().getId());
-			} else {
-				stmt.setObject(9, (Object) null);
-			}
+			
 
-			stmt.setInt(10, parametrage.getId());
+			stmt.setInt(9, parametrage.getId());
 
 			stmt.execute();
 			saved = true;
@@ -14092,9 +14059,7 @@ public class FichierBaseDAO implements Serializable {
 		if (rs.getObject("id_grade") != null)
 			parametrage.setDernierGrade(getGradePersonnel(rs.getInt("id_grade")));
 
-		if (rs.getObject("id_categorie") != null)
-			parametrage.setCategorie(getCategoriePersonnel(rs.getInt("id_categorie")));
-
+	
 		return parametrage;
 	}
 

@@ -156,9 +156,7 @@ public class Tables implements Serializable {
 		case organismesSociaux:
 			tableName = "tbl_organismes_sociaux";
 			break;
-		case organismeSupportantBaseSalarial:
-			tableName = "tbl_organisme_supportant_base_salarial";
-			break;
+		
 		case retenu:
 			tableName = "tbl_retenue_cotisation";
 			break;

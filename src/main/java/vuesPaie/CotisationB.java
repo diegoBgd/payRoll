@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import persistencePaie.FichierBaseDAO;
+import persistencePaie.LiaisonComptaDAO;
 
 @ManagedBean
 @ViewScoped
@@ -33,12 +34,12 @@ public class CotisationB extends CotisationC {
 	private List<CotisationC> listCotisation;
 	private OperateurC operateur;
 	private ExerciceC exercice;
-	private Base selectedOrganisme;
+	private Base selectedOrganisme,selectedCpt;
 	private List<SelectItem> listOrganismesSociaux;
 	private List<SelectItem> listBareme;
-	private List<Base> listeOrganisme;
+	private List<Base> listeOrganisme,listCpte;
 	private String codeOrganisme;
-	private String libelleOrganisme;
+	private String libelleOrganisme,compteCpb,libelleCpte;
 	private HttpSession session = HelperC.getSession();
 	private boolean disableMsg;
 
@@ -142,6 +143,38 @@ public class CotisationB extends CotisationC {
 		this.typElement = typElement;
 	}
 
+	public String getCompteCpb() {
+		return compteCpb;
+	}
+
+	public void setCompteCpb(String compteCpb) {
+		this.compteCpb = compteCpb;
+	}
+
+	public List<Base> getListCpte() {
+		return listCpte;
+	}
+
+	public void setListCpte(List<Base> listCpte) {
+		this.listCpte = listCpte;
+	}
+
+	public Base getSelectedCpt() {
+		return selectedCpt;
+	}
+
+	public void setSelectedCpt(Base selectedCpt) {
+		this.selectedCpt = selectedCpt;
+	}
+
+	public String getLibelleCpte() {
+		return libelleCpte;
+	}
+
+	public void setLibelleCpte(String libelleCpte) {
+		this.libelleCpte = libelleCpte;
+	}
+
 	@PostConstruct
 	private void charger() {
 		this.operateur = new OperateurC();
@@ -176,7 +209,7 @@ public class CotisationB extends CotisationC {
 				typElement = 1;
 			}
 			setTypeElement(typElement);
-
+			chargementOrganisme();
 			chargementCotisation();
 		}
 	}
@@ -222,6 +255,7 @@ public class CotisationB extends CotisationC {
 		setDesignation(this.cotisation.getDesignation());
 		setObligatoire(this.cotisation.isObligatoire());
 		setRetraite(cotisation.isRetraite());
+		setChargePtronal(compteCpb);
 		this.idOrganismeSocial = this.cotisation.getIdOrganisme();
 		setTypeBaremme(this.cotisation.getTypeBaremme());
 		setIdOrganisme(this.idOrganismeSocial);
@@ -229,6 +263,8 @@ public class CotisationB extends CotisationC {
 		setChargeSalarial(cotisation.getChargeSalarial());
 		setPrefixePatronal(cotisation.getPrefixePatronal());
 		setPrefixeSalarial(cotisation.getPrefixeSalarial());
+		compteCpb=cotisation.getChargePtronal();
+		searchCompte();
 		disableMsg = false;
 	}
 
@@ -259,6 +295,9 @@ public class CotisationB extends CotisationC {
 		setObligatoire(false);
 		setRetraite(false);
 		disableMsg = true;
+		compteCpb="";
+		selectedCpt=null;
+		libelleCpte="";
 	}
 
 	public void initialize() {
@@ -370,4 +409,28 @@ public class CotisationB extends CotisationC {
 		this.libelleOrganisme = "";
 		this.selectedOrganisme = null;
 	}
+	
+	public void chargerCompte() {
+		listCpte=LiaisonComptaDAO.getConnection().getPlanComptable("", "");
+	}
+	public void takeSelectedCompte() {
+		setCompteValue();
+		PrimeFaces.current().executeScript("PF('dlgCpt').hide();");
+	}
+	public void searchCompte() {
+		if(compteCpb!=null && !compteCpb.equals(""))
+		{
+			selectedCpt=LiaisonComptaDAO.getConnection().getCompte(compteCpb);
+			setCompteValue();
+		}
+	}
+	private void setCompteValue() {
+		if(selectedCpt!=null)
+		{
+			compteCpb=selectedCpt.getCode();		
+			libelleCpte=selectedCpt.getDesignation();
+			this.setChargePtronal(compteCpb);
+		}
+	}
+	
 }

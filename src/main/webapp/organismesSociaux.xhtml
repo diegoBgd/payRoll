@@ -21,67 +21,76 @@
 				<div class="ui-g">
 					<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
 						<div class="card">
-							<div class="ui-g">
-								<div class="ui-g-12 ui-md-2">
+							 <p:panelGrid columns="2"
+								columnClasses="ui-grid-col-2,ui-grid-col-2"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
 
-									<p:outputLabel value="Code" />
+									<p:outputLabel value="Référence" />
 									<p:inputText id="txtCode" value="#{organismesSociauxB.code}" autocomplete="off">
 										<p:ajax event="blur"
 											listener="#{organismesSociauxB.changeCode()}"
-											update=":frm:txtDes,tbl" />
+											update=":frm:txtDes,tbl"/>
 									</p:inputText>
-								</div>
-								<div class="ui-g-12 ui-md-10">
-									<p:outputLabel value="Désignation" />
+								
+									
+									</p:panelGrid>
+								<p:panelGrid columns="2"
+								columnClasses="ui-grid-col-2,ui-grid-col-9"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+								<p:outputLabel value="Libellé" />
 									<p:inputText id="txtDes"
 										value="#{organismesSociauxB.designation}" autocomplete="off"/>
+								</p:panelGrid>
+								
+								<p:panelGrid columns="4"
+								columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-7,ui-grid-col-1"
+								layout="grid" styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel value="Compte comptable" />
+								<p:inputText id="txtcpt"
+									value="#{organismesSociauxB.compteCpb}" autocomplete="off">
+									<p:ajax event="blur"
+										listener="#{organismesSociauxB.searchCompte()}"
+										update=":frm:txtLiblCpt" />
+								</p:inputText>
+								<p:inputText id="txtLiblCpt"
+									value="#{organismesSociauxB.libelleCpte}" readonly="true" />
+								
+								<p:commandButton icon="fa fa-search" style="border-radius:10px"
+									onclick="PF('dlgCpt').show();" 
+									action="#{organismesSociauxB.chargerCompte()}" 
+									update="frmCpt:tblCpt"/>
+								
+								
+								
+							</p:panelGrid>
 								</div>
 							</div>
 
-							<div class="ui-g">
-								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
-									<div class="ui-g-12 ui-md-4">
-										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
-											value="Enregistrer"
-											action="#{organismesSociauxB.enregistrer()}" update=":frm" />
-									</div>
-									<div class="ui-g-12 ui-md-4">
-										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
-											value="Supprimer"
-											onclick="if (!confirm('Voullez-vous vraiment Supprimer?')) return false"
-											action="#{organismesSociauxB.supprimer()}"
-											styleClass="orange-btn" update=":frm" />
-									</div>
-
-									<div class="ui-g-12 ui-md-4">
-										<p:commandButton id="btnAnnuler"
-											icon="ui-icon ui-icon-refresh" value="Initialiser"
-											action="#{organismesSociauxB.initialiser()}" update=":frm" />
-									</div>
-
-								</div>
-							</div>
+							
 						</div>
 
 						<div class="card">
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-12">
 
-									<p:dataTable id="tbl" var="depa"
+									<p:dataTable id="tbl" var="depa" emptyMessage=""
 										value="#{organismesSociauxB.listOrganismes}"
 										rowKey="#{depa.id}" selectionMode="single"
 										selection="#{organismesSociauxB.organisme}" reflow="true"
-										paginator="true" rows="10" paginatorAlwaysVisible="false"
-										 paginatorPosition="bottom">
+										scrollable="true" scrollHeight="200">
 										<p:ajax event="rowSelect"
-											listener="#{organismesSociauxB.onRowSelected}"
-											update=":frm:txtCode,:frm:txtDes" />
+											listener="#{organismesSociauxB.takeSelectedOrganisme}"
+											update=":frm" />
 
-										<p:column headerText="Code" width="10%">
+										<p:column headerText="Référence" width="10%">
 											<h:outputText value="#{depa.code}" />
 										</p:column>
 
-										<p:column headerText="Désignation">
+										<p:column headerText="Libellé">
 											<h:outputText value="#{depa.designation}" />
 										</p:column>
 
@@ -89,11 +98,87 @@
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
+						<div class="card">
+						<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" style="border-radius:10px"
+											value="Enregistrer"
+											action="#{organismesSociauxB.enregistrer()}" update=":frm" />
+									</div>
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash" style="border-radius:10px"
+											value="Supprimer"
+											
+											action="#{organismesSociauxB.supprimer()}"
+											styleClass="orange-btn" update=":frm">
+											<p:confirm header="Confirmation" disabled="#{organismesSociauxB.disableMsg}"
+												message="Voulez vous vraiment supprimer cet élément ?"
+												icon="ui-icon-alert"/>
+											</p:commandButton>
+									</div>
+
+									<div class="ui-g-12 ui-md-4">
+										<p:commandButton id="btnAnnuler" style="border-radius:10px"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{organismesSociauxB.initialiser()}" update=":frm" />
+									</div>
+
+								</div>
+							</div>
+						</div>
+					
 
 
 			</h:form>
+			<h:form>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" widgetVar="cd" >
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+		
+			<p:dialog widgetVar="dlgCpt" header="Plan comptable"
+				height="40%" width="70%" responsive="true" position="center">
+				<h:form id="frmCpt">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+								
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+
+										<p:dataTable id="tblCpt"
+											value="#{organismesSociauxB.listCpte}" var="cpt"
+											selectionMode="single"
+											selection="#{organismesSociauxB.selectedCpt}" rowKey="#{cpt.code}"
+											reflow="true" scrollable="true" scrollHeight="250">
+
+											<p:ajax event="rowSelect"
+												listener="#{organismesSociauxB.takeSelectedCompte}"
+												update=":frm:txtLiblCpt,:frm:txtcpt" />
+
+											<p:column headerText="Compte" width="10%" filterBy="#{cpt.code}">
+												<h:outputText value="#{cpt.code}" />
+											</p:column>
+
+											<p:column headerText="Libellé" filterBy="#{cpt.designation}" >
+												<h:outputText value="#{cpt.designation}" />
+											</p:column>
+
+										</p:dataTable>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</h:form>
+			</p:dialog>
 		</body>
 	</ui:define>
 </ui:composition>

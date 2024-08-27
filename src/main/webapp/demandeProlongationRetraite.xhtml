@@ -16,9 +16,9 @@
 					<div class="card">
 						<div class="ui-g">
 
-							<div class="ui-g-12 ui-md-4">
+							<div class="ui-g-12 ui-md-3">
 								<p:commandButton value="Recherche" icon="fa fa-search"
-									onclick="PF('dlgDmd').show();" />
+									onclick="PF('dlgDmd').show();" style="border-radius:10px"/>
 							</div>
 							<div class="ui-g-12 ui-md-6">
 								<p:outputLabel value="#{demandeProlongationRetraiteB.msgInfo}" style="color:red"/>
@@ -30,9 +30,10 @@
 				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
 					<div class="card no-margin">
 					<p:panelGrid columns="4"
-							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-1"
 							layout="grid" styleClass="ui-panelgrid-blank"
-							style="background-color:transparent;">
+							style="background-color:transparent;" >
+							
 							<h:outputLabel value="Employé" />
 							<p:inputText id="txtcode"
 								value="#{demandeProlongationRetraiteB.code}">
@@ -43,7 +44,9 @@
 							<p:inputText id="txtNom"
 								value="#{demandeProlongationRetraiteB.employe.nomPrenom}"
 								readonly="true" />
-							<p:commandButton value="..." oncomplete="PF('dlg').show()"></p:commandButton>
+						
+							<p:commandButton oncomplete="PF('dlg').show()" style="border-radius:10px" icon="fa fa-search"/>
+			
 						</p:panelGrid>
 						<p:panelGrid columns="4"
 							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
@@ -119,16 +122,16 @@
 					
 
 					<div class="ui-g card">
-						<div class="ui-g-12 ui-md-4">
-							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" style="border-radius:10px"
 								value="Enregistrer" disabled="#{demandeProlongationRetraiteB.disableSave}"
 								action="#{demandeProlongationRetraiteB.enregistrerDemande()}"
 								update=":frmPrl" />
 						</div>
 					
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
-								value="Initialiser"
+								value="Initialiser" style="border-radius:10px"
 								action="#{demandeProlongationRetraiteB.initialiser()}"
 								update=":frmPrl" />
 						</div>

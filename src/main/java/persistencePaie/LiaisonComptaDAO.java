@@ -26,7 +26,7 @@ public class LiaisonComptaDAO implements Serializable {
 
 			Class.forName("com.mysql.jdbc.Driver");
 
-			String url = "jdbc:mysql://localhost:3306/gestioncompta?characterEncoding=utf8";
+			String url = "jdbc:mysql://localhost:3306/comptavirago?characterEncoding=utf8";
 			con = DriverManager.getConnection(url, "root", "123");
 
 		} catch (ClassNotFoundException e) {
@@ -40,19 +40,19 @@ public class LiaisonComptaDAO implements Serializable {
 		}
 	}
 
-	public static Connection getConnection() {
+	public static LiaisonComptaDAO getConnection() {
 		if (connexion == null) {
 			connexion = new LiaisonComptaDAO();
 		}
-		return con;
+		return connexion;
 	}
-
+ 
 	public List<Base> getPlanComptable(String motCpt, String motLbl) {
 		List<Base> listPlan = new ArrayList<Base>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Base b = null;
-		String sql = "SELECT * FROM tb_plan_compte ORDER BY reference ASC";
+		String sql = "SELECT * FROM tb_plan_compte WHERE detail=1 ORDER BY reference ASC ";
 
 		try {
 			stmt = con.prepareStatement(sql);
@@ -163,7 +163,7 @@ public class LiaisonComptaDAO implements Serializable {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Base b = null;
-		String sql = "SELECT * FROM tb_plan_compte WHERE reference='" + code + "'";
+		String sql = "SELECT * FROM tb_plan_compte WHERE reference='" + code + "' AND detail=1";
 
 		try {
 			stmt = con.prepareStatement(sql);

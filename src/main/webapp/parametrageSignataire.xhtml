@@ -79,7 +79,8 @@
 								</p:inputText>
 								<p:inputText id="txtNomEmploye"
 									value="#{parametrageDecideurSignataireB.nomEmpl}" readonly="true" />
-								<p:commandButton icon="fa fa-search"
+								
+								<p:commandButton icon="fa fa-search" style="border-radius:10px"
 									onclick="PF('dlgEmploye').show();" />
 								
 								<p:commandButton icon="fa fa-plus"  
@@ -152,7 +153,7 @@
 
 										<p:dataTable id="tblEmploye"
 											value="#{parametrageDecideurSignataireB.listEmploye}" var="emplo"
-											selectionMode="single"
+											selectionMode="single" emptyMessage=""
 											selection="#{parametrageDecideurSignataireB.employe}" rowKey="#{emplo.id}"
 											reflow="true" scrollable="true" scrollHeight="250">
 
@@ -160,7 +161,7 @@
 												listener="#{parametrageDecideurSignataireB.onRowSelectEmploye}"
 												update=":frm:txtCodeEmploye,:frm:txtNomEmploye" />
 
-											<p:column headerText="Code">
+											<p:column headerText="Code" width="10%">
 												<h:outputText value="#{emplo.code}" />
 											</p:column>
 

@@ -27,7 +27,7 @@
 							layout="grid" styleClass="ui-panelgrid-blank"
 							style="background-color:transparent;">
 
-							<p:outputLabel value="Type Congé" />
+							<p:outputLabel value="Type de congé" />
 							<p:selectOneMenu id="txtType" value="#{editionConge.idTypeConge}"
 								valueChangeListener="#{editionConge.chargerTypeConge}"
 								autoWidth="false">
@@ -47,7 +47,7 @@
 					<p:dataTable value="#{editionConge.listConge}" emptyMessage=""
 						var="sold" id="tblSoldCg" scrollable="true" scrollHeight="300">
 
-						<f:facet name="header">Solde des congé</f:facet>
+						<f:facet name="header">Solde des congés par employé</f:facet>
 
 						<p:column headerText="Matricule" width="10%">
 							<h:outputText value="#{sold.matricule}" />

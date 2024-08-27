@@ -16,9 +16,9 @@
 					<div class="card">
 						<div class="ui-g">
 
-							<div class="ui-g-12 ui-md-6">
+							<div class="ui-g-12 ui-md-3">
 								<p:commandButton value="Recherche" icon="fa fa-search"
-									onclick="PF('dlgDmd').show();" />
+									onclick="PF('dlgDmd').show();" style="border-radius:10px"/>
 							</div> 
 						</div>
 					</div>
@@ -27,7 +27,7 @@
 				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
 					<div class="card no-margin">
 						<p:panelGrid columns="9"
-							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-0.5"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-1"
 							layout="grid" styleClass="ui-panelgrid-blank"
 							style="background-color:transparent;">
 							<h:outputLabel value="Employé" />
@@ -41,7 +41,7 @@
 							<p:inputText id="txtNom"
 								value="#{demandeRetraiteAnticipeB.employe.nomPrenom}"
 								readonly="true" />
-							<p:commandButton value="..." oncomplete="PF('dlg').show()"></p:commandButton>
+							<p:commandButton oncomplete="PF('dlg').show()" style="border-radius:10px" icon="fa fa-search"/>
 						</p:panelGrid>
 						<p:panelGrid columns="4"
 							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
@@ -127,7 +127,7 @@
 							<div class="ui-g-12 ui-md-4">
 								<p:commandButton value="Rechercher"
 									action="#{demandeRetraiteAnticipeB.chargerEmploye()}"
-									update=":frmRtr:tab" />
+									update=":frmRtr:tab" style="border-radius:10px"/>
 							</div>
 
 						
@@ -152,15 +152,15 @@
 					</p:dialog>
 
 					<div class="ui-g card">
-						<div class="ui-g-12 ui-md-4">
-							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" style="border-radius:10px"
 								value="Enregistrer" disabled="#{demandeRetraiteAnticipeB.disableSave}"
 								action="#{demandeRetraiteAnticipeB.enregistrerDemande()}"
 								update=":frmRtr" />
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
-								value="Supprimer"
+								value="Supprimer" style="border-radius:10px"
 								action="#{demandeRetraiteAnticipeB.supprimer()}" update=":frmRtr"
 								styleClass="orange-btn">
 								
@@ -170,9 +170,9 @@
 												
 							</p:commandButton>
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
-								value="Initialiser"
+								value="Initialiser" style="border-radius:10px"
 								action="#{demandeRetraiteAnticipeB.initialiser()}" update=":frmRtr" />
 						</div>
 

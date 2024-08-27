@@ -38,7 +38,8 @@
 									<p:menuitem icon="fa fa-star" value="Allocation Famillial" outcome="parametreAllocation"  />	
 									<p:menuitem icon="fa fa-star" value="Journal de paie" outcome="/journalParametre"  />
 									<p:menuitem icon="fa fa-star" value="Signataires" outcome="/parametrageSignataire"/>
-									<p:menuitem icon="fa fa-star" value="Jours fériés" outcome="/jourFerier"/>	
+									<p:menuitem icon="fa fa-star" value="Jours fériés" outcome="/jourFerier"/>
+									<p:menuitem icon="fa fa-star" value="Organismes sociaux" outcome="/organismesSociaux"/>		
 							</p:submenu>
 							<p:submenu label="Barèmes" icon="fa fa-outdent">							
 									<p:menuitem icon="fa fa-star" value="I.R.E" outcome="/baremeIRE"  />
@@ -141,17 +142,17 @@
 
 								</p:submenu> 
 									
-								<p:submenu label="Fin de la carrirère" icon="fa fa-briefcase" rendered="false">							
-									<p:menuitem icon="fa fa-star" value="Paramétrage fin carrirère"  outcome="/parametrageFinCarriere" />
+								<p:submenu label="Mis en retraite" icon="fa fa-briefcase">							
+									<p:menuitem icon="fa fa-star" value="Paramétrages"  outcome="/parametrageRetraite" />
 									<p:menuitem icon="fa fa-star" value="Motifs de retraites"  outcome="/motifRetraite" />
 								<p:submenu	label="Prologation de travail" icon="fa fa-clock-o">	
 									<p:menuitem icon="fa fa-star" value="Demande "  outcome="/demandeProlongationRetraite" />
-									<p:menuitem icon="fa fa-star" value="Traitement "  outcome="/validationDemandeProlongationRetraite"  />
+									<p:menuitem icon="fa fa-star" value="Décision "  outcome="/validationDemandeProlongationRetraite"  />
 								</p:submenu>
 								
 								<p:submenu	label="Retraite anticipée" icon="fa fa-sun-o">		
 									<p:menuitem icon="fa fa-star" value="Demande "  outcome="/demandeRetraiteAnticipe"  />
-									<p:menuitem icon="fa fa-star" value="Traitement "  outcome="/validationRetraiteAnticipe"  />
+									<p:menuitem icon="fa fa-star" value="Décision "  outcome="/validationRetraiteAnticipe"  />
 									
 								</p:submenu>
 									<p:menuitem icon="fa fa-legal" value="Validation des retraites"  outcome="/misEnRetraite"  />
@@ -162,7 +163,7 @@
 							<p:submenu label="Utilitaire" icon="fa fa-wrench">	
 								<p:menuitem icon="fa fa-star" value="Affectation des primes"  outcome="/utilitaire"  rendered="false"/>		
 								<p:menuitem icon="fa fa-database" value="Base de données"  outcome="/parametreConnexion"  />	
-								<p:menuitem icon="fa fa-gg" value="Code service en ligne"  outcome="/nouveauLogin"/>							
+								<p:menuitem icon="fa fa-gg" value="Regénérer mot de passe"  outcome="/nouveauLogin"/>							
 							</p:submenu>
                     </pa:menu>
                     

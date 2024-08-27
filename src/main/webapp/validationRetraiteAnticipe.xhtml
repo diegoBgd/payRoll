@@ -17,13 +17,13 @@
 					<div class="card">
 						<div class="ui-g">
 
-							<div class="ui-g-12 ui-md-6">
-								<p:commandButton value="Liste des demandes" 									
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Demandes encours" style="border-radius:10px"									
 									icon="fa fa-search" onclick="PF('dlgDem').show();" />
 							</div>
-							<div class="ui-g-12 ui-md-6">
-	 							<p:commandButton value="Liste des demandes traitées" 									
-									icon="fa fa-search" onclick="PF('dlgVld').show();" />
+							<div class="ui-g-12 ui-md-3">
+	 							<p:commandButton value="Demandes traitées" 									
+									icon="fa fa-search" onclick="PF('dlgVld').show();" style="border-radius:10px"/>
 							</div>
 						</div>
 					</div>
@@ -112,8 +112,8 @@
 							<p:selectOneMenu id="txtMois"
 									value="#{demandeRetraiteAnticipeB.decision}">
 									<f:selectItem itemLabel="" itemValue="0" />
-									<f:selectItem itemLabel="Accepter" itemValue="1" />
-									<f:selectItem itemLabel="Refuser" itemValue="2" />
+									<f:selectItem itemLabel="Acceptée" itemValue="1" />
+									<f:selectItem itemLabel="Refusée" itemValue="2" />
 									
 							</p:selectOneMenu>
 						</p:panelGrid>
@@ -121,15 +121,15 @@
 					
 
 					<div class="ui-g card">
-						<div class="ui-g-12 ui-md-4">
-							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+						<div class="ui-g-12 ui-md-2">
+							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk" style="border-radius:10px"
 								value="Enregistrer" disabled="#{demandeRetraiteAnticipeB.disableSave}"
 								action="#{demandeRetraiteAnticipeB.enregistrerDecision()}"
 								update=":frm" />
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnDelete" icon="fa fa-rotate-left"
-								value="Annuler"
+								value="Annuler" style="border-radius:10px"
 							
 								action="#{demandeRetraiteAnticipeB.annuler()}" update=":frm"
 								styleClass="orange-btn">
@@ -139,9 +139,9 @@
 												icon="ui-icon-alert" />
 							</p:commandButton>
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
-								value="Initialiser"
+								value="Initialiser" style="border-radius:10px"
 								action="#{demandeRetraiteAnticipeB.initialiser()}" update=":frm" />
 						</div>
 

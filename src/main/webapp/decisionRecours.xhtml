@@ -18,12 +18,12 @@
 					<div class="card">
 						<div class="ui-g">
 
-							<div class="ui-g-12 ui-md-6">
-								<p:commandButton value="Liste des dossiers encours "
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Liste des dossiers encours " style="border-radius:10px"
 									icon="fa fa-search" onclick="PF('dlgRec').show();" />
 							</div>
-							<div class="ui-g-12 ui-md-6">
-								<p:commandButton value="Liste des décisions "
+							<div class="ui-g-12 ui-md-3">
+								<p:commandButton value="Liste des décisions " style="border-radius:10px"
 									icon="fa fa-search" onclick="PF('dlgDec').show();" />
 							</div>
 
@@ -143,22 +143,22 @@
 
 
 						<div class="ui-g card">
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
-								value="Enregistrer"
+								value="Enregistrer" style="border-radius:10px"
 								action="#{saisieSanctionB.enregistrerDecision()}"
 								update=":frmDecRec" />
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnDelete" icon="fa fa-rotate-left"
-								value="Annuler"
+								value="Annuler" style="border-radius:10px"
 								onclick="if (!confirm('Voullez-vous vraiment annuler ?')) return false"
 								action="#{saisieSanctionB.annulerDecision()}" update=":frmDecRec"
 								styleClass="orange-btn" />
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
-								value="Initialiser"
+								value="Initialiser" style="border-radius:10px"
 								action="#{saisieSanctionB.initialiser()}"
 								update=":frmDecRec" />
 						</div>

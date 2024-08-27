@@ -2005,7 +2005,7 @@ public class HelperC
     }
     public static void afficherDeleteMessage()
     {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN,"Info", "il faut prÃ©ciser l'Ã©lÃ©ment Ã  supprimer");
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN,"Info", "il faut préciser l'élément à  supprimer");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     public static void afficherMessage(String titre, String message, javax.faces.application.FacesMessage.Severity severity)
