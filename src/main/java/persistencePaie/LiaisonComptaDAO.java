@@ -11,6 +11,7 @@ import java.util.List;
 
 import classesPaie.Base;
 import classesPaie.EcritureComptableC;
+import classesPaie.LiaisonComptaC;
 
 public class LiaisonComptaDAO implements Serializable {
 
@@ -21,13 +22,13 @@ public class LiaisonComptaDAO implements Serializable {
 	private static LiaisonComptaDAO connexion;
 	private static Connection con;
 
-	private LiaisonComptaDAO() {
+	private LiaisonComptaDAO(String serverNm,String uid,String pwd,String dbName) {
 		try {
 
 			Class.forName("com.mysql.jdbc.Driver");
 
-			String url = "jdbc:mysql://localhost:3306/comptavirago?characterEncoding=utf8";
-			con = DriverManager.getConnection(url, "root", "123");
+			String url = "jdbc:mysql://"+serverNm+":3306/"+dbName +"?characterEncoding=utf8";
+			con = DriverManager.getConnection(url, uid,pwd);
 
 		} catch (ClassNotFoundException e) {
 
@@ -40,9 +41,9 @@ public class LiaisonComptaDAO implements Serializable {
 		}
 	}
 
-	public static LiaisonComptaDAO getConnection() {
+	public static LiaisonComptaDAO getConnection(LiaisonComptaC link) {
 		if (connexion == null) {
-			connexion = new LiaisonComptaDAO();
+			connexion = new LiaisonComptaDAO(link.getServerName(),link.getUserCode(),link.getPassWord(),link.getDataBase());
 		}
 		return connexion;
 	}

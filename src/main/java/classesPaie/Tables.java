@@ -44,7 +44,7 @@ public class Tables implements Serializable {
 		filieresOptions, saisiePlanConge, saisieRegimeDisciplinaire, demandeRetraiteAnticipe, finCarriere, saisieSortie,
 		parametrageDecideurSignataire, finCarriereDetailIndemnite, parametrageDecideurDetail, finCarriereDetailPrime,
 		employeDetailContrat, parametreEmail, natureConge, sousService, parametragePrime, parametragePrimeDetail,
-		parametreCotisation, parametreCotisationDetail, elementJournal, parametrageAvancementSalaire;
+		parametreCotisation, parametreCotisationDetail, elementJournal, parametrageAvancementSalaire,liaisonCompta;
 	}
 
 	public static String getTableName(TableName tbl) {
@@ -684,6 +684,9 @@ public class Tables implements Serializable {
 			break;
 		case bulletinComission:
 			tableName = "tbl_bulletin_comission";
+			break;
+		case liaisonCompta:
+			tableName = "tbl_liaison_compta";
 			break;
 		default:
 			break;

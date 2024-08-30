@@ -4,6 +4,7 @@ import classesPaie.Base;
 import classesPaie.ExerciceC;
 import classesPaie.HelperC;
 import classesPaie.Historique;
+import classesPaie.LiaisonComptaC;
 import classesPaie.OperateurC;
 import classesPaie.OrganismeSupportantBaseSalarialC;
 import classesPaie.Tables;
@@ -33,6 +34,7 @@ public class OrganismesSociauxB extends Base {
 	private Base selectedCpt;
 	private List<Base> listCpte;
 	private boolean disableMsg;
+	LiaisonComptaC liaison;
 	
 	public OrganismeSupportantBaseSalarialC getOrganisme() {
 		return organisme;
@@ -134,6 +136,7 @@ public class OrganismesSociauxB extends Base {
 			}
 		} else {
 			disableMsg=true;
+			liaison=FichierBaseDAO.getInstance().getLiaisonCompta();
 			chargement();
 		}
 
@@ -221,7 +224,8 @@ public class OrganismesSociauxB extends Base {
 	}
 
 	public void chargerCompte() {
-		listCpte = LiaisonComptaDAO.getConnection().getPlanComptable("", "");
+		if(liaison!=null)
+		listCpte = LiaisonComptaDAO.getConnection(liaison).getPlanComptable("", "");
 	}
 
 	public void takeSelectedCompte() {
@@ -231,8 +235,11 @@ public class OrganismesSociauxB extends Base {
 
 	public void searchCompte() {
 		if (compteCpb != null && !compteCpb.equals("")) {
-			selectedCpt = LiaisonComptaDAO.getConnection().getCompte(compteCpb);
+			if(liaison!=null)
+			{
+			selectedCpt = LiaisonComptaDAO.getConnection(liaison).getCompte(compteCpb);
 			setCompteValue();
+			}
 		}
 	}
 

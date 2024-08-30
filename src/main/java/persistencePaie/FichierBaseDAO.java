@@ -14490,4 +14490,130 @@ public class FichierBaseDAO implements Serializable {
 		}
 		return deleted;
 	}
+	//-------------------------LIAISON COMPTA ------------------------------
+	
+	public boolean insertUpdateLiaisonCompta(LiaisonComptaC link) {
+		boolean saved = false;
+		try {
+			con.setAutoCommit(false);
+			if (link.getId() == 0) {
+				saved = insertLiaisonCompta(link);
+				if (!saved) {
+					link.setId(0);
+				}
+			} else {
+				saved = updateLiaisonCompta(link);
+			}
+
+			if (saved) {
+				con.commit();
+			} else {
+				con.rollback();
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return saved;
+	}
+	private boolean insertLiaisonCompta(LiaisonComptaC link) {
+		boolean saved = false;
+		PreparedStatement stmt = null;
+	
+		String sql = "INSERT INTO " + Tables.getTableName(Tables.TableName.liaisonCompta)
+				+ " (server_name, user_code, pass_word, database_name) " + " VALUES (?,?,?,?)";
+
+		try {
+			stmt = con.prepareStatement(sql);
+
+			stmt.setString(1, link.getServerName());			
+			stmt.setString(2, link.getUserCode());			
+			stmt.setString(3, link.getPassWord());
+			stmt.setString(4, link.getDataBase());
+
+			stmt.execute();
+			saved = true;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			releaseResource(stmt, null);
+		}
+
+		return saved;
+	}
+	
+	private boolean updateLiaisonCompta(LiaisonComptaC link) {
+		boolean saved = false;
+		PreparedStatement stmt = null;
+		String sql = "UPDATE " + Tables.getTableName(Tables.TableName.liaisonCompta) + " SET  "
+				+ "  server_name=?, user_code=?, pass_word=?, database_name=? WHERE id=?";
+
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, link.getServerName());			
+			stmt.setString(2, link.getUserCode());			
+			stmt.setString(3, link.getPassWord());
+			stmt.setString(4, link.getDataBase());
+			stmt.setInt(5, link.getId());
+			
+			stmt.execute();
+			saved = true;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			releaseResource(stmt, null);
+		}
+
+		return saved;
+	}
+
+	private LiaisonComptaC setLiaisonCompta(ResultSet rs) throws SQLException {
+		LiaisonComptaC link = new LiaisonComptaC();
+		link.setId(rs.getInt("id"));
+		link.setDataBase(rs.getString("database_name"));
+		link.setPassWord(rs.getString("pass_word"));
+		link.setServerName(rs.getString("server_name"));
+		link.setUserCode(rs.getString("user_code"));
+		return link;
+	}
+	public LiaisonComptaC getLiaisonCompta() {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		LiaisonComptaC link = null;
+
+		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.liaisonCompta) ;
+
+		try {
+			stmt = con.prepareStatement(sql);
+		
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				link = setLiaisonCompta (rs);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			releaseResource(stmt, rs);
+		}
+
+		return link;
+	}
+	public boolean deleteLiaisonCompta(LiaisonComptaC link) {
+		boolean deleted = false;
+		try {
+			con.setAutoCommit(false);
+
+			deleted = deleteNotAutocommit(link.getId(),
+					Tables.getTableName(Tables.TableName.liaisonCompta));
+			if (deleted) {
+				con.commit();
+			} else {
+				con.rollback();
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return deleted;
+	}
+	
 }

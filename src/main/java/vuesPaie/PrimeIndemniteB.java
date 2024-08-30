@@ -6,6 +6,7 @@ import classesPaie.DetailPrimeC;
 import classesPaie.DroitC;
 import classesPaie.ExerciceC;
 import classesPaie.HelperC;
+import classesPaie.LiaisonComptaC;
 import classesPaie.OperateurC;
 import classesPaie.PrimeIndemniteC;
 import java.io.IOException;
@@ -48,7 +49,8 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 	private HttpSession session;
 	HttpServletRequest request;
 	Base userFonction;
-
+	LiaisonComptaC liaison;
+	
 	public List<PrimeIndemniteC> getListePrime() {
 		return this.listePrime;
 	}
@@ -223,7 +225,7 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 			}
 
 			this.request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-
+			liaison=FichierBaseDAO.getInstance().getLiaisonCompta();
 			chargementPrime();
 		}
 	}
@@ -394,7 +396,8 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 	}
 
 	public void chargerCompte() {
-		listCpte=LiaisonComptaDAO.getConnection().getPlanComptable("", "");
+		if(liaison!=null)
+		listCpte=LiaisonComptaDAO.getConnection(liaison).getPlanComptable("", "");
 	}
 	public void takeSelectedCompte() {
 		setCompteValue();
@@ -403,8 +406,11 @@ public class PrimeIndemniteB extends PrimeIndemniteC {
 	public void searchCompte() {
 		if(compteCpb!=null && !compteCpb.equals(""))
 		{
-			selectedCpt=LiaisonComptaDAO.getConnection().getCompte(compteCpb);
+			if(liaison!=null)
+			{
+			selectedCpt=LiaisonComptaDAO.getConnection(liaison).getCompte(compteCpb);
 			setCompteValue();
+			}
 		}
 	}
 	private void setCompteValue() {

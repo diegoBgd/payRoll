@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/masterPage.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<h:head>
+			<link type="text/css" rel="stylesheet" href="../resources/style.css" />
+			<h:outputScript library="primefaces" name="jquery/jquery.js" />
+			<title>Liaison compta</title>
+		</h:head>
+
+		<h:form id="frm" onkeypress="if (event.keyCode == 13) { return false; }">
+			
+			<p:growl id="msg" life="21600" showDetail="true" sticky="false" />
+
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+				<div class="ui-g-12 ui-fluid card">
+						<p:panelGrid id="pnl1" columns="2"
+								columnClasses="ui-grid-col-2,ui-grid-col-8" layout="grid"
+								styleClass="ui-panelgrid-blank"
+								style="border:0px none; background-color:transparent;">
+
+								<h:outputText value="Serveur" />
+								<p:inputText id="txtServer" value="#{liaisonComptaB.nomServeur}"  autocomplete="off"/>
+									
+
+								<h:outputText value="Utilisateur" />
+								<p:inputText id="txtUser" value="#{liaisonComptaB.utilisateur}"  autocomplete="off"/>
+								
+								
+								<h:outputText value="Mot de passe" />
+								<p:inputText id="txtPwd" value="#{liaisonComptaB.motPasse}"  autocomplete="off"/>
+								
+								<h:outputText value="Base de données" />
+								<p:inputText id="txtDb" value="#{liaisonComptaB.baseDonne}"  autocomplete="off"/>
+						
+							</p:panelGrid>
+							
+														
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-fluid contact-form">
+								</div>
+							</div>
+					</div>
+					<div class="ui-g-12 ui-fluid card">
+					<div class="ui-g-1"/>
+					<div class="ui-g-8 ui-md-3">
+										<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
+											value="Enregistrer" action="#{liaisonComptaB.save()}"
+											update=":frm" disabled="#{operateurB.desableSave}" style="border-radius:10px"/>
+									</div>
+									<div class="ui-g-8 ui-md-3">
+										<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
+											value="Supprimer" action="#{liaisonComptaB.delete()}" update=":frm"
+											styleClass="orange-btn" style="border-radius:10px">
+												<p:confirm header="Confirmation" disabled="#{liaisonComptaB.disableMsg}"
+												message="Voulez-vous vraiment supprimer ?"
+												icon="ui-icon-alert" />
+											</p:commandButton>
+									</div>
+									<div class="ui-g-8 ui-md-3">
+										<p:commandButton id="btnAnnuler" style="border-radius:10px"
+											icon="ui-icon ui-icon-refresh" value="Initialiser"
+											action="#{liaisonComptaB.initialiser()}" update=":frm" />
+									</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+					responsive="true">
+					<p:commandButton value="Oui" type="button" 
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</h:form>
+
+	</ui:define>
+</ui:composition>

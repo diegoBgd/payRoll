@@ -6,6 +6,7 @@ import classesPaie.CotisationC;
 import classesPaie.DroitC;
 import classesPaie.ExerciceC;
 import classesPaie.HelperC;
+import classesPaie.LiaisonComptaC;
 import classesPaie.OperateurC;
 import classesPaie.Tables;
 import java.io.IOException;
@@ -46,7 +47,8 @@ public class CotisationB extends CotisationC {
 	private DroitC droit;
 
 	Base userFonction;
-
+	LiaisonComptaC liaison;
+	
 	public CotisationC getCotisation() {
 		return this.cotisation;
 	}
@@ -208,6 +210,7 @@ public class CotisationB extends CotisationC {
 			if (frm != null) {
 				typElement = 1;
 			}
+			liaison=FichierBaseDAO.getInstance().getLiaisonCompta();
 			setTypeElement(typElement);
 			chargementOrganisme();
 			chargementCotisation();
@@ -411,7 +414,8 @@ public class CotisationB extends CotisationC {
 	}
 	
 	public void chargerCompte() {
-		listCpte=LiaisonComptaDAO.getConnection().getPlanComptable("", "");
+		if(liaison!=null)
+		listCpte=LiaisonComptaDAO.getConnection(liaison).getPlanComptable("", "");
 	}
 	public void takeSelectedCompte() {
 		setCompteValue();
@@ -420,8 +424,11 @@ public class CotisationB extends CotisationC {
 	public void searchCompte() {
 		if(compteCpb!=null && !compteCpb.equals(""))
 		{
-			selectedCpt=LiaisonComptaDAO.getConnection().getCompte(compteCpb);
+			if(liaison!=null)
+			{
+			selectedCpt=LiaisonComptaDAO.getConnection(liaison).getCompte(compteCpb);
 			setCompteValue();
+			}
 		}
 	}
 	private void setCompteValue() {
