@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import classesPaie.Base;
+import classesPaie.BulletinCotisationC;
+import classesPaie.BulletinPaieC;
 import classesPaie.EcritureComptableC;
 import classesPaie.LiaisonComptaC;
 
@@ -170,6 +172,7 @@ public class LiaisonComptaDAO implements Serializable {
 			stmt = con.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
+				
 				b = new Base();
 				b.setCode(rs.getString("reference"));
 				b.setDesignation(rs.getString("libelle"));
@@ -195,7 +198,42 @@ public class LiaisonComptaDAO implements Serializable {
 		}
 		return b;
 	}
-	
+	public Base getExercice(String code) {
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Base b = null;
+		String sql = "SELECT * FROM tb_exercice WHERE reference='" + code + "'";
+
+		try {
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				b = new Base();
+				b.setCode(rs.getString("reference"));
+				b.setDesignation(rs.getString("libelle"));
+
+			}
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+
+		}
+		return b;
+	}
 	public boolean insertEcriture(List<EcritureComptableC> listEcriture) {
 		boolean saved = false;
 		PreparedStatement pstmt = null;
@@ -215,7 +253,7 @@ public class LiaisonComptaDAO implements Serializable {
 				pstmt.setString(5, ecriture.getLibelle());
 				pstmt.setString(6, ecriture.getPiece());
 				pstmt.setDouble(7, ecriture.getDebit());
-				pstmt.setDouble(7, ecriture.getCredit());
+				pstmt.setDouble(8, ecriture.getCredit());
 
 				pstmt.addBatch();
 			}
@@ -237,5 +275,89 @@ public class LiaisonComptaDAO implements Serializable {
 		}
 
 		return saved;
+	}
+	
+	public boolean insertPaie(List<BulletinPaieC> listPaie) {
+		boolean saved = false;
+		PreparedStatement pstmt = null;
+		String sqlRequest = "";
+
+		sqlRequest = "INSERT INTO tb_depense (cours,date_operation,exercice,libelle,montant,num_piece,taux,centre_cout,"
+				+ "type_charge,devise,fournisseur,taxe,type_depense,mode_reglement) VALUES (?,?,?,?,?,?,?,?)";
+
+		try {
+			pstmt = con.prepareStatement(sqlRequest);
+			
+			for (BulletinPaieC bulletin : listPaie) {
+
+				pstmt.setObject(1, 1);
+				pstmt.setObject(2, bulletin.getDatePaie());
+				pstmt.setInt(3, bulletin.getIdExercice());
+				pstmt.setString(4, bulletin.getCommentaire());				
+				pstmt.setDouble(5, bulletin.getTotalNetPay());
+				pstmt.setString(6, bulletin.getMoisPrint());
+
+				pstmt.addBatch();
+				
+				for (BulletinCotisationC bCot : bulletin.getListeCotisation()) {
+					
+				}
+			}
+ 
+			pstmt.executeBatch();
+			saved = true;
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+		} finally {
+
+			try {
+				pstmt.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+		}
+
+		return saved;
+	}
+	
+	private Base getEmploye(String code,Connection conx) {
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Base b = null;
+		String sql = "SELECT * FROM tb_partenaire WHERE reference='" + code + "'";
+
+		try {
+			stmt = conx.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				
+				b = new Base();
+				b.setCode(rs.getString("reference"));
+				b.setDesignation(rs.getString("libelle"));
+
+			}
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			}
+
+		}
+		return b;
 	}
 }

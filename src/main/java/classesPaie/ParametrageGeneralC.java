@@ -18,7 +18,8 @@ public class ParametrageGeneralC implements Serializable {
 	private boolean allocationBaseHsup;
 	private boolean logementBaseHsup;
 	private String mailOrigine, pwdOrigine, smtpServer, port;
-
+	private String compteCharge,compteSalaire,compteAvance;
+	
 	public int getId() {
 		return this.id;
 	}
@@ -153,6 +154,30 @@ public class ParametrageGeneralC implements Serializable {
 
 	public void setPort(String port) {
 		this.port = port;
+	}
+
+	public String getCompteCharge() {
+		return compteCharge;
+	}
+
+	public void setCompteCharge(String compteCharge) {
+		this.compteCharge = compteCharge;
+	}
+
+	public String getCompteSalaire() {
+		return compteSalaire;
+	}
+
+	public void setCompteSalaire(String compteSalaire) {
+		this.compteSalaire = compteSalaire;
+	}
+
+	public String getCompteAvance() {
+		return compteAvance;
+	}
+
+	public void setCompteAvance(String compteAvance) {
+		this.compteAvance = compteAvance;
 	}
 
 }

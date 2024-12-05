@@ -42,11 +42,11 @@
 							</p:inputText>
 
 							<p:inputText id="txtNom"
-								value="#{demandeProlongationRetraiteB.employe.nomPrenom}"
+								value="#{demandeProlongationRetraiteB.emplName}"
 								readonly="true" />
 						
 							<p:commandButton oncomplete="PF('dlg').show()" style="border-radius:10px" icon="fa fa-search"/>
-			
+							
 						</p:panelGrid>
 						<p:panelGrid columns="4"
 							columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3,"
@@ -177,7 +177,7 @@
 									paginator="true" paginatorAlwaysVisible="false"
 									paginatorPosition="bottom" rows="10">
 									<p:ajax event="rowDblselect"
-										listener="#{demandeProlongationRetraiteB.onRowselected1}" update=":frmPrl" />
+										listener="#{demandeProlongationRetraiteB.onEmployeSelected}" update=":frmPrl" />
 
 									<p:column headerText="Matricule" width="20%">
 										<h:outputText value="#{empl.code}" />

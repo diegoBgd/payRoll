@@ -11,7 +11,7 @@ public class EcritureComptableC implements Serializable{
 	private static final long serialVersionUID = 3592437138310981113L;
 
 	private Date dateEcriture;
-	private String libelle,piece,compte,codeJournal;
+	private String libelle,piece,compte,codeJournal,printDate,printDeb,printCrd;
 	private int idExercice;
 	private double debit,credit;
 	public Date getDateEcriture() {
@@ -61,6 +61,27 @@ public class EcritureComptableC implements Serializable{
 	}
 	public void setCredit(double credit) {
 		this.credit = credit;
+	}
+	public String getPrintDate() {
+		printDate=HelperC.convertDate(getDateEcriture());
+		return printDate;
+	}
+	public void setPrintDate(String printDate) {
+		this.printDate = printDate;
+	}
+	public String getPrintDeb() {
+		printDeb=HelperC.decimalNumber(getDebit(), 0, true);
+		return printDeb;
+	}
+	public void setPrintDeb(String printDeb) {
+		this.printDeb = printDeb;
+	}
+	public String getPrintCrd() {
+		printCrd=HelperC.decimalNumber(getCredit(), 0, true);
+		return printCrd;
+	}
+	public void setPrintCrd(String printCrd) {
+		this.printCrd = printCrd;
 	}
 	
 }

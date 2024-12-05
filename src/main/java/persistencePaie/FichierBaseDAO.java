@@ -780,7 +780,7 @@ public class FichierBaseDAO implements Serializable {
 		op.setCodeSecret(rs.getString("pwd"));
 		op.setIdEmploye(rs.getInt("id_employe"));
 		op.setActif(rs.getBoolean("actif"));
-
+        op.setEmploye(FactoryDAO.getInstance().getEmployeSimple(op.getIdEmploye()));
 		return op;
 	}
 
@@ -937,6 +937,31 @@ public class FichierBaseDAO implements Serializable {
 		}
 
 		return oper;
+	}
+
+	public List<OperateurC> getListOperateur() {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		List<OperateurC> listOp=new ArrayList<OperateurC>();
+		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.operateur);
+
+		try {
+			stmt = con.prepareStatement(sql);
+		
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				listOp.add(setOperateur(rs));
+
+			}
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+		} finally {
+
+			releaseResource(stmt, rs);
+		}
+
+		return listOp;
 	}
 
 	public boolean searchUserExist() {
@@ -1754,7 +1779,8 @@ public class FichierBaseDAO implements Serializable {
 				+ " (id,nbr_decimal,taux_max_logement,logement_inclut_hsup,allocation_inclut_hsup,"
 				+ "dure_cour_terme,dure_moyen_terme,dure_long_terme,montant_net_min,nombre_heure_jour,"
 				+ "nombre_heure_mois,nombre_jour_mois,taux_jour_ferie,mail_source,pwd_source,"
-				+ "serveur_smtp,server_port) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+				+ "serveur_smtp,server_port,compte_charge,compte_paie,compte_avance) VALUES "
+				+ "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
 		try {
 			stmt = con.prepareStatement(sql);
@@ -1776,6 +1802,9 @@ public class FichierBaseDAO implements Serializable {
 			stmt.setString(16, parametrage.getSmtpServer());
 			stmt.setString(17, parametrage.getPort());
 
+			stmt.setString(18, parametrage.getCompteCharge());			
+			stmt.setString(19, parametrage.getCompteSalaire());
+			stmt.setString(20, parametrage.getCompteAvance());
 			stmt.execute();
 			saved = true;
 
@@ -1796,7 +1825,7 @@ public class FichierBaseDAO implements Serializable {
 				+ " SET nbr_decimal=?,taux_max_logement=?,logement_inclut_hsup=?,allocation_inclut_hsup=?,"
 				+ "dure_cour_terme=?,dure_moyen_terme=?,dure_long_terme=?,montant_net_min=?,nombre_heure_jour=?,"
 				+ "nombre_heure_mois=?,nombre_jour_mois=?,taux_jour_ferie=?,mail_source=?,pwd_source=?,"
-				+ "serveur_smtp=?,server_port=? WHERE id=? ";
+				+ "serveur_smtp=?,server_port=?,compte_charge=?,compte_paie=?,compte_avance=? WHERE id=? ";
 
 		try {
 			stmt = con.prepareStatement(sql);
@@ -1817,7 +1846,11 @@ public class FichierBaseDAO implements Serializable {
 			stmt.setString(15, parametrage.getSmtpServer());
 			stmt.setString(16, parametrage.getPort());
 
-			stmt.setInt(17, parametrage.getId());
+			stmt.setString(17, parametrage.getCompteCharge());			
+			stmt.setString(18, parametrage.getCompteSalaire());
+			stmt.setString(19, parametrage.getCompteAvance());
+			
+			stmt.setInt(20, parametrage.getId());
 			stmt.execute();
 			saved = true;
 
@@ -1851,6 +1884,12 @@ public class FichierBaseDAO implements Serializable {
 		prm.setSmtpServer(rs.getString("serveur_smtp"));
 		prm.setPort(rs.getString("server_port"));
 
+		if (rs.getObject("compte_avance") != null)
+			prm.setCompteAvance(rs.getString("compte_avance"));
+		if (rs.getObject("compte_charge") != null)
+			prm.setCompteCharge(rs.getString("compte_charge"));
+		if (rs.getObject("compte_paie") != null)
+			prm.setCompteSalaire(rs.getString("compte_paie"));
 		return prm;
 	}
 
@@ -4038,7 +4077,11 @@ public class FichierBaseDAO implements Serializable {
 		cotisation.setId(rs.getInt("id"));
 		cotisation.setCode(rs.getString("code"));
 		cotisation.setDesignation(rs.getString("designation"));
+		if(rs.getObject("id_organisme")!=null)
+		{
 		cotisation.setIdOrganisme(rs.getInt("id_organisme"));
+		cotisation.setOrganisme(getOrganismeSupportantBaseSalariale(cotisation.getIdOrganisme()));
+		}
 		cotisation.setTypeBaremme(rs.getInt("type_bareme"));
 		cotisation.setHide(rs.getBoolean("desactive"));
 		cotisation.setObligatoire(rs.getBoolean("obligatoire"));
@@ -4048,6 +4091,7 @@ public class FichierBaseDAO implements Serializable {
 		cotisation.setChargePtronal(rs.getString("charge_patronal"));
 		cotisation.setChargeSalarial(rs.getString("charge_salarial"));
 		cotisation.setTypeElement(rs.getInt("type_element"));
+		
 		return cotisation;
 	}
 
@@ -14069,8 +14113,9 @@ public class FichierBaseDAO implements Serializable {
 		ParametrageFinCarriereC parametrage = null;
 
 		String sql = "SELECT * FROM " + Tables.getTableName(Tables.TableName.parametrageFinCarriere)
-				+ " WHERE id_personnel=" + idPrs;
-
+				+ " WHERE 1=1";
+		if (idPrs > 0)
+			sql += " AND id_personnel=" + idPrs;
 		try {
 			stmt = con.createStatement();
 

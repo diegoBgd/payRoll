@@ -93,7 +93,61 @@
 						</p:panelGrid>
 					</div>
 				</div>
-				
+
+				<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
+					<div class="card">
+						
+						<p:panelGrid id="pnl5" columns="4"
+							columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-6,ui-grid-col-1"
+							layout="grid" styleClass="ui-panelgrid-blank"
+							style="border:0px none; background-color:transparent;">
+							
+							<p:outputLabel value="Compte charge salrial" />
+								<p:inputText id="txtcptCh" value="#{parametrageGeneralB.cpteChrg}"
+									autocomplete="off">
+									<p:ajax event="blur" listener="#{parametrageGeneralB.searchCompteChrg()}"
+										update="txtLiblCptCh" />
+								</p:inputText>
+								<p:inputText id="txtLiblCptCh" value="#{parametrageGeneralB.libelleChrg}"
+									readonly="true" />
+
+								<p:commandButton icon="fa fa-search" style="border-radius:10px"
+									onclick="PF('dlgCptChrg').show();"
+									action="#{parametrageGeneralB.chargerCompteChrg()}" update="frmCptCh:tblCptCh" />
+									
+							
+							<p:outputLabel value="Compte personnel" />
+								<p:inputText id="txtcptPy" value="#{parametrageGeneralB.cpteSal}"
+									autocomplete="off">
+									<p:ajax event="blur" listener="#{parametrageGeneralB.searchComptePaie()}"
+										update="txtLiblCptPy" />
+								</p:inputText>
+								<p:inputText id="txtLiblCptPy" value="#{parametrageGeneralB.libelleSal}"
+									readonly="true" />
+
+								<p:commandButton icon="fa fa-search" style="border-radius:10px"
+									onclick="PF('dlgCptPy').show();"
+									action="#{parametrageGeneralB.chargerComptePaie()}" update="frmCptPy:tblCptPy" />
+									
+								<p:outputLabel value="Compte avance" />
+								<p:inputText id="txtcptAv" value="#{parametrageGeneralB.cpteAvc}"
+									autocomplete="off">
+									<p:ajax event="blur" listener="#{parametrageGeneralB.searchCompteAvc()}"
+										update="txtLiblCptAv" />
+								</p:inputText>
+								<p:inputText id="txtLiblCptAv" value="#{parametrageGeneralB.libelleAvc}"
+									readonly="true" />
+
+								<p:commandButton icon="fa fa-search" style="border-radius:10px"
+									onclick="PF('dlgCptAv').show();"
+									action="#{parametrageGeneralB.chargerCompteAvc()}" update="frmCptPy:tblCptPy" />
+
+							
+						</p:panelGrid>
+						
+					</div>
+				</div>
+
 				<div class="ui-g-12 ui-md-12 ui-fluid contact-form">
 					<div class="card">
 						<div class="ui-g">
@@ -130,6 +184,121 @@
 						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 				</p:confirmDialog>
 			</h:form> 
+			<p:dialog widgetVar="dlgCptChrg" header="Plan comptable" height="40%"
+				width="70%" responsive="true" position="center">
+				<h:form id="frmCptCh">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+
+										<p:dataTable id="tblCptCh" value="#{parametrageGeneralB.listCpteChrg}"
+											var="cpt" selectionMode="single"
+											selection="#{parametrageGeneralB.selectedCpteCharge}" rowKey="#{cpt.code}"
+											reflow="true" scrollable="true" scrollHeight="250">
+
+											<p:ajax event="rowSelect"
+												listener="#{parametrageGeneralB.takeSelectedCompteChrg()}"
+												update=":frm:txtLiblCptCh,:frm:txtcptCh" />
+
+											<p:column headerText="Compte" filterBy="#{cpt.code}" width="10%">
+												<h:outputText value="#{cpt.code}" />
+											</p:column>
+
+											<p:column headerText="Libellé" filterBy="#{cpt.designation}">
+												<h:outputText value="#{cpt.designation}" />
+											</p:column>
+
+										</p:dataTable>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</h:form>
+			</p:dialog>
+			<p:dialog widgetVar="dlgCptPy" header="Plan comptable" height="40%"
+				width="70%" responsive="true" position="center">
+				<h:form id="frmCptPy">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+
+										<p:dataTable id="tblCptPy" value="#{parametrageGeneralB.listCptePaie}"
+											var="cpt" selectionMode="single"
+											selection="#{parametrageGeneralB.selectedCpteSalaire}" rowKey="#{cpt.code}"
+											reflow="true" scrollable="true" scrollHeight="250">
+
+											<p:ajax event="rowSelect"
+												listener="#{parametrageGeneralB.takeSelectedCompteSal()}"
+												update=":frm:txtLiblCptPy,:frm:txtcptPy" />
+
+											<p:column headerText="Compte" filterBy="#{cpt.code}" width="10%">
+												<h:outputText value="#{cpt.code}" />
+											</p:column>
+
+											<p:column headerText="Libellé" filterBy="#{cpt.designation}">
+												<h:outputText value="#{cpt.designation}" />
+											</p:column>
+
+										</p:dataTable>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</h:form>
+			</p:dialog>
+			
+			<p:dialog widgetVar="dlgCptAv" header="Plan comptable" height="40%"
+				width="70%" responsive="true" position="center">
+				<h:form id="frmCptAv">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-6 ui-lg-12 ui-fluid contact-form">
+							<div class="card">
+
+
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-12">
+
+										<p:dataTable id="tblCptAv" value="#{parametrageGeneralB.listCpteAvc}"
+											var="cpt" selectionMode="single"
+											selection="#{parametrageGeneralB.selectedCpteAvance}" rowKey="#{cpt.code}"
+											reflow="true" scrollable="true" scrollHeight="250">
+
+											<p:ajax event="rowSelect"
+												listener="#{parametrageGeneralB.takeSelectedCompteAvc()}"
+												update=":frm:txtLiblCptAv,:frm:txtcptAv" />
+
+											<p:column headerText="Compte" filterBy="#{cpt.code}" width="10%">
+												<h:outputText value="#{cpt.code}" />
+											</p:column>
+
+											<p:column headerText="Libellé" filterBy="#{cpt.designation}">
+												<h:outputText value="#{cpt.designation}" />
+											</p:column>
+
+										</p:dataTable>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</h:form>
+			</p:dialog>
 	</ui:define>
 
 </ui:composition>

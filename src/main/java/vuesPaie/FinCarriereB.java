@@ -824,38 +824,40 @@ private void completeEmploye(){
    }
  
    
-   public void save() {
-     if (getEmploye() == null) {
-       HelperC.afficherMessage("Information", "Veillez saisir l'employé");
-     } else {
-       
-       Historique hist = new Historique();
-       hist.setDateOperation(Calendar.getInstance().getTime());
-       hist.setOperateur(this.operateur);
-       if (getId() == 0) {
-         hist.setOperation("Création de la fin de carrière pour l'employé" + getEmploye().getNom() + " " + getEmploye().getPrenom());
-       } else {
-         hist.setOperation("Modification de la fin de carriére pour l'employé" + getEmploye().getNom() + " " + getEmploye().getPrenom());
-       }  hist.setTable(Tables.getTableName(Tables.TableName.finCarriere));
-       setHistorique(hist);
- 
-       if(getDateSalaire()!=null) {
-	                getTraitementAvant().setDateDebut(getDateSalaire());
-	                if(parametre!=null)
-						getTraitementApres().setDateDebut(HelperC.addMonth(getDateSalaire(), parametre.getPeriodeSalire()));
-       if (FactoryDAO.getInstance().insertUpdateFinCarriere(this)) {
-         HelperC.afficherMessage("Félicitation", "Enregistrement avec Succès");
-         
-         clear(true);
-       } else {
-         
-         HelperC.afficherAttention("Désolé", "Echec d'enregistrement");
-       } 
+	public void save() {
+		if (getEmploye() == null) {
+			HelperC.afficherMessage("Information", "Veillez saisir l'employé");
+		} else {
+
+			Historique hist = new Historique();
+			hist.setDateOperation(Calendar.getInstance().getTime());
+			hist.setOperateur(this.operateur);
+			if (getId() == 0) {
+				hist.setOperation("Création de la fin de carrière pour l'employé" + getEmploye().getNom() + " "
+						+ getEmploye().getPrenom());
+			} else {
+				hist.setOperation("Modification de la fin de carriére pour l'employé" + getEmploye().getNom() + " "
+						+ getEmploye().getPrenom());
+			}
+			hist.setTable(Tables.getTableName(Tables.TableName.finCarriere));
+			setHistorique(hist);
+
+			if (getDateSalaire() != null) {
+				getTraitementAvant().setDateDebut(getDateSalaire());
+				if (parametre != null)
+					getTraitementApres().setDateDebut(HelperC.addMonth(getDateSalaire(), parametre.getPeriodeSalire()));
+				if (FactoryDAO.getInstance().insertUpdateFinCarriere(this)) {
+					HelperC.afficherMessage("Félicitation", "Enregistrement avec Succès");
+
+					clear(true);
+				} else {
+
+					HelperC.afficherAttention("Désolé", "Echec d'enregistrement");
 				}
-				else
-					 HelperC.afficherAttention("Attention", "Il faut préciser la date du premier salaire");
-     } 
-   }
+			} else
+				HelperC.afficherAttention("Attention", "Il faut préciser la date du premier salaire");
+		}
+	}
    
    public void delete() {
      if (this.selected != null) {

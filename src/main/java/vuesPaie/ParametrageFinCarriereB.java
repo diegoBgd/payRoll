@@ -261,7 +261,7 @@ public class ParametrageFinCarriereB extends ParametrageFinCarriereC {
 	}
 
 	public void changeGrade(ValueChangeEvent event) {
-		this.idGrade = ((Integer) event.getNewValue()).intValue();
+		idGrade = ((Integer) event.getNewValue()).intValue();
 		if (this.idGrade >0) {
 			setDernierGrade(FichierBaseDAO.getInstance().getGradePersonnel(this.idGrade));
 

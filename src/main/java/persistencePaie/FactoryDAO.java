@@ -5907,7 +5907,8 @@ public class FactoryDAO implements Serializable {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sqlRequest = "SELECT " + Tables.getTableName(Tables.TableName.bulletinPaieCotisation) + ".*,SUM("
-				+ Tables.getTableName(Tables.TableName.bulletinPaieCotisation) + ".montant_salarial)  AS sum_salarial "
+				+ Tables.getTableName(Tables.TableName.bulletinPaieCotisation) + ".montant_salarial)  AS sum_salarial, "
+				+ "SUM("+Tables.getTableName(Tables.TableName.bulletinPaieCotisation) + ".montant_patronal)  AS sum_patronal "
 				+ "FROM " + Tables.getTableName(Tables.TableName.bulletinPaieCotisation) + " LEFT JOIN "
 				+ Tables.getTableName(Tables.TableName.bulletinPaie) + " ON "
 				+ Tables.getTableName(Tables.TableName.bulletinPaie) + ".id="
@@ -5915,6 +5916,7 @@ public class FactoryDAO implements Serializable {
 				+ Tables.getTableName(Tables.TableName.bulletinPaie) + ".id_exercice=" + idExercice + " AND "
 				+ Tables.getTableName(Tables.TableName.bulletinPaie) + ".mois_paie=" + mois;
 		sqlRequest = String.valueOf(sqlRequest) + " GROUP BY id_cotisation";
+
 
 		try {
 			pstmt = con.prepareStatement(sqlRequest);
@@ -5925,9 +5927,10 @@ public class FactoryDAO implements Serializable {
 				cotBulletin.setId(rs.getInt("id"));
 				if (rs.getObject("id_cotisation") != null) {
 					cotBulletin.setIdCotisation(rs.getInt("id_cotisation"));
+					cotBulletin.setCotisation(FichierBaseDAO.getInstance().getCotisation(cotBulletin.getIdCotisation()));
 				}
 				cotBulletin.setMontantBase(rs.getDouble("montant_base"));
-				cotBulletin.setMontantPatronal(rs.getDouble("montant_patronal"));
+				cotBulletin.setMontantPatronal(rs.getDouble("sum_patronal"));
 				cotBulletin.setMontantCotisation(rs.getDouble("sum_salarial"));
 				cotBulletin.setTauxPatronal(rs.getDouble("taux_patronal"));
 				cotBulletin.setTauxSalarial(rs.getDouble("taux_salarial"));
@@ -6575,6 +6578,7 @@ public class FactoryDAO implements Serializable {
 			prmBulletin.setIdPrime(rs.getInt("id_prime"));
 		}
 		prmBulletin.setMontantPrime(rs.getDouble("montant"));
+		
 		if (prmBulletin.getIdPrime() > 0) {
 
 			prmBulletin.setPrimeBulletin(FichierBaseDAO.getInstance().getPrimeIndemnite(prmBulletin.getIdPrime()));
@@ -6616,6 +6620,7 @@ public class FactoryDAO implements Serializable {
 		List<BulletinPrimeC> listPrime = new ArrayList<BulletinPrimeC>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		
 		String sqlRequest = "SELECT " + Tables.getTableName(Tables.TableName.bulletinPaiePrime) + ".id, "
 				+ Tables.getTableName(Tables.TableName.bulletinPaiePrime) + ".id_prime, " + "SUM("
 				+ Tables.getTableName(Tables.TableName.bulletinPaiePrime) + ".montant) AS montant FROM "
@@ -6632,7 +6637,22 @@ public class FactoryDAO implements Serializable {
 			pstmt = con.prepareStatement(sqlRequest);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				listPrime.add(setBulletinPrime(rs));
+				
+				BulletinPrimeC prmBulletin = new BulletinPrimeC();
+				prmBulletin.setId(rs.getInt("id"));
+				
+				if (rs.getObject("id_prime") != null) {
+					prmBulletin.setIdPrime(rs.getInt("id_prime"));
+				}
+				
+				prmBulletin.setMontantPrime(rs.getDouble("montant"));
+				
+				if (prmBulletin.getIdPrime() > 0) {
+
+					prmBulletin.setPrimeBulletin(FichierBaseDAO.getInstance().getPrimeIndemnite(prmBulletin.getIdPrime()));
+					prmBulletin.setCodePrime(prmBulletin.getPrimeBulletin().getCode());
+				}
+				listPrime.add(prmBulletin);
 
 			}
 		} catch (SQLException e) {

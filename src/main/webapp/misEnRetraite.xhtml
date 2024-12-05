@@ -18,14 +18,14 @@
 					<div class="card">
 							<div class="ui-g">
 
-								<div class="ui-g-12 ui-md-6">
+								<div class="ui-g-12 ui-md-3">
 									<p:commandButton value="Retraites encours" icon="fa fa-search"
-										onclick="PF('dlgEmpRt').show();" />
+										style="border-radius:10px" onclick="PF('dlgEmpRt').show();" />
 								</div>
 								
-								<div class="ui-g-12 ui-md-6">
+								<div class="ui-g-12 ui-md-3">
 									<p:commandButton value="Liste des retraites déjà traitées" icon="fa fa-search"
-										onclick="PF('dlgRetr').show();" />
+									style="border-radius:10px"	onclick="PF('dlgRetr').show();" />
 								</div>
 							</div>
 						</div> 
@@ -98,14 +98,14 @@
 					
 						
 					<div class="ui-g card">
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnSave" icon="ui-icon ui-icon-disk"
-								value="Enregistrer"
+								value="Enregistrer" style="border-radius:10px"
 								action="#{finCarriereB.save()}" update=":frm" />
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnDelete" icon="ui-icon ui-icon-trash"
-								value="Annuler"
+								value="Annuler" style="border-radius:10px"
 								action="#{finCarriereB.delete()}" update=":frm"
 								styleClass="orange-btn">
 								
@@ -114,9 +114,9 @@
 												icon="ui-icon-alert" />
 							</p:commandButton>
 						</div>
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<p:commandButton id="btnAnnuler" icon="ui-icon ui-icon-refresh"
-								value="Initialiser"
+								value="Initialiser" style="border-radius:10px"
 								action="#{finCarriereB.initialiser()}" update=":frm" />
 						</div>
 

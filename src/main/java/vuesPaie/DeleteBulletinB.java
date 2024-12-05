@@ -41,6 +41,7 @@ import java.io.IOException;
    private ExerciceC exercice;
    private HttpSession session = HelperC.getSession();
    private String infoMsg;
+   private int mois;
    
    private DroitC droit;
    
@@ -112,6 +113,16 @@ public void setInfoMsg(String infoMsg) {
 }
 
 
+public int getMois() {
+	return mois;
+}
+
+
+public void setMois(int mois) {
+	this.mois = mois;
+}
+
+
 @PostConstruct
    private void init() {
      String codeOperateur = (String)this.session.getAttribute("operateur");
@@ -177,41 +188,58 @@ public void setInfoMsg(String infoMsg) {
  
    
    private void chargementBulletin() {
-     this.listeBulletin = FactoryDAO.getInstance().getListBulletinPaie(0, this.dateDebut, this.dateFin, this.exercice.getId());
+ 
+     this.listeBulletin = FactoryDAO.getInstance().getListBulletinPaie(0,mois, this.exercice.getId());
    }
  
  
    
-   public void delete() throws InterruptedException {
-     if (this.droit != null && this.droit.isSupprimer()) {
-    	Historique hist=null;
-       chargementBulletin();
-       if (this.listeBulletin.size() > 0) {
-         
-         int i = 0;
-         this.progressValue = 0;
-         
-         for (BulletinPaieC bulletin : this.listeBulletin) {
-           
-        	   hist=new Historique();
-				 hist.setDateOperation(new Date());
-				 hist.setOperateur(operateur);
-				 hist.setTable(Tables.getTableName(Tables.TableName.bulletinPaie));							
-				 hist.setOperation("Suppression de la paie de "+bulletin.getNomEmploye() +" pour le mois de "+HelperC.getMoisEnTouteLettre(bulletin.getMois())+" : Net ="+HelperC.decimalNumber(bulletin.getTotalNetPay(), 0, true));
-				 bulletin.setHistory(hist);
-				
-           FactoryDAO.getInstance().deleteBulletinPaie(bulletin);
-           i++;
-           this.progressValue = i * 100 / this.listeBulletin.size();
-           Thread.sleep(60L);
-         } 
-       } 
-       
-       HelperC.afficherMessage("Information", "Opération terminée !");
-     } 
-     else
-    	 HelperC.afficherAttention("Information", "Vous n'avez pas le droit de supprimer");
-   }
+	public void delete() throws InterruptedException {
+
+		if (this.droit == null )
+		{
+			HelperC.afficherAttention("Information", "Il faut paramétrer les droits d'accès");
+			return;
+		}
+			if(!this.droit.isSupprimer()) 
+			{
+				HelperC.afficherAttention("Information", "Vous n'avez pas le droit de supprimer");
+				return;
+			}
+			if (mois > 0) {
+				chargementBulletin();
+				Historique hist = null;
+				if (this.listeBulletin.size() > 0) {
+
+					int i = 0;
+					this.progressValue = 0;
+
+					for (BulletinPaieC bulletin : this.listeBulletin) {
+
+						hist = new Historique();
+						hist.setDateOperation(new Date());
+						hist.setOperateur(operateur);
+						hist.setTable(Tables.getTableName(Tables.TableName.bulletinPaie));
+						hist.setOperation("Suppression de la paie de " + bulletin.getNomEmploye() + " pour le mois de "
+								+ HelperC.getMoisEnTouteLettre(bulletin.getMois()) + " : Net ="
+								+ HelperC.decimalNumber(bulletin.getTotalNetPay(), 0, true));
+						bulletin.setHistory(hist);
+
+						FactoryDAO.getInstance().deleteBulletinPaie(bulletin);
+						i++;
+						this.progressValue = i * 100 / this.listeBulletin.size();
+						Thread.sleep(60L);
+					}
+					HelperC.afficherMessage("Information", "Opération terminée !");
+				}
+				else
+					HelperC.afficherAttention("Information", "Aucune information à supprimer");
+			} else
+				HelperC.afficherAttention("Information", "Il faut préciser le mois ");
+
+	
+			
+	}
  }
 
 

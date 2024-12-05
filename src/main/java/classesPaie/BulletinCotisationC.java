@@ -17,6 +17,7 @@ public class BulletinCotisationC implements Serializable {
 	private double tauxPatronal;
 	private String codeCotisation;
 	private String printSalarial;
+	private String printBase;
 	private String printPatronal;
 	private String libelleCotisation;
 	private CotisationC cotisation;
@@ -162,4 +163,15 @@ public class BulletinCotisationC implements Serializable {
 	public void setTypeCotisation(int typeCotisation) {
 		this.typeCotisation = typeCotisation;
 	}
+
+	public String getPrintBase() {
+		
+		printBase= HelperC.decimalNumber(getMontantBase(), 0, true);
+		return printBase;
+	}
+
+	public void setPrintBase(String printBase) {
+		this.printBase = printBase;
+	}
+	
 }

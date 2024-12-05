@@ -541,12 +541,15 @@
 													<p:column headerText="Libellé" width="40%">
 														<h:outputText value="#{cot.libelleCotisation}" />
 													</p:column>
-
-													<p:column headerText="Salarial" width="20%"
+													<p:column headerText="Base" width="15%"
+														style="text-align:right">
+														<h:outputText value="#{cot.printBase}" />
+													</p:column>
+													<p:column headerText="Salarial" width="15%"
 														style="text-align:right">
 														<h:outputText value="#{cot.printSalarial}" />
 													</p:column>
-													<p:column headerText="Patronal" width="20%"
+													<p:column headerText="Patronal" width="15%"
 														style="text-align:right">
 														<h:outputText value="#{cot.printPatronal}" />
 													</p:column>

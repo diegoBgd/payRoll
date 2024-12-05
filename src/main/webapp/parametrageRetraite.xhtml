@@ -29,8 +29,8 @@
 					<div class="card">
 
 
-						<p:panelGrid id="pnl2" columns="4"
-							columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2"
+						<p:panelGrid id="pnl2" columns="2"
+							columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2"
 							layout="grid" styleClass="ui-panelgrid-blank"
 							style="border:0px none; background-color:transparent;">
 
@@ -44,11 +44,7 @@
 								<p:ajax event="itemSelect" update="txtCat,txtPers" />
 							</p:selectOneMenu>
 
-							<h:outputLabel value="Période de prolongation de travail (ans)" />
-							<p:inputNumber
-								value="#{parametrageFinCarriereB.periodeProlongation}"
-								inputStyle="text-align:right" decimalPlaces="0" />
-
+							
 							<h:outputLabel value="Catégorie" />
 							<p:selectOneMenu id="txtCat"
 								value="#{parametrageFinCarriereB.idCategorie}"
@@ -56,12 +52,7 @@
 								<f:selectItem itemLabel=" " itemValue="0" />
 								<f:selectItems value="#{parametrageFinCarriereB.listCagtorie}" />
 								<p:ajax event="change" update="txtCat,txtGrd" />
-							</p:selectOneMenu>
-
-							<h:outputLabel
-								value="Période à percevoir l'entiereté du salaire (mois) " />
-							<p:inputNumber value="#{parametrageFinCarriereB.periodeSalire}"
-								inputStyle="text-align:right" decimalPlaces="0" />
+							</p:selectOneMenu>							
 
 							<h:outputLabel value="Grade" />
 							<p:selectOneMenu id="txtGrd"
@@ -72,18 +63,17 @@
 								<p:ajax event="change" update="txtGrd" />
 							</p:selectOneMenu>
 
-							<h:outputLabel
-								value="Pourcentage de salaire après la période précédente " />
+							<h:outputLabel value="Période de prolongation de travail (ans)" />
 							<p:inputNumber
-								value="#{parametrageFinCarriereB.pourcentageSalaire}"
-								inputStyle="text-align:right" />
+								value="#{parametrageFinCarriereB.periodeProlongation}"
+								inputStyle="text-align:right" decimalPlaces="0" />
 
 							<h:outputLabel value="Age de la retraite" />
 							<p:inputNumber value="#{parametrageFinCarriereB.ageRetraite}"
 								inputStyle="text-align:right" decimalPlaces="0" />
 
 							<h:outputLabel
-								value="Anciennete à laquelle la retraite peut être anticipée (ans)" />
+								value="Age à laquelle la retraite peut être anticipée (ans)" />
 							<p:inputNumber value="#{parametrageFinCarriereB.periodeAnticipe}"
 								inputStyle="text-align:right" decimalPlaces="0" />
 

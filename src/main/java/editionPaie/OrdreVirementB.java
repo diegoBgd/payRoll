@@ -222,7 +222,7 @@ public class OrdreVirementB implements Serializable {
 		if (getDatePaie() != null) {
 			ovData();
 		} else {
-			HelperC.afficherMessage("Information", "Il faut prÃ©ciser la date paie");
+			HelperC.afficherMessage("Information", "Il faut préciser la date paie");
 		}
 	}
 
@@ -303,12 +303,12 @@ public class OrdreVirementB implements Serializable {
 		table.addCell(cell);
 
 		p = new Paragraph();
-		p.add(new Chunk("RÃ©f:SVG/MBR/......./ "+HelperC.getYearFromDate(datePaie), FontFactory.getFont("Verdana", 8F, 0)));
+		p.add(new Chunk("Réf:SVG/MBR/......./ "+HelperC.getYearFromDate(datePaie), FontFactory.getFont("Verdana", 8F, 0)));
 		cell = HelperItext.getCellule(p, 1, 0, 0, 0, 0.5F, 3F);
 		table.addCell(cell);
 
 		p = new Paragraph();
-		p.add(new Chunk("A Monsieur l'Administrateur Directeur GÃ©nÃ©ral", FontFactory.getFont("Verdana", 8F, 1)));
+		p.add(new Chunk("A Monsieur l'Administrateur Directeur Général", FontFactory.getFont("Verdana", 8F, 1)));
 		p.add(new Chunk("\nÃ ", FontFactory.getFont("Times", 8F, 1)));
 		p.add(new Chunk("\nBUJUMBURA", FontFactory.getFont("Verdana", 8F, 1)));
 		p.setAlignment(1);
@@ -323,7 +323,7 @@ public class OrdreVirementB implements Serializable {
 
 		p = new Paragraph();
 		p.add((new Chunk("Objet : ", FontFactory.getFont("Verdana", 9F, 1))).setUnderline(1.0F, -2F));
-		p.add(new Chunk("Transfert de compte Ã  compte\n\n", FontFactory.getFont("Verdana", 9F, 1)));
+		p.add(new Chunk("Transfert de compte à  compte\n\n", FontFactory.getFont("Verdana", 9F, 1)));
 		cell = HelperItext.getCellule(p, 1, 0, 0, 2, 0.5F, 3F);
 		table.addCell(cell);
 
@@ -334,12 +334,12 @@ public class OrdreVirementB implements Serializable {
 		table.addCell(cell);
 
 		p = new Paragraph();
-		p.add(new Chunk("Monsieur l'Administrateur Directeur GÃ©nÃ©ral,\n\n ", FontFactory.getFont("Verdana", 9F, 0)));
-		p.add(new Chunk("Par le dÃ©bitt de notre compte BIF NÂ° ",FontFactory.getFont("Verdana", 9F, 0)));
+		p.add(new Chunk("Monsieur l'Administrateur Directeur Général,\n\n ", FontFactory.getFont("Verdana", 9F, 0)));
+		p.add(new Chunk("Par le débitt de notre compte BIF N° ",FontFactory.getFont("Verdana", 9F, 0)));
 		
 		p.add(new Chunk(compteSociete, FontFactory.getFont("Verdana", 9F, 1)));
 		
-		p.add(new Chunk(" nous vous prions de bien vouloir crÃ©diter les comptes de nos employÃ©s conformement aux listes annexes, pour un montant total de : ", FontFactory.getFont("Verdana", 9F, 0)));
+		p.add(new Chunk(" nous vous prions de bien vouloir créditer les comptes de nos employés conformement aux listes annexes, pour un montant total de : ", FontFactory.getFont("Verdana", 9F, 0)));
 		
 		p.add(new Chunk(HelperC.TraitementMontant.getMontantEnLettre (totalVrt), FontFactory.getFont("Verdana", 9F, 1)));
 		p.add(new Chunk(" ("+HelperC.decimalNumber(totalVrt, 0, true)+") ", FontFactory.getFont("Verdana", 9F, 1)));
@@ -347,7 +347,7 @@ public class OrdreVirementB implements Serializable {
 		p.add(new Chunk("Paiement salaire " + HelperC.moisEnLettres(mois).toUpperCase()+".",
 				FontFactory.getFont("Verdana", 9F, 1)));
 		p.add(new Chunk(
-				"\n\nVeuillez aggrÃ©er Monsieur l'Administrateur Directeur GÃ©nÃ©ral, l'expression de notre considÃ©ration distingueÃ©. ",
+				"\n\nVeuillez aggréer Monsieur l'Administrateur Directeur Général, l'expression de notre considération distingueé. ",
 				FontFactory.getFont("Verdana", 9F, 0)));
 
 		cell = HelperItext.getCellule(p, 1, 0, 0, 2, 0.5F, 3F);
@@ -568,7 +568,7 @@ public class OrdreVirementB implements Serializable {
 			tabInfo.addCell(cell);
 
 			phrase = new Phrase();
-			phrase.add(new Chunk("BÃ©nÃ©ficiaire ", FontFactory.getFont("Times", 8F, 1)));
+			phrase.add(new Chunk("Bénéficiaire ", FontFactory.getFont("Times", 8F, 1)));
 			cell = HelperItext.getCellule(phrase, 1, 0, 7, 0, 0.5F, 3F);
 			tabInfo.addCell(cell);
 
@@ -654,7 +654,7 @@ public class OrdreVirementB implements Serializable {
 			
 			
 			p = new Paragraph();
-			p.add(new Chunk("Total gÃ©nÃ©ral", FontFactory.getFont("Times", 8F, 1)));
+			p.add(new Chunk("Total général", FontFactory.getFont("Times", 8F, 1)));
 			cell = HelperItext.getCellule(p, 1, 0, 14, 3, 0.5F, 3F);
 			tabInfo.addCell(cell);
 
@@ -701,17 +701,17 @@ public class OrdreVirementB implements Serializable {
 			row = sheet.createRow(0);
 			cellStyle = wb.createCellStyle();
 			cellStyle.setFont(font);
-			row.createCell(0).setCellValue("NÂ°");
+			row.createCell(0).setCellValue("N°");
 			cellStyle.setFillForegroundColor((short) 13);
 			cellStyle.setFillPattern((short) 1);
 			row.getCell(0).setCellStyle(cellStyle);
 
-			row.createCell(1).setCellValue("BÃ©nÃ©ficiaire");
+			row.createCell(1).setCellValue("Bénéficiaire");
 			cellStyle.setFillForegroundColor((short) 13);
 			cellStyle.setFillPattern((short) 1);
 			row.getCell(1).setCellStyle(cellStyle);
 
-			row.createCell(2).setCellValue("NÂ° compte");
+			row.createCell(2).setCellValue("N° compte");
 			cellStyle.setFillForegroundColor((short) 13);
 			cellStyle.setFillPattern((short) 1);
 			row.getCell(2).setCellStyle(cellStyle);

@@ -9,7 +9,7 @@ public class OperateurC implements Serializable {
 	private int idEmploye, idFonction;
 	private boolean actif = true, lineUser;
 	private Date dateModif;
-	private String codeSecret;
+	private String codeSecret,nomOperateur;
 	private String login;
 	private Historique historique;
 	private EmployeC employe;
@@ -92,6 +92,16 @@ public class OperateurC implements Serializable {
 
 	public void setIdFonction(int idFonction) {
 		this.idFonction = idFonction;
+	}
+
+	public String getNomOperateur() {
+		if(getEmploye()!=null)
+			nomOperateur=getEmploye().getNomPrenom();
+		return nomOperateur;
+	}
+
+	public void setNomOperateur(String nomOperateur) {
+		this.nomOperateur = nomOperateur;
 	}
 
 }

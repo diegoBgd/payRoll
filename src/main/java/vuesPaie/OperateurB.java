@@ -49,7 +49,7 @@ public class OperateurB extends OperateurC {
 	private Base fonction;
 	private List<SelectItem> listeFonction;
 	private boolean userExist, disableMsg;
-
+	private List<OperateurC>listUser;
 	private boolean enableFonction;
 	private boolean desableSave;
 	ExerciceC exercice;
@@ -170,6 +170,14 @@ public class OperateurB extends OperateurC {
 		this.disableMsg = disableMsg;
 	}
 
+	public List<OperateurC> getListUser() {
+		return listUser;
+	}
+
+	public void setListUser(List<OperateurC> listUser) {
+		this.listUser = listUser;
+	}
+
 	@PostConstruct
 	public void init() {
 		String codeOperateur = (String) this.session.getAttribute("operateur");
@@ -256,6 +264,7 @@ public class OperateurB extends OperateurC {
 	private void employeValue() {
 		if (employe != null) {
 			nom = this.employe.getNomPrenom();
+			matricule=this.employe.getCode();
 			setIdEmploye(this.employe.getId());
 			this.setIdFonction(employe.getIdFnctn());
 			fonction = FichierBaseDAO.getInstance().getBaseById(getIdFonction(),
@@ -281,6 +290,7 @@ public class OperateurB extends OperateurC {
 		}
 	}
 
+	
 	private void chargementFonction() {
 		this.listeFonction = new ArrayList<SelectItem>();
 		this.listeFonction.add(new SelectItem(Integer.valueOf(0), ""));
@@ -307,6 +317,8 @@ public class OperateurB extends OperateurC {
 			setActif(this.operateurSelected.isActif());
 			setLineUser(operateurSelected.isLineUser());
 			confirmationPwd = this.operateurSelected.getCodeSecret();
+			employe=operateurSelected.getEmploye();
+			employeValue();
 			disableMsg = false;
 		}
 	}
@@ -328,6 +340,9 @@ public class OperateurB extends OperateurC {
 		disableMsg = false;
 	}
 
+	public void chargerOperateur() {
+		listUser=FichierBaseDAO.getInstance().getListOperateur();
+	}
 	public void saveOperator() {
 		if (this.userExist) {
 
@@ -386,7 +401,7 @@ public class OperateurB extends OperateurC {
 			if (FichierBaseDAO.getInstance().insertPremierOperateur(this)) {
 
 				clear(true);
-				HelperC.afficherInformation("FELICITATION", "Succès de l'opération");
+				HelperC.afficherInformation("INFO", "Succès de l'opération");
 			} else {
 
 				HelperC.afficherAttention("DESOLE!", "Echec de l'opération");
@@ -454,7 +469,7 @@ public class OperateurB extends OperateurC {
 		if (this.operateurSelected != null) {
 
 			affecter();
-			PrimeFaces.current().executeScript("PF('dlgRecherche').hide();");
+			PrimeFaces.current().executeScript("PF('dlgResearch').hide();");
 		}
 	}
 }

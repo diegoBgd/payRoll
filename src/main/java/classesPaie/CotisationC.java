@@ -14,7 +14,7 @@ public class CotisationC implements Serializable {
 	private String chargePtronal;
 	private int typeBaremme, typeElement;
 	private boolean hide, obligatoire, retraite;
-
+	private OrganismeSupportantBaseSalarialC organisme;
 	public int getId() {
 		return this.id;
 	}
@@ -117,6 +117,14 @@ public class CotisationC implements Serializable {
 
 	public void setTypeElement(int typeElement) {
 		this.typeElement = typeElement;
+	}
+
+	public OrganismeSupportantBaseSalarialC getOrganisme() {
+		return organisme;
+	}
+
+	public void setOrganisme(OrganismeSupportantBaseSalarialC organisme) {
+		this.organisme = organisme;
 	}
 
 }
